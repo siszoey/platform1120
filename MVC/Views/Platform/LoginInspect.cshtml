@@ -1,0 +1,73 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>无人机宏观地质巡查应用平台</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Scripts/login/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/Scripts/login/form-elements.css" />
+    <link rel="stylesheet" href="~/Scripts/login/style.css" />
+
+    <!--Layui-->
+    <link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/Scripts/layui/layui.all.js"></script>
+</head>
+<body>
+    <div>
+        <div class="layui-row layui-col-space1" style="position:absolute;bottom:100px;width:100%;">
+            <div class="layui-col-md3">
+                <div class="grid-demo">
+                    <img src="~/Resources/img/head/uav1.png" style="width:50%;height:50%;border-radius:10px;background-color:rgba(255,255,255,0.5);" onclick="loginuav()" />
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="grid-demo grid-demo-bg1">
+                    <img src="~/Resources/img/head/img1.png" style="width:50%;height:50%;border-radius:10px;background-color:rgba(255,255,255,0.5);" onclick="loginimg()" />
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="grid-demo">
+                    <img src="~/Resources/img/head/pc1.png" style="width:50%;height:50%;border-radius:10px;background-color:rgba(255,255,255,0.5);" onclick="loginpts()" />
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="grid-demo grid-demo-bg1">
+                    <img src="~/Resources/img/head/xc1.png" style="width:50%;height:50%;border-radius:10px;background-color:rgba(255,255,255,0.5);" onclick="loginmonitor()" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/login/jquery.backstretch.min.js"></script>
+    <script src="~/Scripts/login/scripts1.js"></script>
+
+    <script>
+        function loginuav() {
+            window.location.href = "LoginUav";
+        };
+
+        function loginimg() {
+            window.location.href = "LoginImg";
+        };
+
+        function loginpts() {
+            window.location.href = "LoginPTS";
+        };
+
+        function loginmonitor() {
+            window.location.href = "LoginMonitor";
+        };
+    </script>
+</body>
+</html>
