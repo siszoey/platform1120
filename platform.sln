@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MODEL", "MODEL\MODEL.csproj", "{9A7AE117-6EE2-4D0A-B188-EB84EFD8250A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "COM", "COM", "{FED01312-7B37-43F7-B843-73767B3B6369}"
+	ProjectSection(SolutionItems) = preProject
+		COM\COM.dll = COM\COM.dll
+		COM\COM.dll.config = COM\COM.dll.config
+		COM\COM.pdb = COM\COM.pdb
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
