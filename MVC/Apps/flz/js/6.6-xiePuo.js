@@ -933,7 +933,7 @@ function xiePuoTongji() {
                     viewerPhoto = new Viewer(document.getElementById('xiepochakan'), {
                         toolbar: true, //显示工具条
                         viewed() {
-                            viewerPhoto.zoomTo(0.75); // 图片显示比例 75%
+                            viewerPhoto.zoomTo(1.2); // 图片显示比例 75%
                         },
                         zIndex: 99999999,
                         navbar: false,

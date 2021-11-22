@@ -79,16 +79,16 @@ function hideContextmenu() {
 
 }
 
-$.ajax({
-    url: servicesurl + "/api/FlzWordWxpert/GetWordMLHelper", type: "get",
-    success: function (data) {
-        //console.log(01111);
-       // window.location.href = 'http://www.cq107chy.com:1519/test2.docx';
-        //
+//$.ajax({
+//    url: servicesurl + "/api/FlzWordWxpert/GetWordMLHelper", type: "get",
+//    success: function (data) {
+//        //console.log(01111);
+//       // window.location.href = 'http://www.cq107chy.com:1519/test2.docx';
+//        //
 
        
-    }, datatype: "json"
-});
+//    }, datatype: "json"
+//});
 
 function hideContextmenu() {
 
