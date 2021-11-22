@@ -11,6 +11,8 @@
     <title>消落带采集系统</title>
     <!--jquery-->
     <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="~/Scripts/viewer.min.css">
+    <script src="~/Scripts/viewer.min.js"></script>
     <!--CesiumJS-->
     <link href="~/Scripts/Cesium/Widgets/widgets.css" rel="stylesheet" />
     <script src="~/Scripts/Cesium/Cesium.js"></script>
@@ -28,7 +30,13 @@
         body {
             overflow-y: scroll; /* 禁止刷新后出现横向滚动条 */
         }
+
+        .layui-layer-rim .layui-layer-content {
+            height: 84% !important;
+        }
     </style>
+
+
 </head>
 <body oncontextmenu="hideContextmenu()">
     <!--顶栏-->
@@ -45,7 +53,7 @@
         </div>
         <!--工具栏-->
         <div style="position:absolute;right:5px">
-            <button id="userbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><span class="layui-icon layui-icon-user"  style="font-size:16px " ><span style="margin-left:5px ;font-size:16px">@ViewBag.User</span></span></button>
+            <button id="userbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><span class="layui-icon layui-icon-user" style="font-size:16px "><span style="margin-left:5px ;font-size:16px">@ViewBag.User</span></span></button>
             <button id="noticebtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><span style="font-size:16px " class="layui-icon layui-icon-notice"></span></button>
             <button id="setbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><span style="font-size:16px " class="layui-icon layui-icon-set-fill"></span></button>
             <a href="~/Platform/Logout">
@@ -109,8 +117,8 @@
 
         </div>*@
     <div id="gongJulan">
-        <div style="width:200px;display: inline-block">
-            
+        <div style="width:216px;display: inline-block">
+
             <div><span style=" margin-top:5px; margin-left:50px">测窗</span></div>
             <div>
                 <img src="~/Resources/img//survey/zdyWindon.png" onclick="windowInfoZiDingYi()" title="自定义测窗" class="surveyStyle" />
@@ -133,7 +141,7 @@
 
         </div>
         <img src="~/Resources/img/survey/fenge.png" class="surveyFevGeStyle" />
-        <div style="width:125px;display: inline-block">
+        <div style="width:130px;display: inline-block">
             <div><span style=" margin-top:5px; margin-left:50px">标注</span></div>
             <div>
                 <img src="~/Resources/img/survey/point.png" onclick="pointMeasure()" title="点标注" class="surveyStyle" />
@@ -153,15 +161,37 @@
 
         </div>
         <img src="~/Resources/img/survey/fenge.png" class="surveyFevGeStyle" />
-        <div style="width:196px;display: inline-block">
+        <div style="width:62px;display: inline-block">
+            <div><span style=" margin-top:5px; margin-left:25px">斜坡</span></div>
+            <div>
+                <img src="~/Resources/img/survey/xiePuo.png" onclick="gotoXiePuo()" title="斜坡新增-边界勾画" class="surveyStyle" />
+                <img src="~/Resources/img//survey/xiePuoTong.png" onclick="xiePuoTongji()" title="斜坡统计" class="surveyStyle" />
+            </div>
+
+        </div>
+        <img src="~/Resources/img/survey/fenge.png" class="surveyFevGeStyle" />
+        <div style="width:232px;display: inline-block">
             <div><span style=" margin-top:5px; margin-left:70px">测量工具</span></div>
             <div>
-                <img src="~/Resources/img//survey/position.png" onclick="pointMeasure2()" title="坐标" class="surveyStyle" />
-                <img src="~/Resources/img//survey/distance.png" onclick="lengthMeasure2()" title="长度" class="surveyStyle" />
-                <img src="~/Resources/img//survey/height.png" onclick="heightMeasure()" title="高度" class="surveyStyle" />
+                @*<img src="~/Resources/img//survey/position.png" onclick="pointMeasure2()" title="坐标" class="surveyStyle" />
+                    <img src="~/Resources/img//survey/distance.png" onclick="lengthMeasure2()" title="长度" class="surveyStyle" />
+                    <img src="~/Resources/img//survey/height.png" onclick="heightMeasure()" title="高度" class="surveyStyle" />
+                    <img src="~/Resources/img/survey/area.png" onclick="areaMeasure2()" title="面积" class="surveyStyle" />
+                    <img src="~/Resources/img//survey/azimuth.png" onclick="getOccurrence()" title="产状" class="surveyStyle" />
+                    <img src="~/Resources/img/survey/remove.png" onclick="Clear()" title="清除" class="surveyStyle" />*@
+
+                <img src="~/Resources/img/survey/celiang.png" onclick="celiang()" title="测量" class="surveyStyle" />
+                <img src="~/Resources/img/survey/position.png" onclick="pointMeasure2()" title="坐标" class="surveyStyle" />
+
+                <img src="~/Resources/img/survey/height.png" onclick="heightMeasure()" title="距离" class="surveyStyle" />
                 <img src="~/Resources/img/survey/area.png" onclick="areaMeasure2()" title="面积" class="surveyStyle" />
-                <img src="~/Resources/img//survey/azimuth.png" onclick="getOccurrence()" title="产状" class="surveyStyle" />
-                <img src="~/Resources/img/survey/remove.png" onclick="Clear()" title="清除" class="surveyStyle" />
+                <img src="~/Resources/img/survey/azimuth.png" onclick="getOccurrence()" title="产状" class="surveyStyle" />
+                @*<img src="~/Resources/img/survey/azimuth.png" onclick="getpoly()" title="临时" class="surveyStyle" />*@
+                <img src="~/Resources/img/survey/zouXiang.png" onclick="azimuthMeasure()" title="走向" class="surveyStyle" />
+                @*<img src="~/Resources/img/survey/position.png" onclick="getxyzh()" title="定位" class="surveyStyle" />*@
+                @*<img src="~/Resources/img/survey/position.png" onclick="dispalyPosition()" title="定位" class="surveyStyle" />
+                    <img src="~/Resources/img/mark/l1.png" onclick="modelJiaMiDian()" title="模型加密点" class="surveyStyle" />*@
+                <img src="~/Resources/img/survey/remove.png" onclick="ClearCeliangTemp()" title="清除" class="surveyStyle" />
             </div>
 
         </div>
@@ -281,7 +311,8 @@
     <script src="~/Apps/flz/js/6.3-autodata.js"></script>
     <script src="~/Apps/flz/js/6.4-analysis.js"></script>
     <script src="~/Apps/flz/js/6.5-warning.js"></script>
-    <script src="~/Apps/flz/js/6.6-measure.js"></script>
+    <script src="~/Apps/rock/js/6.6-measure.js"></script>
+    <script src="~/Apps/flz/js/6.6-xiePuo.js"></script>
 
     <script src="~/Apps/flz/js/6.8-localtool.js"></script>
     <script src="~/Apps/flz/js/6.9-report.js"></script>

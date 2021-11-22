@@ -339,7 +339,9 @@ function LoadLayerListLayer(id) {
                         var loadingceindex = layer.load(0, { shade: 0.2, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
 
                         $.ajax({
-                            url: servicesurl + "/api/FlzWindowInfo/GetSteepHillInfoList", type: "get", data: { "cookie": document.cookie, "id": id },
+                            url: servicesurl + "/api/FlzWindowInfo/GetSteepHillInfoList", type: "get", data: {
+                                "cookie": document.cookie, "id": id,
+                                "jieLun": '' },
                             success: function (data) {
                                 layer.close(loadingceindex);
                                 if (data == "") {//没得斜坡单元数据

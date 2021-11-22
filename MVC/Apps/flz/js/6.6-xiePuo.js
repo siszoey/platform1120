@@ -2,10 +2,11 @@
 var xiePuotext = null;
 
 var xiePuoinfoaddlayerindex = null;
-var addtimeimagelayerindex = null;
+var xiepoimglayerindex = null;
 var upload = layui.upload;  
 var srcInfo = {};//用来装图片地址，备注等。
 var xiePuoIndex = null;
+var xiePoChakanlayerindex = null;
 function gotoXiePuo() {
     //本面积计算方法为：将所有点转换为大地坐标BLH，然后将H赋值为最大H，再转换为空间直角坐标XYZ，取XY计算面积
     ClearTemp();
@@ -468,10 +469,8 @@ function fenshu(datas) {
     return parseFloat(datas.split('/')[0]) / parseFloat(datas.split('/')[1])
 }
 function goShangChuan(flag) {
-    console.log(flag);
-    console.log(1111);
-    if (addtimeimagelayerindex==null) {
-        var addtimeimagelayerindex = layer.open({
+    if (xiepoimglayerindex == null) {
+        xiepoimglayerindex = layer.open({
             type: 1
             , title: ['上传目标时序影像', 'font-weight:bold;font-size:large;font-family:Microsoft YaHei']
             , area: ['500px', '600px']
@@ -492,8 +491,7 @@ function goShangChuan(flag) {
                         });
                     }
                     if (srcInfo.appdSrc != null && srcInfo.appdSrc != "") {
-                        //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.appdSrc+".jpg";
-                        document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
+                        document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.appdSrc+".jpg";
                     }
                 }
                 if (flag == 2) {
@@ -501,8 +499,7 @@ function goShangChuan(flag) {
                         form.val('addtimeimageform', { "image_bz_add": srcInfo.apjgrest });
                     }
                     if (srcInfo.apjgSrc != null && srcInfo.apjgSrc != "") {
-                        //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.apjgSrc+".jpg"; 
-                        document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
+                       document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.apjgSrc+".jpg"; 
                     }
                 }
                 if (flag == 3) {
@@ -510,8 +507,7 @@ function goShangChuan(flag) {
                         form.val('addtimeimageform', { "image_bz_add": srcInfo.xpbjrest });
                     }
                     if (srcInfo.xpbjSrc != null && srcInfo.xpbjSrc != "") {
-                        //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.xpbjSrc+".jpg"; 
-                        document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
+                        document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.xpbjSrc+".jpg"; 
                     }
                 }
                 if (flag == 4) {
@@ -520,9 +516,8 @@ function goShangChuan(flag) {
                         form.val('addtimeimageform', { "image_bz_add": srcInfo.yxyzrest });
                     }
                     if (srcInfo.yxyzSrc != null && srcInfo.yxyzSrc != "") {
-                        //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.yxyzSrc+".jpg"; 
-                        document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
-                    }
+                        document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.yxyzSrc+".jpg"; 
+                      }
                 }
                 if (flag == 5) {
                     if (srcInfo.rucrest != null && srcInfo.rucrest != "")
@@ -530,32 +525,28 @@ function goShangChuan(flag) {
                         form.val('addtimeimageform', { "image_bz_add": srcInfo.rucrest });
                     }
                     if (srcInfo.rucSrc != null && srcInfo.rucSrc != "") {
-                        //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.rucSrc+".jpg";
-                        document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
-                    }
+                       document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.rucSrc+".jpg";
+                     }
                 }
                      if (flag == 6) {
                          if (srcInfo.ytjgrest != null && srcInfo.ytjgrest != "") {
                              form.val('addtimeimageform', { "image_bz_add": srcInfo.ytjgrest });
                          } if (srcInfo.ytjgSrc != null && srcInfo.ytjgSrc != "") {
-                             //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.ytjgSrc+".jpg"; 
-                             document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
-                         }
+                             document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.ytjgSrc+".jpg"; 
+                           }
                      }
                      if (flag == 7) {
                          if (srcInfo.ytfhrest != null && srcInfo.ytfhrest != "") {
                              form.val('addtimeimageform', { "image_bz_add": srcInfo.ytfhrest });
                          } if (srcInfo.ytfhSrc != null && srcInfo.ytfhSrc != "") {
-                             //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.ytfhSrc+".jpg"; 
-                             document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
+                             document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.ytfhSrc+".jpg"; 
                          }
                      }
                      if (flag == 8) {
                          if (srcInfo.ytlhrest != null && srcInfo.ytlhrest != "") {
                              form.val('addtimeimageform', { "image_bz_add": srcInfo.ytlhrest });
                          } if (srcInfo.ytlhSrc != null && srcInfo.ytlhSrc != "") {
-                             //document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/" + srcInfo.ytlhSrc+".jpg"; 
-                             document.getElementById("image_timeimage_img").src = "http://localhost:1519/lingShi.jpg";
+                             document.getElementById("image_timeimage_img").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + srcInfo.ytlhSrc+".jpg"; 
                          }
                      }
 
@@ -612,7 +603,7 @@ function goShangChuan(flag) {
                             console.log(res);
                             console.log(flag);
                             layer.close(loadingminindex);
-                            layer.close(addtimeimagelayerindex);
+                            layer.close(xiepoimglayerindex);
                             if (flag==1) {//岸坡上传
                                 srcInfo.appdrest = form.val("addtimeimageform").image_bz_add;
                                 srcInfo.appdSrc = res.data;
@@ -635,10 +626,13 @@ function goShangChuan(flag) {
                 form.render();
                 form.render('select');
             }
-            , end: function () { }
+            , end: function () {
+                xiepoimglayerindex = null;
+            }
         });
     } else {
         layer.msg("已打开照片上传", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+        return;
     }
    
 }
@@ -765,14 +759,66 @@ function xiePuoTongji() {
                                 xiepo.ytjgSrc = windowInfos[i].ytjgSrc;
                                 xiepo.ytfhSrc = windowInfos[i].ytfhSrc;
                                 xiepo.ytlhSrc = windowInfos[i].ytlhSrc;
+
+                                //判断一下有没有图片
+                                var srcList = [];
+                                if (windowInfos[i].appdSrc != null && windowInfos[i].appdSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "岸坡坡度";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].appdSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+
+                                if (windowInfos[i].apjgSrc != null && windowInfos[i].apjgSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "岸坡结构";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].apjgSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+                                if (windowInfos[i].xpbjSrc != null && windowInfos[i].xpbjSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "斜坡边界";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].xpbjSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+                                if (windowInfos[i].yxyzSrc != null && windowInfos[i].yxyzSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "岩性岩组";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].yxyzSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+                                if (windowInfos[i].rucSrc != null && windowInfos[i].rucSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "软弱层";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].rucSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+                                if (windowInfos[i].ytjgSrc != null && windowInfos[i].ytjgSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "岩体结构";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].ytjgSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+                                if (windowInfos[i].ytfhSrc != null && windowInfos[i].ytfhSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "岩体风化程度";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].ytfhSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+                                if (windowInfos[i].ytlhSrc != null && windowInfos[i].ytlhSrc.length > 0) {
+                                    var temp = {};
+                                    temp.name = "岩体裂化程度";
+                                    temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].ytlhSrc + ".jpg";
+                                    srcList.push(temp);
+                                }
+                                if (srcList.length > 0) {
+                                    xiepo.srcList = srcList;
+                                } else {
+                                    xiepo.srcList = "";
+                                }
+
                                 xiepotabledata.push(xiepo);
-                                //var postionList = JSON.parse(windowInfos[i].postion);
-                                //if (xiepo.avgOpening != "0.0020") {
-                                //    postionList.push(postionList[0]);
-                                //    console.log(windowInfos[i].name);
-                                //    console.log(postionList[0]);
-                                //}
-                                //tempList.push(postionList);
+                                
                             }
                             xiepotableview.reload({ id: 'xiepotableviewid', data: xiepotabledata });
                         }
@@ -805,7 +851,17 @@ function xiePuoTongji() {
             , { field: 'dzgz', title: '地质构造得分', width: 120, sort: true, align: "center", totalRow: true }
             , { field: 'gcdz', title: '工程地质得分', width: 120, sort: true, align: "center", totalRow: true }
             , { field: 'score', title: '斜坡得分', width: 120, sort: true, align: "center", totalRow: true }
-            , { field: 'jieLun', title: '斜坡结果', width: 200,  align: "center" }
+            , {
+                field: 'jieLun', title: '斜坡结果', width: 200, align: "center", templet: function (row) {
+                    if (row.jieLun != null && row.jieLun.length>0) {
+                        return row.jieLun;
+                    } else {
+                        return "未识别"
+                    }
+
+                    //得到当前行数据，并拼接成自定义模板
+
+                } }
             , { fixed: 'right', width: 180, align: 'center', toolbar: '#processedPatrolButon' }
         ]]
         , data: []
@@ -813,7 +869,84 @@ function xiePuoTongji() {
     table.on('tool(xiepotable-view)', function (obj) {
         console.log(obj);
         if (obj.event === 'detail') {
+            var datatemp = obj.data;
+            if (xiePoChakanlayerindex !=null) {
+                layer.msg("已打开查看窗口", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                return;
+            }
+            xiePoChakanlayerindex = layer.open({
+                type: 1
+                , title: [datatemp.name + '图片查看', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
+                , area: ['420px', '400px']
+                , shade: 0
+                , offset: 'auto'
+                , closeBtn: 1
+                , maxmin: true
+                , moveOut: true
+                , content: srcChaKan
+                , zIndex: layer.zIndex
+                , success: function (layero) {
+                    layer.setTop(layero);
 
+                    if (datatemp.appdSrc != null && datatemp.appdSrc.length > 0) {
+                        document.getElementById("appdSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.appdSrc + ".jpg";
+                    } else {
+                        $("#appdSrcId").hide();
+                    }
+
+
+                    if (datatemp.apjgSrc != null && datatemp.apjgSrc.length > 0) {
+                        document.getElementById("apjgSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.apjgSrc + ".jpg";
+                    } else {
+                        $("#apjgSrcId").hide();
+                    }
+                    if (datatemp.xpbjSrc != null && datatemp.xpbjSrc.length > 0) {
+                        document.getElementById("xpbjSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.xpbjSrc + ".jpg";
+                    } else {
+                        $("#xpbjSrcId").hide();
+                    }
+                    if (datatemp.yxyzSrc != null && datatemp.yxyzSrc.length > 0) {
+                        document.getElementById("yxyzSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.yxyzSrc + ".jpg";
+                    } else {
+                        $("#yxyzSrcId").hide();
+                    }
+                    if (datatemp.rucSrc != null && datatemp.rucSrc.length > 0) {
+                        document.getElementById("rucSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.rucSrc + ".jpg";
+                    } else {
+                        $("#rucSrcId").hide();
+                    }
+                    if (datatemp.ytjgSrc != null && datatemp.ytjgSrc.length > 0) {
+                        document.getElementById("ytjgSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.ytjgSrc + ".jpg";
+                    } else {
+                        $("#ytjgSrcId").hide();
+                    }
+                    if (datatemp.ytfhSrc != null && datatemp.ytfhSrc.length > 0) {
+                        document.getElementById("ytfhSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.ytfhSrc + ".jpg";
+                    } else {
+                        $("#ytfhSrcId").hide();
+                    }
+                    if (datatemp.ytlhSrc != null && datatemp.ytlhSrc.length > 0) {
+                        document.getElementById("ytlhSrcId").src = "http://www.cq107chy.com:4022/SurImage/xiepo/" + datatemp.ytlhSrc + ".jpg";
+                    } else {
+                        $("#ytlhSrcId").hide();
+                    }
+                    viewerPhoto = new Viewer(document.getElementById('xiepochakan'), {
+                        toolbar: true, //显示工具条
+                        viewed() {
+                            viewerPhoto.zoomTo(0.75); // 图片显示比例 75%
+                        },
+                        zIndex: 99999999,
+                        navbar: false,
+                        show: function () {  // 动态加载图片后，更新实例
+                            viewerPhoto.update();
+                        },
+                    });
+
+                }
+                , end: function () {
+                    xiePoChakanlayerindex = null;
+                }
+            });
         }
     });
     var loadinglayerindex = layer.load(0, { shade: false, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
@@ -821,6 +954,7 @@ function xiePuoTongji() {
         url: servicesurl + "/api/FlzWindowInfo/GetSteepHillInfoList", type: "get", data: {
             "id": currentprojectid,
             "cookie": document.cookie,
+            "jieLun":''
         },
         success: function (data) {
             layer.close(loadinglayerindex);
@@ -868,6 +1002,63 @@ function xiePuoTongji() {
                     xiepo.ytjgSrc = windowInfos[i].ytjgSrc;
                     xiepo.ytfhSrc = windowInfos[i].ytfhSrc;
                     xiepo.ytlhSrc = windowInfos[i].ytlhSrc;
+                    //判断一下有没有图片
+                    var srcList = [];
+                    if (windowInfos[i].appdSrc != null && windowInfos[i].appdSrc.length>0) {
+                        var temp = {};
+                        temp.name = "岸坡坡度";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].appdSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+
+                    if (windowInfos[i].apjgSrc != null && windowInfos[i].apjgSrc.length > 0) {
+                        var temp = {};
+                        temp.name = "岸坡结构";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].apjgSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+                    if (windowInfos[i].xpbjSrc != null && windowInfos[i].xpbjSrc.length > 0) {
+                        var temp = {};
+                        temp.name = "斜坡边界";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].xpbjSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+                    if (windowInfos[i].yxyzSrc != null && windowInfos[i].yxyzSrc.length > 0) {
+                        var temp = {};
+                        temp.name = "岩性岩组";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].yxyzSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+                    if (windowInfos[i].rucSrc != null && windowInfos[i].rucSrc.length > 0) {
+                        var temp = {};
+                        temp.name = "软弱层";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].rucSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+                    if (windowInfos[i].ytjgSrc != null && windowInfos[i].ytjgSrc.length > 0) {
+                        var temp = {};
+                        temp.name = "岩体结构";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].ytjgSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+                    if (windowInfos[i].ytfhSrc != null && windowInfos[i].ytfhSrc.length > 0) {
+                        var temp = {};
+                        temp.name = "岩体风化程度";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].ytfhSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+                    if (windowInfos[i].ytlhSrc != null && windowInfos[i].ytlhSrc.length > 0) {
+                        var temp = {};
+                        temp.name = "岩体裂化程度";
+                        temp.url = "http://www.cq107chy.com:4022/SurImage/xiepo/" + windowInfos[i].ytlhSrc + ".jpg";
+                        srcList.push(temp);
+                    }
+                    if (srcList.length > 0) {
+                        xiepo.srcList = srcList;
+                    } else {
+                        xiepo.srcList = "";
+                    }
+
                     xiepotabledata.push(xiepo);
                 }
                 xiepotableview.reload({ id: 'xiepotableviewid', data: xiepotabledata });
