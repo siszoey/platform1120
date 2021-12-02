@@ -116,25 +116,34 @@ $("#userbtn").on("click", function () {
 });
 
 
-//消息
+//消息(测试瓦片图片加载)
 $("#noticebtn").on("click", function () {
     if (headernoticelayerindex == null) {
         headernoticelayerindex = layer.open({
             type: 1
             , title: ['消息', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
-            , area: ['500px', '500px']
+            , area: ['800px', '800px']
             , shade: 0
             , offset: 'auto'
             , closeBtn: 1
             , maxmin: true
             , moveOut: true
-            , content: '<p>敬请期待……</p>'
+            , content: '<div id="openseadragon1" style="width: 100%; height: 100%;"></div>'
             , zIndex: layer.zIndex
             , success: function (layero) {
                 layer.setTop(layero);
 
-
-
+                //加载
+                OpenSeadragon({
+                    id: "openseadragon1",
+                    prefixUrl: "/Scripts/openseadragon/images/",
+                    tileSources: [{
+                        type: "zoomifytileservice",
+                        width: 8192,
+                        height: 5460,
+                        tilesUrl: "http://www.cq107chy.com:4022/SurDOMDSM/P1/"
+                    }]
+                });
 
 
             }
