@@ -211,7 +211,9 @@ namespace MODEL
                     BSM = row[6].ToString(),
                     BZ = row[8].ToString(),
                     xszt = row[10].ToString(),
-                    xsjg = row[11].ToString()
+                    xsjg = row[11].ToString(),
+                    Width= Convert.ToInt32(row[12].ToString()),
+                    Height = Convert.ToInt32(row[13].ToString()),
                 };
                 if (row.Length>12)
                 {

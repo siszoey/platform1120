@@ -141,7 +141,7 @@ $("#noticebtn").on("click", function () {
                         type: "zoomifytileservice",
                         width: 8192,
                         height: 5460,
-                        tilesUrl: "http://www.cq107chy.com:4022/SurDOMDSM/P1/"
+                        tilesUrl: "http://www.cq107chy.com:4022/SurDOMDSM/500243000001_1_20210725094538/"
                     }]
                 });
 
