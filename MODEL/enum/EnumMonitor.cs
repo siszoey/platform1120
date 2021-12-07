@@ -160,7 +160,10 @@ namespace MODEL
             PreYear = 12,
 
             [RemarkAttribute("全部")]
-            All = 13
+            All = 13,
+            
+            [RemarkAttribute("上一旬的最后一天")]
+            PreTenLastDay = 14
         }
 
         /// <summary>

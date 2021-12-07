@@ -204,6 +204,59 @@ function LoadLayerListLayer(id) {
                         }
 
                         //TODO MORE LAYER
+                        if (id == 70) {
+                            var entity1 = viewer.entities.getById(id + "_id1");
+                            if (entity1 == undefined) {
+                                viewer.entities.add({
+                                    id: id + "_id1",
+                                    polyline: {
+                                        positions: pointList,
+                                        width: 2,
+                                        material: Cesium.Color.BLUE,
+                                        show: true,
+                                        clampToGround: true,
+                                        classificationType: Cesium.ClassificationType.CESIUM_3D_TILE
+                                    }
+                                });
+                            }
+                            
+
+                            //for (var i in jianceList) {
+                            //    var entity = viewer.entities.getById(id+"ranqiLingshi_"+i);
+                            //    if (entity == undefined) {
+                            //        //当无此元素添加  viewer.scene.clampToHeight  模型
+                            //        viewer.entities.add({
+                            //            id: id + "ranqiLingshi_" + i,
+                            //            position: jianceList[i].point,
+                            //            billboard: {
+                            //                image: '../../Resources/img/map/marker.png',
+                            //                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                            //                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                            //                width: 24,
+                            //                height: 24,
+                            //            }
+                            //        });
+                            //    }
+
+                            //    var entitylabel = viewer.entities.getById(id + "ranqiLingshi_" + i + "_LABEL");
+                            //    if (entitylabel == undefined) {
+                            //        viewer.entities.add({
+                            //            id: id + "ranqiLingshi_" + i + "_LABEL",
+                            //            position: jianceList[i].point,
+                            //            label: {
+                            //                text: jianceList[i].name,
+                            //                font: '16px Times New Roman',
+                            //                horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                            //                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                            //                verticalOrigin: Cesium.VerticalOrigin.CENTER,
+                            //                pixelOffset: new Cesium.Cartesian2(0.0, -36),
+                            //            }
+                            //        });
+                            //    }
+                            //}
+                       
+
+                        }
 
                         if (projectlayerlistlayerindex != null) {
                             tree.render({
@@ -263,8 +316,12 @@ function LoadLayerListLayer(id) {
                                                             billboard: {
                                                                 image: '../../Resources/img/map/marker.png',
                                                                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                                                                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
                                                                 width: 24,
                                                                 height: 24,
+
+
+
                                                             }
                                                         });
                                                     }
@@ -278,6 +335,7 @@ function LoadLayerListLayer(id) {
                                                                 text: data.children[i].title,
                                                                 font: '16px Times New Roman',
                                                                 horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                                                                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
                                                                 verticalOrigin: Cesium.VerticalOrigin.CENTER,
                                                                 pixelOffset: new Cesium.Cartesian2(0.0, -36),
                                                             }
@@ -340,6 +398,7 @@ function LoadLayerListLayer(id) {
                                             //单选
                                             if (data.type == "PROJECTCENTER") {
                                                 //项目位置
+                                                
                                                 var entity = viewer.entities.getById(data.id);
                                                 if (entity == undefined) {
                                                     if (curtileset != null) {
@@ -405,6 +464,50 @@ function LoadLayerListLayer(id) {
                                             else if (data.type == "PROJECTSUMODEL") {
                                                 //项目模型
                                                 LoadModel(data);
+                                                
+                                                if (currentprojectid == 70) {
+                                                    console.log(111);
+                                                    console.log(id);
+                                                    //setTimeout(
+                                                        for (var i in jianceList) {
+                                                        var entity = viewer.entities.getById(id + "ranqiLingshi_" + i);
+                                                        if (entity == undefined) {
+                                                            //当无此元素添加  viewer.scene.clampToHeight  模型
+                                                            viewer.entities.add({
+                                                                id: id + "ranqiLingshi_" + i,
+                                                                position: jianceList[i].point,
+                                                                billboard: {
+                                                                    image: '../../Resources/img/map/marker.png',
+                                                                    verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                                                                    disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                                                                    //  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                                                                    width: 24,
+                                                                    height: 24,
+                                                                }
+                                                            });
+                                                        }
+
+                                                        var entitylabel = viewer.entities.getById(id + "ranqiLingshi_" + i + "_LABEL");
+                                                        if (entitylabel == undefined) {
+                                                            viewer.entities.add({
+                                                                id: id + "ranqiLingshi_" + i + "_LABEL",
+                                                                position: jianceList[i].point,
+                                                                label: {
+                                                                    text: jianceList[i].name,
+                                                                    font: '16px Times New Roman',
+                                                                    horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                                                                    disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                                                                    //  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                                                                    verticalOrigin: Cesium.VerticalOrigin.CENTER,
+                                                                    pixelOffset: new Cesium.Cartesian2(0.0, -36),
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+
+//, 1000);
+                                                    
+                                                }
 
                                             }
                                             else if (data.type == "DISASTERCENTER") {
@@ -536,3 +639,583 @@ function LoadLayerListLayer(id) {
     }
 
 }
+var features = 
+    [
+        [
+            106.52582339999998,
+            29.77375347999993
+        ],
+        [
+            106.52522640000012,
+            29.773795670000085
+        ],
+        [
+            106.52506450000004,
+            29.773838900000098
+        ],
+        [
+            106.52473870000012,
+            29.773859130000014
+        ],
+        [
+            106.52443750000004,
+            29.773881310000037
+        ],
+        [
+            106.52431009999998,
+            29.774389840000027
+        ],
+        [
+            106.52381910000003,
+            29.774526270000139
+        ],
+        [
+            106.52335720000002,
+            29.774608360000003
+        ],
+        [
+            106.52290770000013,
+            29.774647640000013
+        ],
+        [
+            106.52282090000006,
+            29.774683170000118
+        ],
+        [
+            106.52120980000001,
+            29.77521099000012
+        ],
+        [
+            106.52079010000006,
+            29.774919389999974
+        ],
+        [
+            106.5205856,
+            29.77472074000002
+        ],
+        [
+            106.52028260000003,
+            29.774620959999934
+        ],
+        [
+            106.51998750000013,
+            29.774728539999953
+        ],
+        [
+            106.51932299999999,
+            29.77490710000001
+        ],
+        [
+            106.51813890000011,
+            29.774622080000026
+        ],
+        [
+            106.51806950000003,
+            29.774552100000116
+        ],
+        [
+            106.51798000000008,
+            29.774478290000045
+        ],
+        [
+            106.51754690000013,
+            29.774706520000107
+        ],
+        [
+            106.5171977,
+            29.77491562
+        ],
+        [
+            106.5166961000001,
+            29.775205130000129
+        ],
+        [
+            106.51646110000002,
+            29.775111620000076
+        ],
+        [
+            106.5162304000001,
+            29.774963600000036
+        ],
+        [
+            106.51557839999998,
+            29.77509466000009
+        ],
+        [
+            106.51545199999998,
+            29.775062310000068
+        ],
+        [
+            106.51509079999994,
+            29.77472100000006
+        ],
+        [
+            106.51471780000003,
+            29.77426086999998
+        ],
+        [
+            106.5133932,
+            29.773694500000035
+        ],
+        [
+            106.50525050000005,
+            29.768757150000057
+        ],
+        [
+            106.50456420000012,
+            29.76939743999992
+        ],
+        [
+            106.50451559999999,
+            29.769621029999994
+        ],
+        [
+            106.5035863,
+            29.769803010000094
+        ],
+        [
+            106.50318390000013,
+            29.76985152000003
+        ],
+        [
+            106.50297809999995,
+            29.769867090000106
+        ],
+        [
+            106.50225570000004,
+            29.769949870000006
+        ],
+        [
+            106.50221599999998,
+            29.770002990000138
+        ],
+        [
+            106.50197630000003,
+            29.7702943700001
+        ],
+        [
+            106.49967960000009,
+            29.770380520000118
+        ],
+        [
+            106.49954170000001,
+            29.770586500000094
+        ],
+        [
+            106.49950600000011,
+            29.77082180000002
+        ],
+        [
+            106.49929450000002,
+            29.771030540000085
+        ],
+        [
+            106.49910050000011,
+            29.771005110000098
+        ],
+        [
+            106.498919,
+            29.771085490000023
+        ],
+        [
+            106.49867710000007,
+            29.77102588000002
+        ],
+        [
+            106.49830659999998,
+            29.770867820000093
+        ],
+        [
+            106.49799630000007,
+            29.770786120000087
+        ],
+        [
+            106.4978107,
+            29.77090912999995
+        ],
+        [
+            106.49754920000004,
+            29.77109582000015
+        ],
+        [
+            106.49733320000007,
+            29.771214349999977
+        ],
+        [
+            106.49704150000014,
+            29.77133538000004
+        ],
+        [
+            106.49690870000012,
+            29.77141155999999
+        ],
+        [
+            106.49676850000009,
+            29.771527070000106
+        ],
+        [
+            106.49657560000009,
+            29.771710750000016
+        ],
+        [
+            106.49653460000008,
+            29.771862839999984
+        ],
+        [
+            106.4964356000001,
+            29.772295640000097
+        ],
+        [
+            106.49618759999999,
+            29.77237384
+        ],
+        [
+            106.49587030000004,
+            29.772388130000136
+        ],
+        [
+            106.4956117000001,
+            29.77241423999999
+        ],
+        [
+            106.49541100000005,
+            29.772496400000028
+        ],
+        [
+            106.49513979999995,
+            29.772577459999977
+        ],
+        [
+            106.49477380000008,
+            29.772661540000006
+        ],
+        [
+            106.49419480000012,
+            29.772795500000087
+        ],
+        [
+            106.49369730000001,
+            29.772809380000014
+        ],
+        [
+            106.49349689999991,
+            29.772808550000094
+        ],
+        [
+            106.49335389999999,
+            29.772853150000065
+        ],
+        [
+            106.49303270000007,
+            29.772849849999948
+        ],
+        [
+            106.49280650000003,
+            29.772760890000084
+        ],
+        [
+            106.49258130000004,
+            29.772605699999987
+        ],
+        [
+            106.49245310000009,
+            29.772499310000119
+        ],
+        [
+            106.49233740000011,
+            29.772404360000047
+        ],
+        [
+            106.49211709999998,
+            29.77227558000005
+        ],
+        [
+            106.49205039999998,
+            29.77207151000005
+        ],
+        [
+            106.49197570000001,
+            29.77184062999993
+        ],
+        [
+            106.49203870000008,
+            29.7717047700001
+        ],
+        [
+            106.49211909999997,
+            29.77157779000004
+        ],
+        [
+            106.49187090000004,
+            29.771418509999994
+        ],
+        [
+            106.49190420000014,
+            29.77128938999999
+        ],
+        [
+            106.49190610000011,
+            29.771155540000107
+        ],
+        [
+            106.49194130000001,
+            29.7710993500001
+        ],
+        [
+            106.49200710000014,
+            29.77104154000011
+        ],
+        [
+            106.49208320000003,
+            29.770956780000007
+        ],
+        [
+            106.4920272,
+            29.77081139000006
+        ],
+        [
+            106.49163189999996,
+            29.77081142000003
+        ],
+        [
+            106.49123120000007,
+            29.770808409999974
+        ],
+        [
+            106.49108429999996,
+            29.770801060000115
+        ],
+        [
+            106.49077580000005,
+            29.770759579999998
+        ],
+        [
+            106.49051319999995,
+            29.770747510000093
+        ],
+        [
+            106.49016919999991,
+            29.77077705000005
+        ],
+        [
+            106.48986140000005,
+            29.770821420000009
+        ],
+        [
+            106.4895515,
+            29.77090030000011
+        ],
+        [
+            106.4892451,
+            29.771023740000034
+        ],
+        [
+            106.4890185000001,
+            29.77115878000001
+        ],
+        [
+            106.48885359999997,
+            29.771219080000038
+        ],
+        [
+            106.48840340000004,
+            29.771095600000139
+        ],
+        [
+            106.48778990000005,
+            29.771017520000045
+        ],
+        [
+            106.48782680000011,
+            29.771182840000056
+        ],
+        [
+            106.48785250000009,
+            29.771312860000138
+        ],
+        [
+            106.48763020000001,
+            29.771469580000145
+        ],
+        [
+            106.48705160000009,
+            29.771736970000064
+        ],
+        [
+            106.48688400000009,
+            29.771816860000116
+        ],
+        [
+            106.48626059999998,
+            29.77199171000001
+        ],
+        [
+            106.48594170000007,
+            29.77198745000004
+        ],
+        [
+            106.48584349999993,
+            29.771982220000099
+        ],
+        [
+            106.48505900000004,
+            29.77230443999997
+        ],
+        [
+            106.48476399999999,
+            29.77243578999997
+        ],
+        [
+            106.48273200000006,
+            29.773223050000128
+        ],
+        [
+            106.48233440000007,
+            29.773438699999987
+        ],
+        [
+            106.48218109999999,
+            29.773518410000017
+        ],
+        [
+            106.48129849999998,
+            29.773955050000099
+        ],
+        [
+            106.47976440000002,
+            29.774716890000098
+        ],
+        [
+            106.47956990000012,
+            29.774725720000107
+        ],
+        [
+            106.47945590000006,
+            29.77474142999995
+        ],
+        [
+            106.47689440000005,
+            29.77544765999994
+        ],
+        [
+            106.47642410000003,
+            29.775587499999977
+        ],
+        [
+            106.47609449999999,
+            29.775663870000068
+        ],
+        [
+            106.47284189999994,
+            29.773401770000139
+        ]
+    ]
+;
+
+var pointList = [];
+for (var i in features) {
+      pointList.push(new Cesium.Cartesian3.fromDegrees(features[i][0], features[i][1],150));
+
+}
+console.log(pointList);
+var jianceList = [];
+var gxjcdList = [
+    {
+        "attributes": {
+            "FID": 0,
+            "code": "GB01",
+            "L": 106.4937500,
+            "B": 29.7715583,
+            "H": 251.02
+			}
+    },
+    {
+        "attributes": {
+            "FID": 1,
+            "code": "GB02",
+            "L": 106.4933361,
+            "B": 29.7719944,
+            "H": 237.97
+			}
+    },
+    {
+        "attributes": {
+            "FID": 2,
+            "code": "GB03",
+            "L": 106.4928944,
+            "B": 29.7724583,
+            "H": 210.43
+			}
+    },
+    {
+        "attributes": {
+            "FID": 3,
+            "code": "GB04",
+            "L": 106.4941806,
+            "B": 29.7714306,
+            "H": 249.81
+			}
+    },
+    {
+        "attributes": {
+            "FID": 4,
+            "code": "GB05",
+            "L": 106.4942694,
+            "B": 29.7718056,
+            "H": 241.01
+			}
+    },
+    {
+        "attributes": {
+            "FID": 5,
+            "code": "GB06",
+            "L": 106.4943861,
+            "B": 29.7722583,
+            "H": 217.61
+			}
+    },
+    {
+        "attributes": {
+            "FID": 6,
+            "code": "YB01",
+            "L": 106.4926278,
+            "B": 29.7726389,
+            "H": 201.56
+			}
+    },
+    {
+        "attributes": {
+            "FID": 7,
+            "code": "YB02",
+            "L": 106.4944833,
+            "B": 29.7727194,
+            "H": 206.54
+			}
+    },
+    {
+        "attributes": {
+            "FID": 8,
+            "code": "JY01",
+            "L": 106.4935000,
+            "B": 29.7727917,
+            "H": 233.42
+			}
+    },
+    {
+        "attributes": {
+            "FID": 9,
+            "code": "SP01",
+            "L": 106.4935167,
+            "B": 29.7727778,
+            "H": 233.21
+        }
+    }
+]
+
+for (var i in gxjcdList) {
+    var temp = {};
+    temp.point = Cesium.Cartesian3.fromDegrees(gxjcdList[i].attributes.L, gxjcdList[i].attributes.B, gxjcdList[i].attributes.H);
+    temp.name = gxjcdList[i].attributes.code;
+    jianceList.push(temp);
+}
+console.log(jianceList);

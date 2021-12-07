@@ -186,6 +186,24 @@ function LoadwuRenJiXuShiLayer(projectid) {
                         });
                         return false;
                     });
+                    //报告下载
+                    form.on('submit(downWord)', function (data) {
+                      
+                        data.id = currentprojectid;
+                        console.log(data);
+                        // data.field.patrolStatus = "1";//这里已处理的
+                        var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+
+                        $.ajax({
+                            url: servicesurl + "/api/FlzWordWxpert/GetWordMLHelper", type: "get", data: { "id": currentprojectid, "cookie": document.cookie},
+                            success: function (result) {
+                                layer.close(loadingminindex);
+                                console.log(result); 
+                               // window.location.href = 'http://www.cq107chy.com:4022/SurImage/Download/' + "南川区李家湾滑坡20211203142945174.docx";
+                            }, datatype: "json"
+                        });
+                        return false;
+                    });
 
                 }
                 , end: function () {
@@ -1407,6 +1425,7 @@ var partolHtm =  "    <div class='layui-tab layui-tab-brief' lay-filter='docDemo
     + "            <li lay-id='111' class='layui-this' style='display: block;'>设备巡查</li>                                                                                     "
     + "            <li lay-id='222' style='display: block;'>裂缝巡查</li>                                                                                                        "
     + "            <li lay-id='333' style='display: block;'>基座巡查</li>                                                                                                        "
+    + "            <li lay-id='444' style='display: block;'>报告下载</li>                                                                                                        "
     + "        </ul>                                                                                                                                                "
     + "                                                                                                                                                             "
     + "        <div class='layui-tab-content' id='xunShiDiv' style='margin-left:120px;height:600px;border-left:solid;border-left-color:#e6e6e6;border-left-width:1px;'>      "
@@ -1576,6 +1595,23 @@ var partolHtm =  "    <div class='layui-tab layui-tab-brief' lay-filter='docDemo
     + "							<a class='layui-btn layui-btn-xs' lay-event='edit'>处理</a>                       "
     + "						</script>                                                                             "
   //  + "                 <div  id='jiZuoXunShiTree'></div>                                                                                                                                             "
+    + "            </div>                                                                                                                                            "
+    + "            <div class='layui-tab-item' >                                                                                                                      "
+    + "                <!--报告下载-->                                                                                                                               "
+    + "					<form class='layui-form' style='margin-bottom:15px;margin-right:5px;' lay-filter='downWordinfoform'>	"
+    + "						    <div class='layui-form-item'>	"
+    + "						        <div class='layui-row'>	"
+    + "						            <div class='layui-col-md6'>	"
+    + "						                <div class='grid-demo grid-demo-bg1'>	"
+    + "						                     <div style='position:absolute;right:25px;'>	"
+    + "						                        <button type='submit' class='layui-btn' lay-submit='' lay-filter='downWord' style='width:100px'>旬报下载</button>	"
+    + "						                     </div>	"
+    + "						                </div>	"
+    + "						            </div>	"
+    + "						        </div>	"
+    + "						    </div>	"
+    + "						</form>	"
+    //  + "                 <div  id='jiZuoXunShiTree'></div>                                                                                                                                             "
     + "            </div>                                                                                                                                            "
     + "        </div>                                                                                                                                                "
  //   + "    </div>                                                                                                                                                    "
