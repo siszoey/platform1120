@@ -480,6 +480,8 @@ function ImageTargetInfo(id, style) {
                                         image.yxbh = imageinfos[i].YXBH;
                                         image.yxlj = imageinfos[i].YXLJ;
                                         image.bz = imageinfos[i].BZ;
+                                        image.width = imageinfos[i].Width;
+                                        image.height = imageinfos[i].Height;
                                         //image.xmp = imageinfos[i].XMP;
                                         //image.xmpjson = JSON.parse(image.xmp);
                                         
@@ -523,7 +525,9 @@ function ImageTargetInfo(id, style) {
                                         var b;
                                         var h;
                                         var firstmark;
-
+                                        var imagewidth;
+                                        var imageheight;
+                                   
                                         //创建一个影像上传组件
                                         var uploadinst = upload.render({
                                             elem: '#image_timeimage_select' //绑定元素
@@ -549,7 +553,13 @@ function ImageTargetInfo(id, style) {
                                                 },
                                                 firstmark: function () {
                                                     return firstmark;
-                                                },                                              
+                                                },  
+                                                imagewidth: function () {
+                                                    return imagewidth;
+                                                }, 
+                                                imageheight: function () {
+                                                    return imageheight;
+                                                }, 
                                                 cookie: function () {
                                                     return document.cookie;
                                                 }
@@ -567,7 +577,7 @@ function ImageTargetInfo(id, style) {
                                                     image.onload = function () {
                                                         EXIF.getData(image, function () {
                                                             var exifs = EXIF.pretty(this);
-                                                            imagetime = EXIF.getTag(this, "DateTimeOriginal");                                                   
+                                                            imagetime = EXIF.getTag(this, "DateTimeOriginal");  
                                                             f = EXIF.getTag(this, "FocalLength");
                                                             f = f.numerator * 1.0 / f.denominator;
                                                             camera = EXIF.getTag(this, "Model");
@@ -577,6 +587,8 @@ function ImageTargetInfo(id, style) {
                                                             b = bs[0].numerator + (bs[1].numerator / 60) + (bs[2].numerator /( bs[2].denominator * 3600));   
                                                             l = ls[0].numerator + (ls[1].numerator / 60) + (ls[2].numerator /( ls[2].denominator * 3600));
                                                             h = hs.numerator / hs.denominator;
+                                                            imagewidth = EXIF.getTag(this, "PixelXDimension");
+                                                            imageheight = EXIF.getTag(this, "PixelYDimension");
                                                         });
                                                     }                                                
 
@@ -631,46 +643,102 @@ function ImageTargetInfo(id, style) {
                     table.on('tool(image_timeimage-edit)', function (obj) {
                         var data = obj.data;
                         var layEvent = obj.event;
-                        var imageid = data.id;                       
+                        var imageid = data.id;  
+                        var yxbh = data.yxbh;
+                        var w = data.width;
+                        var h = data.height;
+
                         if (layEvent === 'timeimageview') {
                             //4.4.1查看影像
                             //TODO 影像查看放大缩小功能
+
                             layer.open({
                                 type: 1
-                                , title: ['影像查看', 'font-weight:bold;font-size:large;font-family:Microsoft YaHei']
-                                , area: ['720px', '600px']
+                                , title: ['消息', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
+                                , area: ['800px', '800px']
                                 , shade: 0
                                 , offset: 'auto'
                                 , closeBtn: 1
-                                , maxmin: false
+                                , maxmin: true
                                 , moveOut: true
-                                , content: '<form class="layui-form" style="margin-top:10px" lay-filter="viewtimeimageform">  <div class="layui-form-item" style="height: 560px;"><div class="layui-upload-list"><img class="layui-upload-img" id="image_timeimage_img" name="image_timeimage_img" style="width:100%;height:100%;vertical-align:middle"></div></div></form>'
+                                , content: '<div id="openseadragon1" style="width: 100%; height: 100%;"></div>'
                                 , zIndex: layer.zIndex
                                 , success: function (layero) {
                                     layer.setTop(layero);
-                                    //点击单个影像 返回该影像信息并显示
 
-
-                                    //加载大图片
-                                    $.ajax({
-                                        url: servicesurl + "/api/ImageUpload/GetImageFile", type: "get", data: { "id": imageid, "cookie": document.cookie },
-                                        success: function (data) {
-                                            var result = JSON.parse(data);
-                                            //var result = data;
-                                            if (result.code == 1) {
-                                                var imagefile = JSON.parse(result.data);
-                                                $('#image_timeimage_img')[0].src = "data:image/jpeg;base64," + imagefile;
-                                            }
-                                            layer.msg(result.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                                        }, datatype: "json"
+                                    //加载
+                                    OpenSeadragon({
+                                        id: "openseadragon1",
+                                        prefixUrl: "/Scripts/openseadragon/images/",
+                                        tileSources: [{
+                                            type: "zoomifytileservice",
+                                            width: w,
+                                            height: h,
+                                            //tilesUrl: "http://www.cq107chy.com:4022/SurDOMDSM/500243000001_1_20210725094538/"
+                                            tilesUrl: "http://www.cq107chy.com:4022/SurDOMDSM/" + yxbh+"/"
+                                        }]
                                     });
+
+
+                                }
+                                , end: function () {
+                                    headernoticelayerindex = null;
+                                }
+                            });
+
+
+
+
+
+
+                            //layer.open({
+                            //    type: 1
+                            //    , title: ['影像查看', 'font-weight:bold;font-size:large;font-family:Microsoft YaHei']
+                            //    , area: ['720px', '600px']
+                            //    , shade: 0
+                            //    , offset: 'auto'
+                            //    , closeBtn: 1
+                            //    , maxmin: false
+                            //    , moveOut: true
+                            //    , content: '<form class="layui-form" style="margin-top:10px" lay-filter="viewtimeimageform">  <div class="layui-form-item" style="height: 560px;"><div class="layui-upload-list"><img class="layui-upload-img" id="image_timeimage_img" name="image_timeimage_img" style="width:100%;height:100%;vertical-align:middle"></div></div></form>'
+                            //    , zIndex: layer.zIndex
+                            //    , success: function (layero) {
+                            //        layer.setTop(layero);
+                            //        //点击单个影像 返回该影像信息并显示
+
+
+                            //        //加载大图片
+                            //        $.ajax({
+                            //            url: servicesurl + "/api/ImageUpload/GetImageFile", type: "get", data: { "id": imageid, "cookie": document.cookie },
+                            //            success: function (data) {
+                            //                var result = JSON.parse(data);
+                            //                //var result = data;
+                            //                if (result.code == 1) {
+                            //                    var imagefile = JSON.parse(result.data);
+                            //                    $('#image_timeimage_img')[0].src = "data:image/jpeg;base64," + imagefile;
+                            //                }
+                            //                layer.msg(result.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                            //            }, datatype: "json"
+                            //        });
 
 
 
                                    
-                                }
-                                , end: function () { }
-                            });
+                            //    }
+                            //    , end: function () { }
+                            //});
+
+
+
+
+
+
+
+
+
+
+
+
                         }
 
                         //4.4.2删除影像

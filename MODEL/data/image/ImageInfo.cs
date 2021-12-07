@@ -56,6 +56,17 @@ namespace MODEL
         /// 目标id
         /// </summary>
         public string targetid { get; set; }
+        public int Width { get; set; }
+        /// <summary>
+        /// 影像名称
+        /// </summary>
+
+        public int Height { get; set; }
+        /// <summary>
+        /// 影像名称
+        /// </summary>
+
+
 
     }
 }

@@ -45,6 +45,9 @@ namespace SERVICE.Controllers
             string f = HttpContext.Current.Request.Form["f"];//焦距
             string camera = HttpContext.Current.Request.Form["camera"];//相机型号
             string firstmark = HttpContext.Current.Request.Form["firstmark"];
+            string imagewidth= HttpContext.Current.Request.Form["imagewidth"];
+            string imageheight= HttpContext.Current.Request.Form["imageheight"];
+
             #endregion
 
             string image_bz_add = HttpContext.Current.Request.Form["bz"];
@@ -86,7 +89,6 @@ namespace SERVICE.Controllers
                         return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, "影像数据存在错误！", string.Empty));
                     }
                     #endregion
-
                     #region 压缩
                     //MemoryStream ms1 = new MemoryStream(bytea);
                     //Bitmap bitmap1 = (Bitmap)Image.FromStream(ms1);
@@ -175,6 +177,8 @@ namespace SERVICE.Controllers
 
                     #endregion
 
+
+
                     #region 另存为本地图片
                     string ImageFilePath = imgdir + "\\SurImage";        //   ".../SurImage"
                     if (!Directory.Exists(ImageFilePath))//判断文件夹是否存在
@@ -196,14 +200,25 @@ namespace SERVICE.Controllers
                     }
                     #endregion
 
+
+
+                    #region
+                    var inputimg = new ZoomifyImage(imageFileName);//输入影像
+                    //var inputimg = new ZoomifyImage(new MemoryStream(bytea));
+
+
+                    inputimg.Zoomify(ImageFilePath + "\\" + yxbh);//输出瓦片
+
+                    #endregion
+
                     #region 存数据库
                     string mbmc = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT mbmc FROM image_target WHERE id={0} AND bsm{1} AND ztm={2}", targetid, userbsms, (int)MODEL.Enum.State.InUse));
                     string projectid1 = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT projectid FROM image_map_project_target WHERE targetid={0} AND ztm={1}", targetid, (int)MODEL.Enum.State.InUse));
                     string xmmc = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT xmmc FROM image_project WHERE id={0} AND bsm{1} AND ztm={2}", projectid1, userbsms, (int)MODEL.Enum.State.InUse));
 
-                    string yxmc = xmmc + "_" + mbmc + "_" + imageXMP.CreateDate.Replace("-", " ").Replace(":", " ").Replace(" ", "");
+                    string yxmc = xmmc + "_" + mbbh + "_" + imageXMP.CreateDate.Replace("-", " ").Replace(":", " ").Replace(" ", "");
 
-                    int imageinfoid = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, string.Format("INSERT INTO image_imageinfo(yxmc, yxbh, yxlj,xmp,cjsj, bsm, ztm, bz,mark) VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8})",
+                    int imageinfoid = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, string.Format("INSERT INTO image_imageinfo(yxmc, yxbh, yxlj,xmp,cjsj, bsm, ztm, bz,mark,width,height) VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10})",
                         SQLHelper.UpdateString(yxmc),
                         SQLHelper.UpdateString(yxbh),
                         SQLHelper.UpdateString(imageFileName),
@@ -212,7 +227,9 @@ namespace SERVICE.Controllers
                         SQLHelper.UpdateString(target.BSM),
                         (int)MODEL.Enum.State.InUse,
                         SQLHelper.UpdateString(image_bz_add),
-                        (int)MODEL.EnumIMG.MatchMark.NotMatched
+                        (int)MODEL.EnumIMG.MatchMark.NotMatched,
+                        imagewidth,
+                        imageheight
                         ));
                     if (imageinfoid == -1)
                     {
