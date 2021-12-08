@@ -41,8 +41,8 @@ var curtileset = null;//当前模型
 /*
  * 图标常量
  */
-var LANDSLIDEICON = '<span style="margin-right:2px;"><img src="../../../Resources/img/map/project_type_landslide.png" style="width:14px;height:14px;"/></span>';
-var ROCKFALLICON = '<span style="margin-right:2px;"><img src="../../../Resources/img/map/project_type_rockfall.png" style="width:14px;height:14px;"/></span>';
+var LANDSLIDEICON = '<span style="margin-left:5px;margin-right:5px;"><img src="../../../Resources/img/map/project_type_landslide.png" style="width:14px;height:14px;"/></span>';
+var ROCKFALLICON = '<span style="margin-left:5px;margin-right:5px;"><img src="../../../Resources/img/map/project_type_rockfall.png" style="width:14px;height:14px;"/></span>';
 
 
 

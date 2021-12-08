@@ -137,6 +137,7 @@ function GetUserProjects() {
                     , data: projectdatagrouptime
                     , edit: ['add', 'update', 'del']
                     , accordion: true
+                    , cancelNodeFileIcon: true
                     , click: function (obj) {
                         ProjectNodeClick(obj);
                     }
@@ -152,6 +153,7 @@ function GetUserProjects() {
                     , edit: ['add', 'update', 'del']
                     , customOperate: true
                     , accordion: true
+                    , cancelNodeFileIcon: true
                     , click: function (obj) {
                         ProjectNodeClick(obj);
                     }
