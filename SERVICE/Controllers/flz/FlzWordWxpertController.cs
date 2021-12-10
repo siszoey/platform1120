@@ -194,7 +194,8 @@ namespace SERVICE.Controllers
                     }
                     else//雨量没数据，怎么办？
                     {
-
+                        yuLiangMax = 0;
+                        yuLiangTime = year+"-"+month+"-" + day;
                     }
                     continue;
                 }
@@ -212,21 +213,12 @@ namespace SERVICE.Controllers
                         List<DataStatistics> dslist = lfMonitorPerDay.Statistics;
                         for (int j = 0; j < dslist.Count; j++)
                         {
-                            if (dslist[j].Name == "水平位移")
-                            {
-                                tempDataStatistics.Min = dslist[j].Avg;//用min来装上一旬的水平位移
-
-                            }
-                            if (dslist[j].Name == "垂直位移")
-                            {
-                                tempDataStatistics.Max = dslist[j].Avg;//用max来装上一旬的垂直位移
-                            }
+                            tempDataStatistics.Min = dslist[j].Avg;//用min来装上一旬的水平位移
                         }
                     }
                     else
                     {
                         tempDataStatistics.Min = 0;//用min来装上一旬的水平位移
-                        tempDataStatistics.Max = 0;//用max来装上一旬的垂直位移
                     }
                     if (toady != null && toady != "")
                     {
@@ -234,22 +226,12 @@ namespace SERVICE.Controllers
                         List<DataStatistics> dslist = lfMonitortoady.Statistics;
                         for (int j = 0; j < dslist.Count; j++)
                         {
-                            if (dslist[j].Name == "水平位移")
-                            {
-                                tempDataStatistics.Avg = dslist[j].Avg;//用Avg来装今天的水平位移
-                                xys.Add(dslist[j].Avg);
-                            }
-                            if (dslist[j].Name == "垂直位移")
-                            {
-                                tempDataStatistics.Sd = dslist[j].Avg;//用Sd来装今天的垂直位移
-                                hs.Add(dslist[j].Avg);
-                            }
+                           tempDataStatistics.Avg = dslist[j].Avg;//用Avg来装今天的水平位移
                         }
                     }
                     else
                     {
                         tempDataStatistics.Avg = 0;//用Avg来装今天的水平位移
-                        tempDataStatistics.Sd = 0;//用Sd来装今天的垂直位移
                     }
                     dataLieFengStatisticsList.Add(tempDataStatistics);//装裂缝数据。
                     //本旬的数据，用来画折线图
@@ -343,15 +325,15 @@ namespace SERVICE.Controllers
 
                                 if (day >= 1 && day <= 10)
                                 {
-                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + 3  + ((month - 1) * 3 + 1) + "");
+                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 1) + "");
                                 }
                                 else if (day >= 11 && day <= 20)
                                 {
-                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + 3  + ((month - 1) * 3 + 2) + "");
+                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 2) + "");
                                 }
                                 else
                                 {
-                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + 3  + ((month - 1) * 3 + 3) + "");
+                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 3) + "");
                                 }
                             }
                         }
@@ -367,31 +349,7 @@ namespace SERVICE.Controllers
                         tagInfos[i].AddContent(txtInfo);
                         continue;
                     }
-                    
-                    if (string.Equals(tagInfos[i].TagTips.Trim(), "[分包名称]"))
-                    {
-                        TxtInfo txtInfo = new TxtInfo();
-                        txtInfo.Content = "重庆市地质灾害二级专业监测预警项目（分包1）";
-                        txtInfo.Size = 32;
-                        txtInfo.Bold = "true";
-                        tagInfos[i].AddContent(txtInfo);
-                        continue;
-                    }
-                    if (string.Equals(tagInfos[i].TagTips.Trim(), "[项目名称]"))
-                    {
-                        TxtInfo txtInfo = new TxtInfo();
-                        txtInfo.Content = "南川区李家湾滑坡";
-                        txtInfo.Size = 40;
-                        txtInfo.Bold = "true";
-                        tagInfos[i].AddContent(txtInfo);
-                        continue;
-                    }
-                    if (string.Equals(tagInfos[i].TagTips.Trim(), "[项目名称1]"))
-                    {
-                        wordMLHelper.FillContentWithoutStyle(tagInfos[i], "南川区李家湾滑坡");
-                        continue;
-
-                    }
+                  
                     if (string.Equals(tagInfos[i].TagTips.Trim(), "[水平最大值]"))
                     {
                         TxtInfo txtInfo = new TxtInfo();
@@ -456,6 +414,7 @@ namespace SERVICE.Controllers
                             if (dataStatisticsList[m].Avg - dataStatisticsList[m].Min > bianXing)//水平位移，得到。
                             {
                                 name = dataStatisticsList[m].Name;
+                                bianXing = dataStatisticsList[m].Avg - dataStatisticsList[m].Min;
                             }
                         }
                         txtInfo.Content = name;
@@ -489,6 +448,7 @@ namespace SERVICE.Controllers
                             if (Math.Abs(dataStatisticsList[m].Sd - dataStatisticsList[m].Max) > Math.Abs(bianXing))//水平位移，得到。
                             {
                                 name = dataStatisticsList[m].Name;
+                                bianXing= dataStatisticsList[m].Sd - dataStatisticsList[m].Max;
                             }
                         }
                         txtInfo.Content = name;
@@ -522,7 +482,26 @@ namespace SERVICE.Controllers
                             
                             if (Math.Abs(dataLieFengStatisticsList[n].Avg) > Math.Abs(tempLf))//绝对值大的那个，变化两大
                             {
-                                txtInfo.Content = Math.Round(dataLieFengStatisticsList[n].Avg, 1) + "mm,编号为" + dataLieFengStatisticsList[n].Name; 
+                                txtInfo.Content = Math.Round(dataLieFengStatisticsList[n].Avg, 1) + "mm,编号为" + dataLieFengStatisticsList[n].Name;
+                                tempLf = dataLieFengStatisticsList[n].Avg;
+                            }
+                        }
+                        tagInfos[i].AddContent(txtInfo);
+                        continue;
+                    }
+                    if (string.Equals(tagInfos[i].TagTips.Trim(), "[裂缝变形最大值]"))
+                    {
+                        TxtInfo txtInfo = new TxtInfo();
+
+                        double tempLf = dataLieFengStatisticsList[0].Avg - dataLieFengStatisticsList[0].Min;
+                        txtInfo.Content = Math.Abs(Math.Round(tempLf, 1)) + "mm,编号为" + dataLieFengStatisticsList[0].Name;
+                        for (int n = 0; n < dataLieFengStatisticsList.Count; n++)
+                        {
+
+                            if (Math.Abs(dataLieFengStatisticsList[n].Avg- dataLieFengStatisticsList[n].Min) > Math.Abs(tempLf))//绝对值大的那个，变化两大
+                            {
+                                txtInfo.Content = Math.Round(dataLieFengStatisticsList[n].Avg - dataLieFengStatisticsList[n].Min, 1) + "mm,编号为" + dataLieFengStatisticsList[n].Name;
+                                tempLf = dataLieFengStatisticsList[n].Avg - dataLieFengStatisticsList[n].Min;
                             }
                         }
                         tagInfos[i].AddContent(txtInfo);
@@ -721,7 +700,7 @@ namespace SERVICE.Controllers
                         }
                         
                     }
-                    if (tagInfos[i].Seq == 13)
+                    if (tagInfos[i].Seq == 13)//裂缝，大蓝牙，周家原子
                     {
                         tagInfos[i].Tbl.TblType = TblType.HORIZONTAL_HEADER;
                         TableStructureInfo tblInfo = tagInfos[i].Tbl;
@@ -744,19 +723,11 @@ namespace SERVICE.Controllers
                                 }
                                 else if (k == 2)
                                 {
-                                    //if (datatemp.Avg - datatemp.Min < 0)
-                                    //{
-                                    //    txtInfo.Content = "-";
-                                    //}
-                                    //else
-                                    //{
-                                    txtInfo.Content = Math.Round(datatemp.Avg - datatemp.Min, 1) + "";
-                                    //}
-
+                                    txtInfo.Content = Math.Round((datatemp.Avg - datatemp.Min) , 2) + "";
                                 }
                                 else if (k == 3)//垂直
                                 {
-                                    txtInfo.Content = Math.Round((datatemp.Avg - datatemp.Min)/10, 1) + "";
+                                    txtInfo.Content = Math.Abs(Math.Round((datatemp.Avg - datatemp.Min), 2)) + "mm/10d";
                                 }
                                 txtInfo.Size = 20;
                                 cell.AddContent(txtInfo);
@@ -768,7 +739,21 @@ namespace SERVICE.Controllers
 
                 }
             }
-            string outputPath = projectString.ZHDMC+ DateTime.Now.ToString("yyyyMMddHHmmssfff")+".docx";
+            //2021年11月下旬旬报
+            string xunbaoName="";
+            if (day >= 1 && day <= 10)
+            {
+                xunbaoName= "上旬旬报";
+            }
+            else if (day >= 11 && day <= 20)
+            {
+                xunbaoName = "中旬旬报";
+            }
+            else
+            {
+                xunbaoName = "下旬旬报";
+            }
+            string outputPath = projectString.XMMC +"-"+ DateTime.Now.ToString("yyyy年MM月")+ xunbaoName + ".docx";
             if (!string.IsNullOrEmpty(outputPath))
             {
                
@@ -953,10 +938,10 @@ namespace SERVICE.Controllers
             }
 
             //底部文字
-            int singleWidth = width / 5;
+            int singleWidth = width / sumToal;
             int pingJun = Convert.ToInt32(Math.Ceiling(sumToal / 5.0));
             
-            for (int i = 0; i < bottomData.Length; i++)
+            for (int i = 0; i <=sumToal; i++)
             {
                 if (i% pingJun==0)
                 {
@@ -965,21 +950,23 @@ namespace SERVICE.Controllers
 
                     //x轴下的文字
                     //指向线
-                    g.DrawLine(blackPen, margin_left + Convert.ToInt32(Math.Ceiling(i / pingJun*1.0)) * singleWidth, (height + margin_top), margin_left + Convert.ToInt32(Math.Ceiling(i / pingJun * 1.0)) * singleWidth, (height + margin_top + 5));
+                    g.DrawLine(blackPen, margin_left + i * singleWidth, (height + margin_top), margin_left + i * singleWidth, (height + margin_top + 5));
                     //文字
-                    RectangleF rec = new RectangleF(margin_left + (Convert.ToInt32(Math.Ceiling(i / pingJun * 1.0)) * singleWidth) - singleWidth / 2, (height + margin_top + 15), singleWidth, (margin_bottom - 20));
-                    g.DrawString(year+"-"+month+"-"+(day-bottomData[bottomData.Length-i-1] /24), font, blackBrush, rec, format);
+                    RectangleF rec = new RectangleF((i * singleWidth)+30 , (height + margin_top + 15), 100, (margin_bottom - 20));
+                    g.DrawString(year+"-"+month+"-"+(day- (sumToal-i) / 24), font, blackBrush, rec, format);
                 }
-                if (i == bottomData.Length - 1)
+                if (i == sumToal)
                 {
+                    
+
                     StringFormat format = new StringFormat();
                     format.Alignment = StringAlignment.Center; //居中
 
                     //x轴下的文字
                     //指向线
-                    g.DrawLine(blackPen, margin_left + width, (height + margin_top), margin_left + width, (height + margin_top + 5));
+                    g.DrawLine(blackPen, margin_left + i * singleWidth, (height + margin_top), margin_left + i * singleWidth, (height + margin_top + 5));
                     //文字
-                    RectangleF rec = new RectangleF(margin_left + width - singleWidth / 2, (height + margin_top + 15), singleWidth, (margin_bottom - 20));
+                    RectangleF rec = new RectangleF((i * singleWidth)+30, (height + margin_top + 15), 100, (margin_bottom - 20));
                     g.DrawString((year + "-" + month + "-" + day), font, blackBrush, rec, format);
                 }
 
@@ -989,6 +976,7 @@ namespace SERVICE.Controllers
 
             for (int i = 0; i < lineName.Count; i++)
             {
+                
                 //随机颜色
                 Color tempColor = colors[i];//GetRandomColor();
 
@@ -1010,12 +998,15 @@ namespace SERVICE.Controllers
                 // 文字
                 RectangleF rec = new RectangleF(margin_left + width + 10 + 25, margin_top + i * 25, 80, 20);
                 g.DrawString(lineName[i], font, blackBrush, rec, format);
-
+                if (data[i].Count < 2)//只有一个点的情况，
+                {
+                    continue;
+                }
                 //这里要开始画折线了
                 Point[] points = new Point[data[i].Count];
                 for (int j = 0; j < data[i].Count; j++)
                 {
-                    //singleWidth = width / lineData[i].Count; 
+                    
                     singleWidth = width / sumToal;
                     string time = data[i][j].time;
 
@@ -1028,15 +1019,15 @@ namespace SERVICE.Controllers
                     int sumToal2 = 0;
                     if (day2 >= 1 && day2 <= 10)
                     {
-                        sumToal2 = (day2 - 1) * 24 + hh2 ;
+                        sumToal2 = (day2 - 1) * 24 + hh2+1 ;
                     }
                     else if (day2 >= 11 && day2 <= 20)
                     {
-                        sumToal2 = (day2 - 11) * 24 + hh2;
+                        sumToal2 = (day2 - 11) * 24 + hh2+1;
                     }
                     else
                     {
-                        sumToal2 = (day2 - 21) * 24 + hh2;
+                        sumToal2 = (day2 - 21) * 24 + hh2+1;
                     }
                     // sumToal = (day - 1) * 24 + hh + 1;
                     //int x = width - ((day - day2) * 24 + hh - hh2+1) * singleWidth + margin_left;
@@ -1069,7 +1060,7 @@ namespace SERVICE.Controllers
             #region 允许配置项
 
             //定义宽高
-            int height = 353, width = 600;
+            int height = 400, width = 730;
 
             //边缘位置留白
             int margin_top = 20;

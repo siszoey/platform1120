@@ -236,7 +236,7 @@ function pointMeasure2() {
 
                     if (height > 0) {
                         // showCeliang = " 位置:" + "\n" + " X:" + position.x.toFixed(6) + "\n" + " Y:" + position.y.toFixed(6) + "\n" + " Z:" + position.z.toFixed(6);
-                        showCeliang = "X: " + (xy.x).toFixed(3) + "\n" + "Y: " + parseFloat(xy.y).toFixed(3) + "\n" + "L: " + ToDegress(longitude) + "\n" + "B: " + ToDegress(latitude) + "\n" + "H: " + (height + 31.80).toFixed(2);
+                        showCeliang = "X: " + (xy.x).toFixed(3) + "\n" + "Y: " + parseFloat(xy.y).toFixed(3) + "\n" + "L: " + ToDegress(longitude) + "\n" + "B: " + ToDegress(latitude) + "\n" + "H: " + height.toFixed(2);
 
 
                         if (Cesium.defined(position)) {
@@ -249,16 +249,12 @@ function pointMeasure2() {
                                     disableDepthTestDistance: Number.POSITIVE_INFINITY
                                 }
                             });
-
-                            console.log(longitude.toFixed(6));
-                            console.log(latitude.toFixed(6));
-                            console.log((height + 31.80).toFixed(2));
                             //测试用
                             viewer.entities.add({
                                 name: "ptlMeasue" + NewGuidCL(),
                                 position: Cesium.Cartesian3.fromDegrees(longitude, latitude, height),
                                 label: {
-                                    text: '经纬度(' + longitude.toFixed(6) + ',' + latitude.toFixed(6) + ',' + (height + 31.80).toFixed(2) + ')',
+                                    text: '经纬度(' + longitude.toFixed(6) + ',' + latitude.toFixed(6) + ',' + height.toFixed(2) + ')',
                                     showBackground: true,
                                     backgroundColor: new Cesium.Color(0.165, 0.165, 0.165, 0.5),
                                     font: '16px Times New Roman',

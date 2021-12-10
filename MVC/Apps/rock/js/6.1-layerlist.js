@@ -868,11 +868,11 @@ function LoadLayerListLayer(id) {
                                                                                 id: data.children[i].id,
                                                                                 polyline: {
                                                                                     positions: pointList,
-                                                                                    width: 1,
+                                                                                    width: 2,
                                                                                     material: Cesium.Color.fromCssColorString('#09f4f7'),
                                                                                     show: true,
                                                                                     clampToGround: true,
-                                                                                    classificationType: Cesium.ClassificationType.CESIUM_3D_TILE
+                                                                                    classificationType: Cesium.ClassificationType.BOTH,
                                                                                 }
                                                                             });
 
@@ -971,10 +971,12 @@ function LoadLayerListLayer(id) {
                                                                                     positions: pointList,
                                                                                     width: 1,
                                                                                     material: Cesium.Color.RED,
-                                                                                    depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-                                                                                        color: Cesium.Color.RED
-                                                                                    }),
-                                                                                    
+                                                                                    //depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
+                                                                                    //    color: Cesium.Color.RED
+                                                                                    //}),
+                                                                                    show: true,
+                                                                                    clampToGround: true,
+                                                                                    classificationType: Cesium.ClassificationType.BOTH,
                                                                                 }
                                                                             });
 
@@ -1030,9 +1032,9 @@ function LoadLayerListLayer(id) {
                                                                                     positions: pointList,
                                                                                     width: 1,
                                                                                     material: Cesium.Color.fromCssColorString('#09f4f7'),
-                                                                                    depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-                                                                                        color: Cesium.Color.fromCssColorString('#09f4f7')
-                                                                                    }),
+                                                                                    show: true,
+                                                                                    clampToGround: true,
+                                                                                    classificationType: Cesium.ClassificationType.BOTH,
                                                                                 }
                                                                             });
 
@@ -1172,10 +1174,11 @@ function LoadLayerListLayer(id) {
                                                                                     polyline: {
                                                                                         positions: pointList,
                                                                                         width: 1,
+                                                                                       
                                                                                         material: Cesium.Color.fromCssColorString('#09f4f7'),
                                                                                         show: true,
                                                                                         clampToGround: true,
-                                                                                        classificationType: Cesium.ClassificationType.CESIUM_3D_TILE
+                                                                                        classificationType: Cesium.ClassificationType.BOTH,
                                                                                     }
                                                                                 });
                                                                                 viewer.entities.add({
@@ -1275,10 +1278,9 @@ function LoadLayerListLayer(id) {
                                                                                         positions: pointList,
                                                                                         width: 1,
                                                                                         material: Cesium.Color.RED,
-                                                                                        depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-                                                                                            color: Cesium.Color.RED
-                                                                                        }),
-                                                                                        
+                                                                                        show: true,
+                                                                                        clampToGround: true,
+                                                                                        classificationType: Cesium.ClassificationType.BOTH,
                                                                                     }
                                                                                 });
 
@@ -1333,9 +1335,12 @@ function LoadLayerListLayer(id) {
                                                                                             positions: pointList,
                                                                                             width: 1,
                                                                                             material: Cesium.Color.fromCssColorString('#09f4f7'),
-                                                                                            depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-                                                                                                color: Cesium.Color.fromCssColorString('#09f4f7')
-                                                                                            }),
+                                                                                            //depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
+                                                                                            //    color: Cesium.Color.fromCssColorString('#09f4f7')
+                                                                                            //}),
+                                                                                            show: true,
+                                                                                            clampToGround: true,
+                                                                                            classificationType: Cesium.ClassificationType.BOTH,
                                                                                         }
                                                                                     });
 
@@ -1807,21 +1812,39 @@ function LoadLayerListLayer(id) {
 
                                                         if (entity == undefined) {
                                                             if (data.data.startPoint!=null) {
+                                                                //viewer.entities.add({
+                                                                //    id: data.id,
+                                                                //    wall: {
+                                                                //        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+                                                                //            data.data.startPoint.L,
+                                                                //            data.data.startPoint.B,
+                                                                //            180,
+                                                                //            data.data.endPoint.L,
+                                                                //            data.data.endPoint.B,
+                                                                //            180,
+                                                                //        ]),
+                                                                //        minimumHeights: [100, 100],
+                                                                //        material: Cesium.Color.YELLOW.withAlpha(0.3),//
+                                                                //    },
+                                                                //});
+                                                                var pointList = [];
+
+                                                                pointList.push(new Cesium.Cartesian3.fromDegrees(data.data.startPoint.L, data.data.startPoint.B, 160));
+                                                                pointList.push(new Cesium.Cartesian3.fromDegrees(data.data.endPoint.L, data.data.endPoint.B, 160));
+
                                                                 viewer.entities.add({
                                                                     id: data.id,
-                                                                    wall: {
-                                                                        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
-                                                                            data.data.startPoint.L,
-                                                                            data.data.startPoint.B,
-                                                                            180,
-                                                                            data.data.endPoint.L,
-                                                                            data.data.endPoint.B,
-                                                                            180,
-                                                                        ]),
-                                                                        minimumHeights: [100, 100],
-                                                                        material: Cesium.Color.YELLOW.withAlpha(0.3),//
-                                                                    },
+                                                                    polyline: {
+                                                                        positions: pointList,
+                                                                        width: 1,
+
+                                                                        material: Cesium.Color.fromCssColorString('#09f4f7'),
+                                                                        show: true,
+                                                                        clampToGround: true,
+                                                                        classificationType: Cesium.ClassificationType.BOTH,
+                                                                    }
                                                                 });
+                                                             
                                                                 viewer.entities.add({
                                                                     id: data.id + "_LABEL",
                                                                     position: Cesium.Cartesian3.fromDegrees(data.data.startPoint.L, data.data.startPoint.B, 180),
@@ -1927,12 +1950,9 @@ function LoadLayerListLayer(id) {
                                                                         positions: pointList,
                                                                         width: 1,
                                                                         material: Cesium.Color.RED,
-                                                                        depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-                                                                            color: Cesium.Color.RED
-                                                                        }),
-                                                                        //show: true,
-                                                                        //clampToGround: true,
-                                                                        //classificationType: Cesium.ClassificationType.CESIUM_3D_TILE
+                                                                        show: true,
+                                                                        clampToGround: true,
+                                                                        classificationType: Cesium.ClassificationType.BOTH,
                                                                     }
                                                                 });
 
@@ -2084,9 +2104,9 @@ function LoadLayerListLayer(id) {
                                                                         positions: pointList,
                                                                         width: 1,
                                                                         material: Cesium.Color.fromCssColorString('#09f4f7'),
-                                                                        depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-                                                                            color: Cesium.Color.fromCssColorString('#09f4f7')
-                                                                        }),
+                                                                        show: true,
+                                                                        clampToGround: true,
+                                                                        classificationType: Cesium.ClassificationType.BOTH,
                                                                     }
                                                                 });
 

@@ -205,10 +205,11 @@ function FlyToChina() {
 function LoadModel(obj) {
     //var modelurl = "../Data/SurModel" + obj.path;
     var modelurl =''
-    if (currentprojectid!=28) {//
-        modelurl = datasurl + "/GeoModel" + obj.path;
-    } else {
+    if (currentprojectid == 28 || currentprojectid == 30) {//
         modelurl = datasurl + "/SurModel" + obj.path;
+    } else {
+
+        modelurl = datasurl + "/GeoModel" + obj.path;
     }
    
     //if (obj.MXST != null) {

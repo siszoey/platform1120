@@ -139,6 +139,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\AuthorityFilter.cs" />
     <Compile Include="Utility\UserManage.cs" />
@@ -611,6 +614,8 @@
     <Content Include="Apps\uav\widget\3.1-uavroute-mbtxcj.html" />
     <Content Include="Apps\uav\widget\2.0-uavroutetype.html" />
     <Content Include="Apps\uav\widget\1.0-uavproject-add.html" />
+    <Content Include="bin\MVC.dll" />
+    <Content Include="bin\MVC.pdb" />
     <Content Include="Resources\img\cesium\google_earth_pro.ico" />
     <Content Include="Resources\img\head\flzlogo.png" />
     <Content Include="Resources\img\head\imagelogo.png" />

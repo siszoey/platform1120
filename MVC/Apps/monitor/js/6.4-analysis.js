@@ -195,12 +195,17 @@ function LoadwuRenJiXuShiLayer(projectid) {
                         var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
 
                         $.ajax({
-                            url: servicesurl + "/api/FlzWordWxpert/GetWordMLHelper", type: "get", data: { "id": currentprojectid, "cookie": document.cookie},
+                            url: servicesurl + "/api/FlzWordWxpert/GetWordMLHelper", type: "get", data: { "id": currentprojectid, "cookie": document.cookie },
                             success: function (result) {
                                 layer.close(loadingminindex);
-                                console.log(result); 
-                               // window.location.href = 'http://www.cq107chy.com:4022/SurImage/Download/' + "南川区李家湾滑坡20211203142945174.docx";
-                            }, datatype: "json"
+                                console.log(result);
+                                window.location.href = 'http://www.cq107chy.com:4022/SurImage/Download/' + "南川区李家湾滑坡20211207144007726.docx";
+                            },
+                            error: function (res) {
+                                layer.close(loadingminindex);
+                                console.log(res);
+                                layer.msg(res.responseJSON.ExceptionMessage, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                            },datatype: "json"
                         });
                         return false;
                     });

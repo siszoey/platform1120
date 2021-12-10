@@ -592,37 +592,44 @@ namespace SERVICE.Controllers
                 int year = Convert.ToInt32(DateTime.Now.ToString("yyyy"));
                 int month = Convert.ToInt32(DateTime.Now.ToString("MM"));
                 int day = Convert.ToInt32(DateTime.Now.ToString("dd"));
-
-                if ((day >= 1) && (day <= 10))
+                if ((month == 1) && (day >= 1) && (day <= 10))//1月1到十号  上一年
                 {
-                    if ((month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12))
-                    {
-                        return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-31 00:00:00");
-                    }
-                    else if ((month == 4) || (month == 6) || (month == 9) || (month == 11))
-                    {
-                        return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-30 00:00:00");
-                    }
-                    else
-                    {
-                        if (year % 4 == 0)
-                        {
-                            return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-29 00:00:00");
-                        }
-                        else
-                        {
-                            return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-28 00:00:00");
-                        }
-                    }
-                }
-                else if ((day >= 11) && (day <= 20))
-                {
-                    return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.ToString("yyyy-MM") + "-01 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-10 00:00:00");
+                    return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.AddYears(-1).ToString("yyyy") + "-12-21 00:00:00", DateTime.Now.AddYears(-1).ToString("yyyy") + "-12-31 23:59:59");
                 }
                 else
                 {
-                    return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.ToString("yyyy-MM") + "-11 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-20 00:00:00");
+                    if ((day >= 1) && (day <= 10))//  求上个月的
+                    {     //(month == 1) ||   month==1  不会进来了
+                        if ((month == 2) || (month == 4) || (month == 6) || (month == 8) || (month == 9) || (month == 11))//其实是2
+                        {
+                            return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-31 23:59:59");
+                        }
+                        else if ((month == 5) || (month == 7) || (month == 10) || (month == 12))
+                        {
+                            return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-30 23:59:59");
+                        }
+                        else//当前是3月才来判断2月的情况
+                        {
+                            if (year % 4 == 0)
+                            {
+                                return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-29 23:59:59");
+                            }
+                            else
+                            {
+                                return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-21 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-28 23:59:59");
+                            }
+                        }
+                    }
+                    else if ((day >= 11) && (day <= 20))
+                    {
+                        return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.ToString("yyyy-MM") + "-01 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-10 23:59:59");
+                    }
+                    else
+                    {
+                        return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.ToString("yyyy-MM") + "-11 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-20 23:59:59");
+                    }
                 }
+
             }
             else if (pre == (int)MODEL.EnumMonitor.AutoDataDateTime.PreMonth)
             {
@@ -660,6 +667,50 @@ namespace SERVICE.Controllers
             {
                 return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.AddDays(-29).ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             }
+            else if (pre == (int)MODEL.EnumMonitor.AutoDataDateTime.PreTenLastDay)//需要上一旬的最后一天的数据
+            {
+                int year = Convert.ToInt32(DateTime.Now.ToString("yyyy"));
+                int month = Convert.ToInt32(DateTime.Now.ToString("MM"));
+                int day = Convert.ToInt32(DateTime.Now.ToString("dd"));
+                if ((month == 1) && (day >= 1) && (day <= 10))//1月1到十号  上一年
+                {
+                    return string.Format("(gcsj>='{0}' AND gcsj<'{1}')", DateTime.Now.AddYears(-1).ToString("yyyy") + "-12-31 00:00:00", DateTime.Now.AddYears(-1).ToString("yyyy") + "-12-31 23:59:59");
+                }
+                else
+                {
+                    if ((day >= 1) && (day <= 10))//  求上个月的
+                    {     //(month == 1) ||   month==1  不会进来了
+                        if ((month == 2) || (month == 4) || (month == 6) || (month == 8) || (month == 9) || (month == 11))//其实是2
+                        {
+                            return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-31 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-31 23:59:59");
+                        }
+                        else if ((month == 5) || (month == 7) || (month == 10) || (month == 12))
+                        {
+                            return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-30 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-30 23:59:59");
+                        }
+                        else//当前是3月才来判断2月的情况
+                        {
+                            if (year % 4 == 0)
+                            {
+                                return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-29 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-29 23:59:59");
+                            }
+                            else
+                            {
+                                return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-28 00:00:00", DateTime.Now.AddMonths(-1).ToString("yyyy-MM") + "-28 23:59:59");
+                            }
+                        }
+                    }
+                    else if ((day >= 11) && (day <= 20))
+                    {
+                        return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.ToString("yyyy-MM") + "-10 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-10 23:59:59");
+                    }
+                    else
+                    {
+                        return string.Format("(gcsj>='{0}' AND gcsj<='{1}')", DateTime.Now.ToString("yyyy-MM") + "-20 00:00:00", DateTime.Now.ToString("yyyy-MM") + "-20 23:59:59");
+                    }
+                }
+            }
+
 
             return string.Empty;
         }
