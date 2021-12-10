@@ -160,7 +160,25 @@ namespace SERVICE
                         }
                     }
                     #endregion
-
+                    #region 实景模型项目
+                    string modelmaps = PostgresqlHelper.QueryData(connect, string.Format("SELECT *FROM model_map_user_project WHERE userid={0} AND ztm={1}", user.Id, (int)MODEL.Enum.State.InUse));
+                    if (!string.IsNullOrEmpty(modelmaps))
+                    {
+                        string[] rows = modelmaps.Split(new char[] { COM.ConstHelper.rowSplit });
+                        for (int i = 0; i < rows.Length; i++)
+                        {
+                            MapUserModelProject mapUserModelProject = ParseModelHelper.ParseMapUserModelProject(rows[i]);
+                            if (mapUserModelProject != null)
+                            {
+                                ModelProject modelProject = ParseModelHelper.ParseModelProject(PostgresqlHelper.QueryData(connect, string.Format("SELECT *FROM model_project WHERE id={0} AND ztm={1}", mapUserModelProject.ModelProjectId, (int)MODEL.Enum.State.InUse)));
+                                if (modelProject != null)
+                                {
+                                    bsminfo += modelProject.BSM + ",";
+                                }
+                            }
+                        }
+                    }
+                    #endregion
                     if (!string.IsNullOrEmpty(bsminfo))
                     {
                         bsminfo = bsminfo.TrimEnd(',');

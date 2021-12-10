@@ -21,7 +21,7 @@
     <link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
     <script src="~/Scripts/layui/layui.all.js"></script>
 
-    <link href="~/Apps/monitor/css/main.css" rel="stylesheet" />
+    <link href="~/Apps/model/css/main.css" rel="stylesheet" />
     <style>
         body {
             overflow-y: scroll; /* 禁止刷新后出现横向滚动条 */
@@ -56,17 +56,19 @@
         var servicesurl = @Html.Raw(Json.Encode(ViewBag.ServicesURL));
         var datasurl = @Html.Raw(Json.Encode(ViewBag.DatasURL));
     </script>
-    
+
     <!--开发-->
-    <script src="~/Apps/monitor/js/1.1-all.js"></script>
-    <script src="~/Apps/monitor/js/1.2-para.js"></script>
-    <script src="~/Apps/monitor/js/3.0-map.js"></script>
-    <script src="~/Apps/monitor/js/4.1-projectlist.js"></script>
-    <script src="~/Apps/monitor/js/4.2-projectinfo.js"></script>
-    <script src="~/Apps/monitor/js/5.0-header.js"></script>
-    <script src="~/Apps/monitor/js/5.1-message.js"></script>
-    <script src="~/Apps/monitor/js/5.2-setting.js"></script>
-    <script src="~/Apps/monitor/js/6.0-util.js"></script>
+    <script src="~/Apps/model/js/1.1-all.js"></script>
+    <script src="~/Apps/model/js/1.2-para.js"></script>
+    <script src="~/Apps/model/js/3.0-map.js"></script>
+    <script src="~/Apps/model/js/4.1-projectlist.js"></script>
+    <script src="~/Apps/model/js/4.2-projectinfo.js"></script>
+    <script src="~/Apps/model/js/4.3-taskinfo.js"></script>
+    <script src="~/Apps/model/js/5.0-header.js"></script>
+    <script src="~/Apps/model/js/5.1-message.js"></script>
+    <script src="~/Apps/model/js/5.2-setting.js"></script>
+    <script src="~/Apps/model/js/6.0-util.js"></script>
+
     <script src="~/Apps/monitor/js/6.1-layerlist.js"></script>
     <script src="~/Apps/monitor/js/6.2-autodevice.js"></script>
     <script src="~/Apps/monitor/js/6.3-autodata.js"></script>
