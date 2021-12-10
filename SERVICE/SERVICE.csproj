@@ -168,6 +168,7 @@
     <Compile Include="Controllers\flz\FlzDataController.cs" />
     <Compile Include="Controllers\flz\FlzLayerController.cs" />
     <Compile Include="Controllers\flz\FlzWindowInfoController.cs" />
+    <Compile Include="Controllers\flz\FlzWordWxpertController.cs" />
     <Compile Include="Controllers\image\ImageProjectController.cs" />
     <Compile Include="Controllers\image\ImageResultController.cs" />
     <Compile Include="Controllers\image\ImageTargetController.cs" />

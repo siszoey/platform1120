@@ -31,18 +31,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="COM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="COM">
       <HintPath>..\COM\COM.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.14.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.14.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="data\common\survey\BlockExtent.cs" />
@@ -86,6 +90,7 @@
     <Compile Include="data\monitormap\MapUserMonitorProject.cs" />
     <Compile Include="data\monitor\DeviceCountDay.cs" />
     <Compile Include="data\monitor\DeviceCountResult.cs" />
+    <Compile Include="data\monitor\device\GNSSZheXian.cs" />
     <Compile Include="data\monitor\device\Interval.cs" />
     <Compile Include="data\monitor\device\DataStatistics.cs" />
     <Compile Include="data\monitor\device\GNSSMonitor.cs" />
@@ -240,6 +245,9 @@
     <Compile Include="enum\EnumFlz.cs" />
     <Compile Include="enum\EnumIMG.cs" />
     <Compile Include="enum\EnumMonitor.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="parse\ParseFlzoneHelper.cs" />
     <Compile Include="parse\ParseImageHelper.cs" />
     <Compile Include="parse\ParseManageHelper.cs" />
@@ -276,12 +284,46 @@
     <Compile Include="enum\EnumUAV.cs" />
     <Compile Include="utility\IMP.cs" />
     <Compile Include="utility\ResponseResult.cs" />
+    <Compile Include="word\Assistance.cs" />
+    <Compile Include="word\Const.cs" />
+    <Compile Include="word\Entity\AbstractFillingContainer.cs" />
+    <Compile Include="word\Entity\AbstractInfo.cs" />
+    <Compile Include="word\Entity\CellInfo.cs" />
+    <Compile Include="word\Entity\CellOfRowInfo.cs" />
+    <Compile Include="word\Entity\CellStructureInfo.cs" />
+    <Compile Include="word\Entity\ImgInfo.cs" />
+    <Compile Include="word\Entity\ParagraphBegin.cs" />
+    <Compile Include="word\Entity\ParagraphEnd.cs" />
+    <Compile Include="word\Entity\RowInfo.cs" />
+    <Compile Include="word\Entity\RowStructureInfo.cs" />
+    <Compile Include="word\Entity\TableStructureInfo.cs" />
+    <Compile Include="word\Entity\TagInfo.cs" />
+    <Compile Include="word\Entity\TblInfo.cs" />
+    <Compile Include="word\Entity\TxtInfo.cs" />
+    <Compile Include="word\ExtensionMethod.cs" />
+    <Compile Include="word\WordMLHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="data\uav\prj\ModelPointCloud.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\MODEL.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Release\MODEL.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Release\MODEL.csprojAssemblyReference.cache" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="obj\Debug\MODEL.csproj.FileListAbsolute.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
