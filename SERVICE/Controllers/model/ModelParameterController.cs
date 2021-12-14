@@ -79,28 +79,7 @@ namespace SERVICE.Controllers
 
             return string.Empty;
         }
-        /// <summary>
-        /// 项目类型
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public string GetXMLX()
-        {
-            List<string[]> xmlxs = new List<string[]>();
-            System.Array values = System.Enum.GetValues(typeof(MODEL.EnumModel.ProjectType));
-            foreach (var value in values)
-            {
-                string[] xmlx = (EnumExtension.GetRemark((MODEL.EnumModel.ProjectType)System.Enum.Parse(typeof(MODEL.EnumModel.ProjectType), ((int)value).ToString())) + ";" + (int)value).Split(new char[] { ';' });
-                xmlxs.Add(xmlx);
-            }
-
-            if (xmlxs.Count > 0)
-            {
-                return JsonHelper.ToJson(xmlxs);
-            }
-
-            return string.Empty;
-        }
+        
         /// <summary>
         ///项目用途
         /// </summary>
@@ -168,6 +147,7 @@ namespace SERVICE.Controllers
 
             return string.Empty;
         }
+        
         #endregion
 
 

@@ -334,18 +334,17 @@ function FlyToChina() {
     }, { duration: 3 });
 };
 
-
-
-
 /*
  * 加载3d tiles模型
  */
 function LoadModel(obj) {
-    var modelurl = datasurl + "/SurModel" + obj.path;
+    var modelurl = datasurl + obj.path;
     //删除上一个模型（保证只有一个模型）
+    
     if (curtileset != null) {
         viewer.scene.primitives.remove(curtileset);
     }
+
     //添加模型
     curtileset = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
         url: modelurl,

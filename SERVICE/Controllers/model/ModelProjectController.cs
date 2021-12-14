@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,9 +21,11 @@ namespace SERVICE.Controllers
     {
         private static Logger logger = Logger.CreateLogger(typeof(ModelProjectController));
         private static string pgsqlConnection = ConfigurationManager.ConnectionStrings["postgresql"].ConnectionString.ToString();
+        //service 的Web.config中定义modeldir,绝对路径
+        private static string modeldir = ConfigurationManager.AppSettings["modeldir"] != null ? ConfigurationManager.AppSettings["modeldir"].ToString() : string.Empty;
 
         /// <summary>
-        /// 1---新建项目
+        /// 新建项目
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -66,17 +69,15 @@ namespace SERVICE.Controllers
                     + zxwd + ","
                     + xzqbm + ","
                     + SQLHelper.UpdateString(xmsj) + ","
-                    + xmlx + ","
                     + xmyt + ","
                     + SQLHelper.UpdateString(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) + ","
                     + SQLHelper.UpdateString(Guid.NewGuid().ToString("D")) + ","
                     + (int)MODEL.Enum.State.InUse + ","
                     + SQLHelper.UpdateString(bz) + ")";
 
-                    int id = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, "INSERT INTO model_project (xmmc,xmbm,zxjd,zxwd,xzqbm,xmsj,xmlx,xmyt,cjsj,bsm,ztm,bz) VALUES" + value);
+                    int id = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, "INSERT INTO model_project (xmmc,xmbm,zxjd,zxwd,xzqbm,xmsj,xmyt,cjsj,bsm,ztm,bz) VALUES" + value);
                     if (id != -1)
                     {
-                        //2---非必填选项，有值则更新信息至image_project
                         if (!string.IsNullOrEmpty(xmbm))
                         {
                             PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE model_project SET xmbm={0} WHERE id={1}", xmbm, id));
@@ -112,8 +113,9 @@ namespace SERVICE.Controllers
             }
         }
 
+        
         /// <summary>
-        /// 2---获取当前用户所有项目，以及各项目下的实景模型
+        /// 获取当前用户所有项目，以及各项目下的任务实景模型
         /// </summary>
         /// <param name="cookie"></param>
         /// <returns></returns>
@@ -155,11 +157,28 @@ namespace SERVICE.Controllers
                                     MapModelProjecTask mapModelProjecTask = ParseModelHelper.ParseMapModelProjecTask(maprows[j]);
                                     if (mapModelProjecTask != null)
                                     {
+                                        
                                         ModelTask modelTask = ParseModelHelper.ParseModelTask(PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_task WHERE id={0} AND ztm={1}", mapModelProjecTask.TaskId, (int)MODEL.Enum.State.InUse)));
                                         if (modelTask != null)
                                         {
+
+                                            try
+                                            {
+                                                // 使用 System.IO.Directory.GetFiles() 函数获取所有文件
+                                                string modelFilePath = modeldir +@"\AllModel"+ @"\" + modelProject.XMBM.ToString() + @"\" + modelTask.RWBM.ToString();
+                                                string[] strDataFiles = Directory.GetFiles(modelFilePath);
+                                                string format = ".json";
+                                                string[] jsonPath = CheckFileEx(strDataFiles, format);
+                                                modelTask.MXLJ = @"/AllModel" + @"/" + modelProject.XMBM.ToString() + @"/" + modelTask.RWBM.ToString()+@"/"+ jsonPath[0].Split('\\').Last();
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                logger.Error("读取JSON文件错误原因:"+ ex.ToString());
+                                                modelTask.MXLJ = null;
+                                            }
                                             Tasks.Add(modelTask);
                                         }
+                                        
                                     }
                                 }
                                 #endregion
@@ -199,7 +218,7 @@ namespace SERVICE.Controllers
         }
 
         /// <summary>
-        /// 3---获取项目信息（查看+编辑项目）
+        /// 获取项目信息（查看+编辑项目）
         /// </summary>
         /// <param name="id">项目id</param>
         /// <param name="cookie">验证信息</param>
@@ -228,10 +247,9 @@ namespace SERVICE.Controllers
                 return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, cookieResult.GetRemark(), string.Empty));
             }
         }
-
-
+        
         /// <summary>
-        /// 3.1---更新项目信息（编辑后保存）
+        /// 更新项目信息（编辑后保存）
         /// </summary>
         /// <returns></returns>
         [HttpPut]
@@ -241,13 +259,13 @@ namespace SERVICE.Controllers
             string id = HttpContext.Current.Request.Form["id"];
             string cookie = HttpContext.Current.Request.Form["cookie"];
 
-            string xmmc = HttpContext.Current.Request.Form["image_xmmc_edit"];
-            string xmbm = HttpContext.Current.Request.Form["image_xmbm_edit"];
-            string zxjd = HttpContext.Current.Request.Form["image_zxjd_edit"];
-            string zxwd = HttpContext.Current.Request.Form["image_zxwd_edit"];
-            string srid = HttpContext.Current.Request.Form["image_kjck_edit"];
-            string ms = HttpContext.Current.Request.Form["image_ms_edit"];
-            string bz = HttpContext.Current.Request.Form["image_bz_edit"];
+            string xmmc = HttpContext.Current.Request.Form["model_xmmc_edit"];// 获取页面表单元素
+            string zxjd = HttpContext.Current.Request.Form["model_zxjd_edit"];
+            string zxwd = HttpContext.Current.Request.Form["model_zxwd_edit"];
+            string xmsj = HttpContext.Current.Request.Form["model_xmsj_edit"];
+            string xzqbm = HttpContext.Current.Request.Form["model_district_edit"];
+            string xmyt = HttpContext.Current.Request.Form["model_xmyt_edit"];
+            string bz = HttpContext.Current.Request.Form["model_bz_edit"];
             #endregion
 
             string userbsms = string.Empty;
@@ -255,22 +273,24 @@ namespace SERVICE.Controllers
 
             if (cookieResult == COM.CookieHelper.CookieResult.SuccessCookkie)
             {
-                int count = PostgresqlHelper.QueryResultCount(pgsqlConnection, string.Format("SELECT *FROM image_project WHERE id={0} AND ztm={1} AND bsm{2}", id, (int)MODEL.Enum.State.InUse, userbsms));
+                int count = PostgresqlHelper.QueryResultCount(pgsqlConnection, string.Format("SELECT *FROM model_project WHERE id={0} AND ztm={1} AND bsm{2}", id, (int)MODEL.Enum.State.InUse, userbsms));
                 if (count == 1)
                 {
-                    if (!string.IsNullOrEmpty(xmmc)
-                    && !string.IsNullOrEmpty(zxjd)
-                    && !string.IsNullOrEmpty(zxwd)
-                    && !string.IsNullOrEmpty(srid))
+                    if (
+                    (!string.IsNullOrEmpty(xmmc))
+                    && (!string.IsNullOrEmpty(zxjd))
+                    && (!string.IsNullOrEmpty(zxwd))
+                    )
                     {
+                        
                         int updatecount = PostgresqlHelper.UpdateData(pgsqlConnection, string.Format(
-                             "UPDATE image_project SET xmmc={0},xmbm={1},zxjd={2},zxwd={3},srid={4},ms={5},bz={6} WHERE id={7} AND bsm{8} AND ztm={9}",
+                             "UPDATE model_project SET xmmc={0},zxjd={1},zxwd={2},xzqbm={3},xmsj={4},xmyt={5},bz={6} WHERE id={7} AND bsm{8} AND ztm={9}",
                              SQLHelper.UpdateString(xmmc),
-                             SQLHelper.UpdateString(xmbm),
                              zxjd,
                              zxwd,
-                             srid,
-                             SQLHelper.UpdateString(ms),
+                             xzqbm,
+                             SQLHelper.UpdateString(xmsj),
+                             xmyt,
                              SQLHelper.UpdateString(bz),
                              id,
                              userbsms,
@@ -278,17 +298,10 @@ namespace SERVICE.Controllers
 
                         if (updatecount == 1)
                         {
-                            if (!string.IsNullOrEmpty(xmbm))
-                            {
-                                PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE image_project SET xmbm={0} WHERE id={1} AND bsm{2} AND ztm={3}", xmbm, id, userbsms, (int)MODEL.Enum.State.InUse));
-                            }
-                            if (!string.IsNullOrEmpty(ms))
-                            {
-                                PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE image_project SET ms={0} WHERE id={1} AND bsm{2} AND ztm={3}", ms, id, userbsms, (int)MODEL.Enum.State.InUse));
-                            }
+                            
                             if (!string.IsNullOrEmpty(bz))
                             {
-                                PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE image_project SET bz={0} WHERE id={1} AND bsm{2} AND ztm={3}", bz, id, userbsms, (int)MODEL.Enum.State.InUse));
+                                PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE model_project SET bz={0} WHERE id={1} AND bsm{2} AND ztm={3}", bz, id, userbsms, (int)MODEL.Enum.State.InUse));
                             }
 
                             return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Success, "更新成功！", string.Empty));
@@ -317,7 +330,7 @@ namespace SERVICE.Controllers
         }
 
         /// <summary>
-        /// 4---删除项目
+        /// 删除项目
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
@@ -369,7 +382,7 @@ namespace SERVICE.Controllers
                 string data = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_project WHERE xzqbm='{0}'", xjxzq));
                 if (data == string.Empty)
                 {
-                    return xjxzq + "000001";
+                    return xjxzq + "0001";
                 }
                 else
                 {
@@ -399,29 +412,39 @@ namespace SERVICE.Controllers
             }
         }
 
-
         #endregion
-        /// <summary>
+
+        #region 方法2
+        /// 筛选文件格式
         /// </summary>
-        /// <param name="cookie">验证信息</param>
+        /// <param name="paths">文件列表</param>
+        /// <param name="ex">保留的 格式，多个以逗号隔开(.txt,.jpg)</param>
         /// <returns></returns>
-        [HttpGet]
-        public string GetModelUserInfo(string cookie)
+        /// 
+        private string[] CheckFileEx(string[] paths, string ex)
         {
-            #region 解析验证用户
-            User user = null;
-            COM.CookieHelper.CookieResult cookieResult = ManageHelper.ValidateCookie(pgsqlConnection, cookie, ref user);
-            if (cookieResult == COM.CookieHelper.CookieResult.SuccessCookkie)
+            List<string> result = new List<string>();
+            for (int i = 0; i < paths.Length; i++)
             {
-                return JsonHelper.ToJson(user.BZ);
+                int lastex = paths[i].LastIndexOf('.');
+                string tex = paths[i].Substring(lastex);
+                var blo = false;
+                foreach (string s in ex.Split(','))
+                {
+                    if (tex == s)
+                    {
+                        blo = true;
+                        break;
+                    }
+                }
+                if (blo)
+                {
+                    result.Add(paths[i]);
+                }
             }
-            else
-            {
-                //验证失败
-                return string.Empty;
-            }
-            #endregion
+            return result.ToArray();
         }
 
+        #endregion
     }
 }

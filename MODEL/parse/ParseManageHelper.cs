@@ -53,7 +53,8 @@ namespace MODEL
                     DLSJ = row[5].ToString(),
                     SSDW = row[6].ToString(),
                     SSQY = row[7].ToString(),
-                    BZ = row[9].ToString()
+                    BZ = row[9].ToString(),
+                    ALIASNAME = row[10].ToString()
                 };
 
                 return user;

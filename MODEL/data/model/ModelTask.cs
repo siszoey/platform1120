@@ -46,11 +46,11 @@ namespace MODEL
         /// <summary>
         /// 控制点
         /// </summary>
-        public int? YXKZD { get; set; }
+        public string YXKZD { get; set; }
         /// <summary>
         /// 范围KML
         /// </summary>
-        public int? YXFW { get; set; }
+        public string YXFW { get; set; }
         /// <summary>
         /// 百度云影像存放链接
         /// </summary>

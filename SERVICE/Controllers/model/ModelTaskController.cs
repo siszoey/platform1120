@@ -25,17 +25,24 @@ namespace SERVICE.Controllers
     {
         private static Logger logger = Logger.CreateLogger(typeof(ModelTaskController));
         private static string pgsqlConnection = ConfigurationManager.ConnectionStrings["postgresql"].ConnectionString.ToString();
+        //service 的Web.config中定义modeldir,绝对路径
+        private static string modeldir = ConfigurationManager.AppSettings["modeldir"] != null ? ConfigurationManager.AppSettings["modeldir"].ToString() : string.Empty;
 
 
         /// <summary>
-        /// 1---新建任务
+        /// 新建任务
         /// </summary>
         [HttpPost]
         public string AddTask()
         {
+            #region 解析验证用户
+            User user = null;
+            COM.CookieHelper.CookieResult cookieResult = ManageHelper.ValidateCookie(pgsqlConnection, HttpContext.Current.Request.Form["cookie"], ref user);
+            #endregion
+
             #region 参数
             string rwmc = HttpContext.Current.Request.Form["model_rwmc_add"];
-            string yxcjry = HttpContext.Current.Request.Form["model_yxcjry_add"];
+            string yxcjry = user.ALIASNAME;
             string yxcjsj = HttpContext.Current.Request.Form["model_yxcjsj_add"];
             string yxsl = HttpContext.Current.Request.Form["model_yxsl_add"];
             string yxcjsb = HttpContext.Current.Request.Form["model_yxcjsb_add"];
@@ -45,32 +52,28 @@ namespace SERVICE.Controllers
             string yxfw = HttpContext.Current.Request.Form["model_yxfw_add"];
             string yxcflj = HttpContext.Current.Request.Form["model_yxcflj_add"];
             string rwms = HttpContext.Current.Request.Form["model_rwms_add"];
-            string bz = HttpContext.Current.Request.Form["model_bz_add"];
+            
 
             string projectid = HttpContext.Current.Request.Form["projectid"];
             #endregion
 
-            #region 解析验证用户
-            string userbsms = string.Empty;
-            COM.CookieHelper.CookieResult cookieResult = ManageHelper.ValidateCookie(pgsqlConnection, HttpContext.Current.Request.Form["cookie"], ref userbsms);
-            #endregion
+            
 
             if (cookieResult == COM.CookieHelper.CookieResult.SuccessCookkie)
             {
-                ModelProject modelProject = ParseModelHelper.ParseModelProject(PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_project WHERE id={0} AND bsm{1} AND ztm={2}", projectid, userbsms, (int)MODEL.Enum.State.InUse)));
+                ModelProject modelProject = ParseModelHelper.ParseModelProject(PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_project WHERE id={0} AND ztm={1}", projectid,(int)MODEL.Enum.State.InUse)));
                 if (modelProject == null)
                 {
                     return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, "无此项目！", string.Empty));
                 }
                 string rwbm = CreateTaskCode(modelProject.XMBM, modelProject.BSM);//项目编码
+
                 if (
                     (!string.IsNullOrEmpty(rwmc))
                     && (!string.IsNullOrEmpty(yxcjry))
                     && (!string.IsNullOrEmpty(yxcjsj))
                     && (!string.IsNullOrEmpty(yxsl))
                     && (!string.IsNullOrEmpty(yxcjsb))
-                    && (!string.IsNullOrEmpty(yxkzd))
-                    && (!string.IsNullOrEmpty(yxfw))
                     && (!string.IsNullOrEmpty(yxcflj))
                     && (!string.IsNullOrEmpty(srid))
                     )     //1---必填选项，填入则可创建项目id
@@ -84,16 +87,16 @@ namespace SERVICE.Controllers
                     + SQLHelper.UpdateString(yxcjsb) + ","
                     + srid + ","
                     + SQLHelper.UpdateString(sxcg) + ","
-                    + yxkzd + ","
-                    + yxfw + ","
+                    + SQLHelper.UpdateString(yxkzd) + ","
+                    + SQLHelper.UpdateString(yxfw) + ","
                     + SQLHelper.UpdateString(yxcflj) + ","
                     + SQLHelper.UpdateString(rwms) + ","
                     + SQLHelper.UpdateString(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) + ","
                     + SQLHelper.UpdateString(modelProject.BSM) + ","
-                    + (int)MODEL.Enum.State.InUse + ","
-                    + SQLHelper.UpdateString(bz) + ")";
+                    + (int)MODEL.Enum.State.InUse 
+                    + ")";
 
-                    int id = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, "INSERT INTO model_task (rwmc,rwbm,yxcjry,yxcjsj,yxsl,yxcjsb,kjck,sxcg,yxkzd,yxfw,yxcflj,rwms,rwcjsj,bsm,ztm,bz) VALUES" + value);
+                    int id = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, "INSERT INTO model_task (rwmc,rwbm,yxcjry,yxcjsj,yxsl,yxcjsb,kjck,sxcg,yxkzd,yxfw,yxcflj,rwms,rwcjsj,bsm,ztm) VALUES" + value);
                     if (id != -1)
                     {
                         int mapid = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, string.Format("INSERT INTO model_map_project_task (projectid,taskid,cjsj,ztm) VALUES({0},{1},{2},{3})", projectid, id, SQLHelper.UpdateString(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), (int)MODEL.Enum.State.InUse));
@@ -103,9 +106,27 @@ namespace SERVICE.Controllers
                         }
                         else
                         {
+                            string modelFilePath = modeldir + @"\Allmodel" + @"\" + modelProject.XMBM.ToString() + @"\" + rwbm;
+                            if (Directory.Exists(modelFilePath))//判断文件夹是否存在
+                            {
+                                Console.WriteLine("文件夹"+modelFilePath+"在，无需创建！");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    Directory.CreateDirectory(modelFilePath);
+                                    Console.WriteLine("文件夹" + modelFilePath + "创建成功！");
+                                }
+                                catch(Exception ex)
+                                {
+                                    Console.WriteLine("文件夹创建失败，原因：" +ex.ToString());
+                                }
+                            }
                             return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Success, "成功！", string.Empty));
+
                         }
-                    }
+                    } 
                     else
                     {
                         return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, "创建任务失败！", string.Empty));
@@ -122,10 +143,9 @@ namespace SERVICE.Controllers
                 return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, cookieResult.GetRemark(), string.Empty));
             }
         }
-
-
+        
         /// <summary>
-        /// 2---获取任务基本信息(查看-编辑任务基本信息)
+        /// 获取任务基本信息(查看-编辑任务基本信息)
         /// </summary>
         [HttpGet]
         public string GetTaskInfo(int id, string cookie)
@@ -149,10 +169,9 @@ namespace SERVICE.Controllers
                 return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, cookieResult.GetRemark(), string.Empty));
             }
         }
-
-
+        
         /// <summary>
-        /// 2.1---更新任务基本信息(编辑后保存)
+        /// 更新任务基本信息(编辑后保存)
         /// </summary>
         [HttpPut]
         public string UpdateTaskInfo()
@@ -162,13 +181,20 @@ namespace SERVICE.Controllers
             string id = HttpContext.Current.Request.Form["id"];
             string cookie = HttpContext.Current.Request.Form["cookie"];
 
-            string mbmc = HttpContext.Current.Request.Form["model_mbmc_edit"];
-            string mbbh = HttpContext.Current.Request.Form["model_mbbh_edit"];
-            string mblx = HttpContext.Current.Request.Form["model_mblx_edit"];
-            string x = HttpContext.Current.Request.Form["model_x_edit"];
-            string y = HttpContext.Current.Request.Form["model_y_edit"];
-            string z = HttpContext.Current.Request.Form["model_z_edit"];
+            string rwmc = HttpContext.Current.Request.Form["model_rwmc_edit"];
+            string rwbm = HttpContext.Current.Request.Form["model_rwbm_edit"];
+            string yxcjry = HttpContext.Current.Request.Form["model_yxcjry_edit"];
+            string yxcjsj = HttpContext.Current.Request.Form["model_yxcjsj_edit"];
+            string yxsl = HttpContext.Current.Request.Form["model_yxsl_edit"];
+            string yxcjsb = HttpContext.Current.Request.Form["model_yxcjsb_edit"];
             string srid = HttpContext.Current.Request.Form["model_kjck_edit"];
+            string sxcg = HttpContext.Current.Request.Form["model_sxcg_edit"];
+            string yxkzd = HttpContext.Current.Request.Form["model_yxkzd_edit"];
+            string yxfw = HttpContext.Current.Request.Form["model_yxfw_edit"];
+            string yxcflj = HttpContext.Current.Request.Form["model_yxcflj_edit"];
+            string rwms = HttpContext.Current.Request.Form["model_rwms_edit"];
+            string cgxzlj = HttpContext.Current.Request.Form["model_cgxzlj_edit"];
+            string mxms = HttpContext.Current.Request.Form["model_mxms_edit"];
             string bz = HttpContext.Current.Request.Form["model_bz_edit"];
             #endregion
 
@@ -182,37 +208,38 @@ namespace SERVICE.Controllers
 
                 if (count == 1)
                 {
-                    if ((!string.IsNullOrEmpty(mbmc))
-                    && (!string.IsNullOrEmpty(mblx))
-                    && (!string.IsNullOrEmpty(x))
-                    && (!string.IsNullOrEmpty(y))
-                    && (!string.IsNullOrEmpty(z))
-                    && (!string.IsNullOrEmpty(srid)))
+                    if ((!string.IsNullOrEmpty(rwmc))
+                    && (!string.IsNullOrEmpty(yxcjry))
+                    && (!string.IsNullOrEmpty(yxcjsj))
+                    && (!string.IsNullOrEmpty(yxsl))
+                    && (!string.IsNullOrEmpty(yxcjsb))
+                    && (!string.IsNullOrEmpty(yxkzd))
+                    && (!string.IsNullOrEmpty(yxfw))
+                    && (!string.IsNullOrEmpty(yxcflj))
+                    && (!string.IsNullOrEmpty(srid))
+                    )
                     {
                         int updatecount = PostgresqlHelper.UpdateData(pgsqlConnection, string.Format(
-                               "UPDATE model_task SET mbmc={0},mbbh={1},mblx={2},x={3},y={4},z={5},srid={6},bz={7} WHERE id={8} AND bsm{9} AND ztm={10}",
-                               SQLHelper.UpdateString(mbmc),
-                               SQLHelper.UpdateString(mbbh),
-                               SQLHelper.UpdateString(mblx),
-                               x,
-                               y,
-                               z,
+                               "UPDATE model_task SET rwmc={0},yxcjry={1},yxcjsj={2},yxsl={3},yxcjsb={4},kjck={5},sxcg={6},yxkzd={7},yxfw={8},yxcflj={9},rwms={10},cgxzlj={11},mxms={12} ,bz={13} WHERE id={14} AND bsm{15} AND ztm={16}",
+                               SQLHelper.UpdateString(rwmc),
+                               SQLHelper.UpdateString(yxcjry),
+                               SQLHelper.UpdateString(yxcjsj),
+                               yxsl,
+                               SQLHelper.UpdateString(yxcjsb),
                                srid,
+                               SQLHelper.UpdateString(sxcg),
+                               yxkzd,
+                               yxfw,
+                               SQLHelper.UpdateString(yxcflj),
+                               SQLHelper.UpdateString(rwms),
+                               SQLHelper.UpdateString(cgxzlj),
+                               SQLHelper.UpdateString(mxms),
                                SQLHelper.UpdateString(bz),
                                id,
                                userbsms,
                                (int)MODEL.Enum.State.InUse));
                         if (updatecount == 1)
                         {
-                            if (!string.IsNullOrEmpty(mbbh))
-                            {
-                                PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE model_task SET mbbh={0} WHERE id={1} AND bsm{2} AND ztm={3}", mbbh, id, userbsms, (int)MODEL.Enum.State.InUse));
-                            }
-
-                            if (!string.IsNullOrEmpty(bz))
-                            {
-                                PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE model_task SET bz={0} WHERE id={1} AND bsm{2} AND ztm={3}", bz, id, userbsms, (int)MODEL.Enum.State.InUse));
-                            }
                             return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Success, "更新成功！", string.Empty));
                         }
                         else
@@ -238,7 +265,7 @@ namespace SERVICE.Controllers
         }
 
         /// <summary>
-        /// 2.2---删除任务
+        /// 删除任务
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
@@ -264,6 +291,7 @@ namespace SERVICE.Controllers
                 return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, cookieResult.GetRemark(), string.Empty));
             }
         }
+
         /// <summary>
         /// 获取目标集合
         /// </summary>

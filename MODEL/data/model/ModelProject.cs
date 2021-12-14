@@ -45,11 +45,7 @@ namespace MODEL
         /// 创建时间
         /// </summary>
         public string CJSJ { get; set; }
-        /// <summary>
-        /// 项目类型
-        /// </summary>
-        public string XMLX { get; set; }
-
+        
         /// <summary>
         /// 项目用途
         /// </summary>

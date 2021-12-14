@@ -48,6 +48,10 @@ namespace MODEL
         /// </summary>
         public string SSQY { get; set; }
         /// <summary>
+        /// 别名
+        /// </summary>
+        public string ALIASNAME { get; set; }
+        /// <summary>
         /// 备注
         /// </summary>
         public string BZ { get; set; }

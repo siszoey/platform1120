@@ -49,10 +49,9 @@ namespace MODEL
                     XMBM = row[2].ToString(),
                     XZQBM = row[3].ToString(),
                     XMSJ = row[6].ToString(),
-                    XMLX = row[7].ToString(),
-                    XMYT = row[8].ToString(),
-                    CJSJ = row[9].ToString(),
-                    BSM = row[10].ToString(),
+                    XMYT = row[7].ToString(),
+                    CJSJ = row[8].ToString(),
+                    BSM = row[9].ToString(),
                     BZ = row[11].ToString()
                 };
                 if (string.IsNullOrEmpty(row[4].ToString()))
@@ -90,7 +89,7 @@ namespace MODEL
         {
             if (string.IsNullOrEmpty(data))
             {
-                logger.Warn("解析目标数据为空！");
+                logger.Warn("解析任务数据为空！");
                 return null;
             }
 
@@ -99,7 +98,7 @@ namespace MODEL
                 string[] rows = data.Split(new char[] { COM.ConstHelper.rowSplit });
                 if (rows.Length != 1)
                 {
-                    logger.Warn("目标不唯一！");
+                    logger.Warn("任务不唯一！");
                     return null;
                 }
 
@@ -111,15 +110,13 @@ namespace MODEL
                     RWBM = row[2].ToString(),
                     YXCJSJ = row[4].ToString(),
                     YXSL = Convert.ToInt32(row[6].ToString()),
-                    YXKZD = Convert.ToInt32(row[7].ToString()),
-                    YXFW = Convert.ToInt32(row[8].ToString()),
+                    YXKZD = row[7].ToString(),
+                    YXFW =row[8].ToString(),
                     YXCFLJ = row[9].ToString(),
                     SRID = Convert.ToInt32(row[10].ToString()),
                     SXCG = row[11].ToString(),
-                    MXLJ = row[15].ToString(),
-                    RWCJSJ = row[16].ToString(),
-                    BSM = row[17].ToString(),
-                    BZ = row[19].ToString(),
+                    RWCJSJ = row[15].ToString(),
+                    BSM = row[16].ToString()
                 };
                 if (string.IsNullOrEmpty(row[3].ToString()))
                 {
@@ -161,22 +158,13 @@ namespace MODEL
                 {
                     modelTask.MXMS = row[14].ToString();
                 }
-                if (string.IsNullOrEmpty(row[15].ToString()))
-                {
-                    modelTask.MXLJ = null;
-                }
-                else
-                {
-                    modelTask.MXLJ = row[15].ToString();
-                }
-
-                if (string.IsNullOrEmpty(row[19].ToString()))
+                if (string.IsNullOrEmpty(row[18].ToString()))
                 {
                     modelTask.BZ = null;
                 }
                 else
                 {
-                    modelTask.BZ = row[19].ToString();
+                    modelTask.BZ = row[18].ToString();
                 }
                 return modelTask;
             }
