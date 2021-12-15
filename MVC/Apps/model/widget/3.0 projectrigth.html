@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--jquery-->
+    <script src="../../../Scripts/jquery-3.3.1.js"></script>
+    <!--Layui-->
+    <link href="../layuiadmin/layui2.5.6/css/layui.css" rel="stylesheet" />
+    <link href="../layuiadmin/style/admin.css" rel="stylesheet" />
+    <script src="../layuiadmin/layui2.5.6/layui.all.js"></script>
+</head>
+<body>
+    <form class="layui-form" action="" lay-filter="authuserform" style="margin-top:0px;">
+        <div class="layui-row layui-col-space10">
+            <div class="layui-col-md9">
+                <div class="grid-demo grid-demo-bg1">
+                    <label class="layui-form-label" style="width:60px;">选择用户</label>
+                    <div class="layui-input-block" style="margin-left:90px;">
+                        <select id="usersid" name="users" lay-filter="selectuser">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md3">
+                <div class="grid-demo" style="position:absolute;right:5px;">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="authusersubmit" style="width:120px;">更新授权</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-demo" style="margin-top:10px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width:60px;padding-top:290px;">项目</label>
+                <div class="layui-input-block" style="margin-left:90px;height:600px;border:solid;border-color:#e6e6e6;border-width:1px;">
+                    <div id="modelprojectid" style="padding:10px;"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

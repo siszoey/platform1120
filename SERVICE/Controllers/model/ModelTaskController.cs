@@ -213,8 +213,6 @@ namespace SERVICE.Controllers
                     && (!string.IsNullOrEmpty(yxcjsj))
                     && (!string.IsNullOrEmpty(yxsl))
                     && (!string.IsNullOrEmpty(yxcjsb))
-                    && (!string.IsNullOrEmpty(yxkzd))
-                    && (!string.IsNullOrEmpty(yxfw))
                     && (!string.IsNullOrEmpty(yxcflj))
                     && (!string.IsNullOrEmpty(srid))
                     )

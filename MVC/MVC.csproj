@@ -527,6 +527,7 @@
     <Content Include="Apps\model\widget\2.3 taskeditview.html" />
     <Content Include="Apps\model\widget\2.2 taskview.html" />
     <Content Include="Apps\model\widget\2.1 taskaddview.html" />
+    <Content Include="Apps\model\widget\3.0 projectrigth.html" />
     <Content Include="Apps\monitor\js\1.2-para.js" />
     <Content Include="Apps\monitor\js\6.4-analysis.js" />
     <Content Include="Apps\monitor\js\6.5-warning.js" />

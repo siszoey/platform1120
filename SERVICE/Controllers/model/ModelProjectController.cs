@@ -161,15 +161,30 @@ namespace SERVICE.Controllers
                                         ModelTask modelTask = ParseModelHelper.ParseModelTask(PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_task WHERE id={0} AND ztm={1}", mapModelProjecTask.TaskId, (int)MODEL.Enum.State.InUse)));
                                         if (modelTask != null)
                                         {
-
                                             try
                                             {
                                                 // 使用 System.IO.Directory.GetFiles() 函数获取所有文件
-                                                string modelFilePath = modeldir +@"\AllModel"+ @"\" + modelProject.XMBM.ToString() + @"\" + modelTask.RWBM.ToString();
-                                                string[] strDataFiles = Directory.GetFiles(modelFilePath);
-                                                string format = ".json";
-                                                string[] jsonPath = CheckFileEx(strDataFiles, format);
-                                                modelTask.MXLJ = @"/AllModel" + @"/" + modelProject.XMBM.ToString() + @"/" + modelTask.RWBM.ToString()+@"/"+ jsonPath[0].Split('\\').Last();
+                                                string modelFilePath = modeldir + @"\AllModel" + @"\" + modelProject.XMBM.ToString() + @"\" + modelTask.RWBM.ToString();
+                                                string jsonname = string.Empty; ;
+                                                DirectoryInfo dir = new DirectoryInfo(modelFilePath);
+                                                foreach (FileInfo file in dir.GetFiles("*.json", SearchOption.AllDirectories))
+                                                {
+                                                    jsonname = file.FullName;
+                                                    if (jsonname.Contains(".json"))
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                                string[] path = jsonname.Split(new string[] { "data" }, StringSplitOptions.RemoveEmptyEntries);
+                                                if (path.Last() == null)
+                                                {
+                                                    modelTask.MXLJ = null;
+                                                }
+                                                else
+                                                {
+                                                    modelTask.MXLJ = path.Last().Replace("\\", "/");
+                                                }
+                                               
                                             }
                                             catch (Exception ex)
                                             {
@@ -411,40 +426,7 @@ namespace SERVICE.Controllers
                 return string.Empty;
             }
         }
-
-        #endregion
-
-        #region 方法2
-        /// 筛选文件格式
-        /// </summary>
-        /// <param name="paths">文件列表</param>
-        /// <param name="ex">保留的 格式，多个以逗号隔开(.txt,.jpg)</param>
-        /// <returns></returns>
-        /// 
-        private string[] CheckFileEx(string[] paths, string ex)
-        {
-            List<string> result = new List<string>();
-            for (int i = 0; i < paths.Length; i++)
-            {
-                int lastex = paths[i].LastIndexOf('.');
-                string tex = paths[i].Substring(lastex);
-                var blo = false;
-                foreach (string s in ex.Split(','))
-                {
-                    if (tex == s)
-                    {
-                        blo = true;
-                        break;
-                    }
-                }
-                if (blo)
-                {
-                    result.Add(paths[i]);
-                }
-            }
-            return result.ToArray();
-        }
-
+        
         #endregion
     }
 }

@@ -1,10 +1,10 @@
-﻿var imageprojectlist = [];
+﻿var modelprojectlist = [];
 
 //三维模型项目列表widget
 layer.open({
     type: 1
-    , title: ['项目列表', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
-    , area: ['350px', '650px']
+    , title: ['项目列表', 'font-weight:bold;font-size:large;font-family:Microsoft YaHei']
+    , area: ['300px', '800px']
     , shade: 0
     , offset: ['60px', '10px']
     , closeBtn: 0
@@ -38,7 +38,30 @@ layer.open({
                 if (obj.checked) {
                     if (obj.data.type == "task") {
                         LoadModel(obj.data);
+                        for (var i in modelprojectlist) {
+                            for (var j in modelprojectlist[i].children) {
+                                for (var k in modelprojectlist[i].children[j].children) {
+                                    if (modelprojectlist[i].children[j].children[k].id != obj.data.id) {
+                                        //modelprojectlist[i].spread = false;
+                                        //modelprojectlist[i].children[j].spread = false;
+                                        //modelprojectlist[i].children[j].children[k].spread = false;
+                                        modelprojectlist[i].children[j].children[k].checked = false;
+                                    }
+                                    else {
+                                        modelprojectlist[i].spread = true;
+                                        modelprojectlist[i].children[j].spread = true;
+                                        modelprojectlist[i].children[j].children[k].spread = true;
+                                        modelprojectlist[i].children[j].children[k].checked = true;
+                                    }
+                                }
+                            }
+                        }
+                       
                     }
+                    //重载项目树：将项目列表数据ModelProjectlist给data
+                    tree.reload('modelprojectlistid', {
+                        data: modelprojectlist
+                    });
                 }
             }
         });
@@ -80,7 +103,7 @@ $('#projectsearch').click(function () {
 
 //获取用户所有项目列表
 function GetUserAllModelProjects() {
-    modelprojectlist = [];
+    
 
     $.ajax({
         url: servicesurl + "/api/ModelProject/GetUserModelProjectList", type: "get", data: { "cookie": document.cookie },
@@ -145,6 +168,10 @@ function GetUserAllModelProjects() {
                                     
                                     if (modelprojectdata[i].ModelTasks.TaskList[j].MXLJ != null) {
                                         task.showCheckbox = true;
+                                        task.checked = false;
+                                    }
+                                    else {
+                                        task.showCheckbox = false;
                                         task.checked = false;
                                     }
                                     tasks.push(task);
