@@ -515,11 +515,15 @@
     <Content Include="Apps\model\js\3.0-map.js" />
     <Content Include="Apps\model\js\4.1-projectlist.js" />
     <Content Include="Apps\model\js\4.2-projectinfo.js" />
-    <Content Include="Apps\model\js\4.3-taskinfo.js" />
+    <Content Include="Apps\model\js\4.3-projectright.js" />
+    <Content Include="Apps\model\js\4.4-taskinfo.js" />
     <Content Include="Apps\model\js\5.0-header.js" />
     <Content Include="Apps\model\js\5.1-message.js" />
     <Content Include="Apps\model\js\5.2-setting.js" />
     <Content Include="Apps\model\js\6.0-util.js" />
+    <Content Include="Apps\model\js\6.1-measure.js" />
+    <Content Include="Apps\model\js\6.2-draw.js" />
+    <Content Include="Apps\model\js\6.3-localtool.js" />
     <Content Include="Apps\model\widget\0-projectlist.html" />
     <Content Include="Apps\model\widget\1.1 projectaddview.html" />
     <Content Include="Apps\model\widget\1.2 projectview.html" />

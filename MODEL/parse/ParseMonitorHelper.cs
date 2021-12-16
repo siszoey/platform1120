@@ -4194,6 +4194,45 @@ namespace MODEL
             }
         }
         /// <summary>
+        /// 巡视照片表
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static PatrolPhotoInfo ParsePatrolPhotoInfo(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+            {
+                logger.Warn("解析巡视照片数据为空！");
+                return null;
+            }
+
+            try
+            {
+                string[] rows = data.Split(new char[] { COM.ConstHelper.rowSplit });
+                if (rows.Length != 1)
+                {
+                    logger.Warn("Project不唯一！");
+                    return null;
+                }
+
+                string[] row = rows[0].Split(new char[] { COM.ConstHelper.columnSplit });
+                PatrolPhotoInfo project = new PatrolPhotoInfo()
+                {
+                    id = Convert.ToInt32(row[0].ToString()),
+                    photoUrl = row[1].ToString(),
+                    projectId = row[2].ToString(),
+                    patrolNum = row[3].ToString(),
+                    patrolTime = row[4].ToString()
+                };
+                return project;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("为巡视照片信息表解析失败：" + data, ex);
+                return null;
+            }
+        }
+        /// <summary>
         /// 巡视表
         /// </summary>
         /// <param name="data"></param>

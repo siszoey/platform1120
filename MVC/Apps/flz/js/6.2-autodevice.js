@@ -398,6 +398,7 @@ function DrwInfo(data,flag) {
             , title: '点位信息'
             , skin: 'line'
             , even: false
+            , toolbar: true
             , page: {
                 layout: ['prev', 'page', 'next', 'count']
             }

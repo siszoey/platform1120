@@ -15,7 +15,7 @@ var role = "";                     //用户功能权限
 var modelprojectinfoviewlayerindex = null;                           //项目信息模块（查看）
 var modelprojectinfoaddlayerindex = null;                            //项目信息模块（新建）
 var modelprojectinfoeditlayerindex = null;                           //项目信息模块（编辑）
-
+var modelprojectrightuserlayerindex = null;                          //项目权限模块
 
 var modeltaskinfoviewlayerindex = null;                           //模型信息模块（查看）
 var modeltaskinfoaddlayerindex = null;                            //模型信息模块（新建）

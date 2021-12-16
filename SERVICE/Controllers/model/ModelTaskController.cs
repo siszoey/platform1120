@@ -214,6 +214,7 @@ namespace SERVICE.Controllers
                     && (!string.IsNullOrEmpty(yxsl))
                     && (!string.IsNullOrEmpty(yxcjsb))
                     && (!string.IsNullOrEmpty(yxcflj))
+                    && (!string.IsNullOrEmpty(cgxzlj))
                     && (!string.IsNullOrEmpty(srid))
                     )
                     {
@@ -226,8 +227,8 @@ namespace SERVICE.Controllers
                                SQLHelper.UpdateString(yxcjsb),
                                srid,
                                SQLHelper.UpdateString(sxcg),
-                               yxkzd,
-                               yxfw,
+                               SQLHelper.UpdateString(yxkzd),
+                               SQLHelper.UpdateString(yxfw),
                                SQLHelper.UpdateString(yxcflj),
                                SQLHelper.UpdateString(rwms),
                                SQLHelper.UpdateString(cgxzlj),

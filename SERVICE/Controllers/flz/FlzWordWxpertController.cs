@@ -47,6 +47,7 @@ namespace SERVICE.Controllers
             logger.Info("【" + JsonHelper.ToJson(projectString) + "】pgsqlConnection");
 
             DataController dataController = new DataController();
+
             MonitorController monitorController = new MonitorController();
 
             string devs = monitorController.GetMonitor(Convert.ToInt32(id), cookie);
@@ -72,7 +73,7 @@ namespace SERVICE.Controllers
             string yuLiangTime = "";
             double sumYuLiang = 0;
             int yuliangDay = 0;
-
+            string xyzs = "";//雨量数据
 
             for (int i=0;i< monitorInfo.Count;i++)
             {
@@ -171,7 +172,7 @@ namespace SERVICE.Controllers
                 };
                 if (monitorString.JCFF=="雨量")
                 {
-                    string xyzs = dataController.GetAutoDatabyPreDateTime(monitorString.Id, "雨量", "2", cookie);
+                    xyzs = dataController.GetAutoDatabyPreDateTime(monitorString.Id, "雨量", "2", cookie);
 
                     if (xyzs != "")
                     {
@@ -276,15 +277,57 @@ namespace SERVICE.Controllers
             }
 
             string sunLieFengUrl = "";
+           
             if (lieFengName.Count>0)//看有没有折线数据
             {
                 sunLieFengUrl = this.DrawLineChart(sumLieFengList, lieFengName);
             }
-               
+            
 
 
-            string templatePath = imgdir + "/SurImage/MoBan/"+ projectString.ZHDMC+".docx";
-             
+            // 算总时间
+            string jieSuTime = projectString.BZ;
+            //TxtInfo txtInfo = new TxtInfo();
+            string patrolNum = "";
+            if (jieSuTime != "" && jieSuTime.Length > 0)
+            {
+                string[] timexy = jieSuTime.Split('-');
+                if (timexy.Length > 1)
+                {
+                    int startYear = int.Parse(timexy[0]);
+                    int dattime = int.Parse(timexy[1]);
+                    //txtInfo.Content=(year - startYear-1)*36+3+"";//
+
+                    if (day >= 1 && day <= 10)
+                    {
+                        patrolNum = (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 1)+"";
+                    }
+                    else if (day >= 11 && day <= 20)
+                    {
+                        patrolNum = (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 2) + "";
+                    }
+                    else
+                    {
+                        patrolNum = (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 3) + "";
+                    }
+                }
+            }
+            PatrolEquipmentController patrolEquipmentController = new PatrolEquipmentController();
+            List<PatrolPhotoInfo> patrolPhotoInfoList = new List<PatrolPhotoInfo>();
+            if (patrolNum.Length>0)
+            {
+               string photoList= patrolEquipmentController.getPatrolPhotoInfo(projectString.Id+"", patrolNum);
+
+                patrolPhotoInfoList = COM.JsonHelper.StringToObject<List<PatrolPhotoInfo>>(photoList);
+            }
+           
+            //
+
+
+
+            string templatePath = imgdir + "/SurImage/MoBan/" + projectString.ZHDMC + ".docx";
+
+
             WordMLHelper wordMLHelper = new WordMLHelper();
             List<TagInfo> tagInfos = wordMLHelper.GetAllTagInfo(File.OpenRead(templatePath));//打开模板文件,获取所有填充域
 
@@ -312,34 +355,8 @@ namespace SERVICE.Controllers
                     }
                     if (string.Equals(tagInfos[i].TagTips.Trim(), "[sumNum]"))
                     {
-                        string jieSuTime= projectString.BZ;
-                        //TxtInfo txtInfo = new TxtInfo();
-                        if (jieSuTime!=""&& jieSuTime.Length>0)
-                        {
-                            string[] timexy = jieSuTime.Split('-');
-                            if (timexy.Length>1)
-                            {
-                                int startYear = int.Parse(timexy[0]);
-                                int dattime = int.Parse(timexy[1]);
-                                //txtInfo.Content=(year - startYear-1)*36+3+"";//
-
-                                if (day >= 1 && day <= 10)
-                                {
-                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 1) + "");
-                                }
-                                else if (day >= 11 && day <= 20)
-                                {
-                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 2) + "");
-                                }
-                                else
-                                {
-                                    wordMLHelper.FillContentWithoutStyle(tagInfos[i], (year - startYear - 1) * 36 + dattime + ((month - 1) * 3 + 3) + "");
-                                }
-                            }
-                        }
                         
-                        //txtInfo.Content = "68";
-                        //tagInfos[i].AddContent(txtInfo);
+                        wordMLHelper.FillContentWithoutStyle(tagInfos[i], patrolNum);
                         continue;
                     }
                     if (string.Equals(tagInfos[i].TagTips.Trim(), "[时间]"))
@@ -582,12 +599,19 @@ namespace SERVICE.Controllers
                     }
                     if (string.Equals(tagInfos[i].TagTips.Trim(), "[雨量图]"))
                     {
-                        ImgInfo imgInfo = new ImgInfo();
-                        imgInfo.ImgPath = imgdir + "/SurImage/Download/lingShi.jpg";
+                        if (xyzs!="")
+                        {
+                            ImgInfo imgInfo = new ImgInfo();
+                            imgInfo.ImgPath = imgdir + "/SurImage/Download/lingShi.jpg";
 
-                        imgInfo.Width = 512;
-                        imgInfo.Height = 302;
-                        tagInfos[i].AddContent(imgInfo);
+                            imgInfo.Width = 512;
+                            imgInfo.Height = 302;
+                            tagInfos[i].AddContent(imgInfo);
+                        }
+                        else{
+                            wordMLHelper.FillContentWithoutStyle(tagInfos[i], "无雨量数据");
+                        }
+                        
                         continue;
                     }
                     if (string.Equals(tagInfos[i].TagTips.Trim(), "[sumDay]"))
@@ -638,6 +662,44 @@ namespace SERVICE.Controllers
                         }
                         continue;
 
+                    }
+                    if (string.Equals(tagInfos[i].TagTips.Trim(), "[巡视图1]"))
+                    {
+                        if (patrolPhotoInfoList.Count > 0)
+                        {
+                            PatrolPhotoInfo patrolPhotoInfo1 = patrolPhotoInfoList[0];
+                            ImgInfo imgInfo = new ImgInfo();
+                            imgInfo.ImgPath = imgdir + patrolPhotoInfo1.photoUrl;
+
+                            imgInfo.Width = 264;
+                            imgInfo.Height = 198;
+                            tagInfos[i].AddContent(imgInfo);
+                        }
+                        else
+                        {
+                            wordMLHelper.FillContentWithoutStyle(tagInfos[i], "");
+                        }
+
+                        continue;
+                    }
+                    if (string.Equals(tagInfos[i].TagTips.Trim(), "[巡视图2]"))
+                    {
+                        if (patrolPhotoInfoList.Count > 1)
+                        {
+                            PatrolPhotoInfo patrolPhotoInfo1 = patrolPhotoInfoList[1];
+                            ImgInfo imgInfo = new ImgInfo();
+                            imgInfo.ImgPath = imgdir + patrolPhotoInfo1.photoUrl;
+
+                            imgInfo.Width = 264;
+                            imgInfo.Height = 198;
+                            tagInfos[i].AddContent(imgInfo);
+                        }
+                        else
+                        {
+                            wordMLHelper.FillContentWithoutStyle(tagInfos[i], "");
+                        }
+
+                        continue;
                     }
 
                 }

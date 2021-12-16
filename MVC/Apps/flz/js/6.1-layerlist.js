@@ -158,9 +158,10 @@ function LoadLayerListLayer(id) {
                                     surmodel.path = layerlist.ProjectLayer.SurModels.SurModelList[i].MXLJ;
                                     surmodel.checked = false;
                                     surmodel.showCheckbox = true;//显示复选框
+                                    surmodel.gcgz = layerlist.ProjectLayer.SurModels.SurModelList[i].MXST;
                                     prjsurmodelchild.push(surmodel);
                                 }
-
+                                console.log(modleInfoList);
                                 prjsurmodel.children = prjsurmodelchild;
                                 layers.push(prjsurmodel);
                             }

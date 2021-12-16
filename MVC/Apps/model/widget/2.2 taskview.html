@@ -1,13 +1,15 @@
 ﻿<!--查看任务-->
 <form class="layui-form" style="margin-top:5px;margin-right:10px;" lay-filter="viewModeltaskinfoform">
     <div class="layui-form-item">
-        <label class="layui-form-label" style="font-weight:bold">任务名称</label>
-        <div class="layui-input-block">
-            <input type="text" name="model_rwmc_view" readonly="readonly" class="layui-input" />
-        </div>
-    </div>
-    <div class="layui-form-item">
         <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="grid-demo">
+                    <label class="layui-form-label" style="font-weight:bold">任务名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="model_rwmc_view" readonly="readonly" class="layui-input" />
+                    </div>
+                </div>
+            </div>
             <div class="layui-col-md6">
                 <div class="grid-demo">
                     <label class="layui-form-label" style="font-weight:bold">任务编码</label>
@@ -16,6 +18,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-row">
             <div class="layui-col-md6">
                 <div class="grid-demo">
                     <label class="layui-form-label" style="font-weight:bold">采集人员</label>
@@ -24,10 +30,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-row">
             <div class="layui-col-md6">
                 <div class="grid-demo">
                     <label class="layui-form-label" style="font-weight:bold">影像数量</label>
@@ -36,23 +38,15 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md6">
-                <div class="grid-demo">
-                    <label class="layui-form-label" style="font-weight:bold">采集时间</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="yxcjsjid" name="model_yxcjsj_view" readonly="readonly" class="layui-input" />
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-row">
             <div class="layui-col-md6">
                 <div class="grid-demo">
-                    <label class="layui-form-label" style="font-weight:bold">坐标系统</label>
+                    <label class="layui-form-label" style="font-weight:bold">采集时间</label>
                     <div class="layui-input-block">
-                        <input type="text" name="model_kjck_view" readonly="readonly" class="layui-input" />
+                        <input type="text" id="yxcjsjid" name="model_yxcjsj_view" readonly="readonly" class="layui-input" />
                     </div>
                 </div>
             </div>
@@ -67,19 +61,25 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label" style="font-weight:bold">坐标系统</label>
+        <div class="layui-input-block">
+            <input type="text" name="model_kjck_view" readonly="readonly" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label" style="font-weight:bold">目标成果</label>
         <div class="layui-input-block" id="sxcgid">
             <input type="text" name="model_sxcg_view" readonly="readonly" class="layui-input" />
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" >控制点</label>
+        <label class="layui-form-label">控制点</label>
         <div class="layui-input-block">
             <input type="text" name="model_yxkzd_view" readonly="readonly" class="layui-input" />
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" >范围</label>
+        <label class="layui-form-label">范围</label>
         <div class="layui-input-block">
             <input type="text" name="model_yxfw_view" readonly="readonly" class="layui-input" />
         </div>

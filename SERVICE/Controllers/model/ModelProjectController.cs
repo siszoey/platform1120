@@ -15,7 +15,7 @@ using MODEL;
 namespace SERVICE.Controllers
 {
     /// <summary>
-    /// 影像项目
+    /// 模型项目
     /// </summary>
     public class ModelProjectController : ApiController
     {

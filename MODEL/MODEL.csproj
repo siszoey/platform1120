@@ -143,6 +143,7 @@
     <Compile Include="data\monitor\patrol\DianYunChanges.cs" />
     <Compile Include="data\monitor\patrol\DianYunUrl.cs" />
     <Compile Include="data\monitor\patrol\PatrolEquipmentInfo.cs" />
+    <Compile Include="data\monitor\patrol\PatrolPhotoInfo.cs" />
     <Compile Include="data\monitor\project\MonitorProject.cs" />
     <Compile Include="data\monitor\project\MonitorProjectString.cs" />
     <Compile Include="data\monitor\disaster\RockfallPropertyString.cs" />
