@@ -159,6 +159,7 @@ function LoadLayerListLayer(id) {
                                     surmodel.path = layerlist.ProjectLayer.SurModels.SurModelList[i].MXLJ;
                                     surmodel.checked = false;
                                     surmodel.showCheckbox = true;//显示复选框
+                                    surmodel.gcgz = layerlist.ProjectLayer.SurModels.SurModelList[i].MXST;
                                     prjsurmodelchild.push(surmodel);
                                 }
 
@@ -1497,7 +1498,7 @@ function LoadLayerListLayer(id) {
                                                             }
                                                         }
 
-
+                                                        
                                                         if (modleInfo != null && data.id != modleInfo.id) {
 
                                                             modleInfo = data;
@@ -1506,7 +1507,7 @@ function LoadLayerListLayer(id) {
                                                             tree.reload('prjlayerlistid', { data: layers });
                                                         }
                                                         modleInfo = data;
-
+                                                        console.log(modleInfo);
 
                                                         //项目模型
                                                         var loadingceindex = layer.load(0, { shade: 0.2, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });

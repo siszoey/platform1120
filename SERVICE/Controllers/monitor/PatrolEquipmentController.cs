@@ -334,6 +334,49 @@ namespace SERVICE.Controllers
             return string.Empty;
         }
 
+        /// <summary>
+        /// 获取巡视的照片信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="patrolNum">验证信息</param>
+        /// <returns></returns>
+        [HttpGet]
+        public string getPatrolPhotoInfo(string id, string patrolNum)
+        {
+           
+           
+                string sql = "SELECT * FROM patrol_photo_info WHERE project_id ={0} and patrol_num={1}";
+                string datas = PostgresqlHelper.QueryData(pgsqlConnection, string.Format(sql, SQLHelper.UpdateString(id), SQLHelper.UpdateString(patrolNum)));
+                if (!string.IsNullOrEmpty(datas))
+                {
+                    List<PatrolPhotoInfo> patrolPhotoInfoList = new List<PatrolPhotoInfo>();
 
+                    string[] rows = datas.Split(new char[] { COM.ConstHelper.rowSplit });
+                    for (int i = 0; i < rows.Length; i++)
+                    {
+                    PatrolPhotoInfo patrolPhotoInfo = ParseMonitorHelper.ParsePatrolPhotoInfo(rows[i]);       //ParseMapProjectWarningInfo(rows[i]);
+                        if (patrolPhotoInfo != null)
+                        {
+                        patrolPhotoInfoList.Add(patrolPhotoInfo);
+
+                        }
+                    }
+
+                    if (patrolPhotoInfoList.Count > 0)
+                    {
+                        return JsonHelper.ToJson(patrolPhotoInfoList);
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+                else
+                {
+                    return string.Empty;
+                }
+         }
+            
+        
     }
 }

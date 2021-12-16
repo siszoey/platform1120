@@ -657,8 +657,66 @@ namespace SERVICE.Controllers
                 return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, cookieResult.GetRemark(), string.Empty));
             }
         }
+        /// <summary>
+        /// 1---调查区图片上舛（表单提交、图片上传至服务器）  陈小飞
+        /// </summary>
+        [HttpPost]
+        public string UploadWeChartImage()
+        {
+            string step = null;
+            try
+            {
+                string ImageFilePath = imgdir + "/SurImage/wechart/";        //   ".../SurImage"
+                HttpPostedFile file = HttpContext.Current.Request.Files["upload"];
+                string projectId = HttpContext.Current.Request.Form["projectId"];
+                string patrolNum = HttpContext.Current.Request.Form["patrolNum"];
+                string patrolTime = HttpContext.Current.Request.Form["patrolTime"];
 
 
+                if (file!=null)
+                {
+                    Stream sr = file.InputStream;
+                    Bitmap bitmap = (Bitmap)Bitmap.FromStream(sr);
+                    
+                    if (!Directory.Exists(ImageFilePath))//判断文件夹是否存在
+                    {
+                        return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, "影像存储路径不存在！", string.Empty));
+                    }
+                    
+                  
+                    file.SaveAs(ImageFilePath + file.FileName);// +".txt");
+                   string lujin= "/SurImage/wechart/" + file.FileName;
+                   string value = "("
+                       + SQLHelper.UpdateString(lujin) + ","
+                       + SQLHelper.UpdateString(projectId) + ","
+                       + SQLHelper.UpdateString(patrolNum) + ","
+                       + SQLHelper.UpdateString(patrolTime) + ")";
+                    int id = PostgresqlHelper.InsertDataReturnID(pgsqlConnection, "INSERT INTO patrol_photo_info (photo_url,project_id,patrol_num,patrol_time) VALUES"+ value);
+                    if (id != -1)
+                    {
+                        return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Success, "上传成功！", id+""));
+                    }
+                    else
+                    {
+                        return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, "数据库插入失败", ""));
+                    }
+                        
+                }
+                else
+                {
+                    return JsonHelper.ToJson(new ResponseResult((int)MODEL.Enum.ResponseResultCode.Failure, "影像存储失败！", string.Empty));
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+           
+
+
+        }    
 
     }
 }

@@ -217,10 +217,20 @@ function pointMeasure2() {
         //左击
         handler.setInputAction(function (leftclick) {
             var pickedOject
+            var hGaizhengshu = 31.80;
             if (viewer.scene.globe.depthTestAgainstTerrain) {//地形测量
                 pickedOject = scene.pickPosition(leftclick.position);
             } else {
                 pickedOject = scene.pick(leftclick.position);
+                try {
+                    if (modleInfo.gcgz == "1") {
+                        hGaizhengshu = 0;
+                    }
+                } catch (e) {
+                    console.log(e.message);//sojson is undefined
+                }
+       
+               
             }
          
 
@@ -236,7 +246,7 @@ function pointMeasure2() {
 
                     if (height > 0) {
                         // showCeliang = " 位置:" + "\n" + " X:" + position.x.toFixed(6) + "\n" + " Y:" + position.y.toFixed(6) + "\n" + " Z:" + position.z.toFixed(6);
-                        showCeliang = "X: " + (xy.x).toFixed(3) + "\n" + "Y: " + parseFloat(xy.y).toFixed(3) + "\n" + "L: " + ToDegress(longitude) + "\n" + "B: " + ToDegress(latitude) + "\n" + "H: " + height.toFixed(2);
+                        showCeliang = "X: " + (xy.x).toFixed(3) + "\n" + "Y: " + parseFloat(xy.y).toFixed(3) + "\n" + "L: " + ToDegress(longitude) + "\n" + "B: " + ToDegress(latitude) + "\n" + "H: " + (height + hGaizhengshu).toFixed(2);
 
 
                         if (Cesium.defined(position)) {
@@ -254,7 +264,7 @@ function pointMeasure2() {
                                 name: "ptlMeasue" + NewGuidCL(),
                                 position: Cesium.Cartesian3.fromDegrees(longitude, latitude, height),
                                 label: {
-                                    text: '经纬度(' + longitude.toFixed(6) + ',' + latitude.toFixed(6) + ',' + height.toFixed(2) + ')',
+                                    text: '经纬度(' + longitude.toFixed(6) + ',' + latitude.toFixed(6) + ',' + (height + hGaizhengshu).toFixed(2) + ')',
                                     showBackground: true,
                                     backgroundColor: new Cesium.Color(0.165, 0.165, 0.165, 0.5),
                                     font: '16px Times New Roman',
