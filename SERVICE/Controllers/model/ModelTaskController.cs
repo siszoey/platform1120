@@ -214,7 +214,6 @@ namespace SERVICE.Controllers
                     && (!string.IsNullOrEmpty(yxsl))
                     && (!string.IsNullOrEmpty(yxcjsb))
                     && (!string.IsNullOrEmpty(yxcflj))
-                    && (!string.IsNullOrEmpty(cgxzlj))
                     && (!string.IsNullOrEmpty(srid))
                     )
                     {

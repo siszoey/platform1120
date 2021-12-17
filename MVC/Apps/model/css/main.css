@@ -48,3 +48,35 @@
     border-color: rgba(48, 51, 54, 1);
     visibility:hidden
 }
+
+@keyframes shock {
+    0% {
+        margin-left: 0px;
+        margin-right: 5px;
+        margin-top: 0px;
+    }
+
+    100% {
+        margin-left: 5px;
+        margin-right: 0px;
+        margin-top: 5px; /* 可以自定义上下左右的幅度 */
+    }
+}
+
+#task_count {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    line-height: 20px;
+    font-size: 12px;
+    left: -15px;
+    top: -5px;
+    border-radius: 5px;
+    animation-delay: 0s;
+    animation-name: shock;
+    animation-duration: .2s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-timing-function: linear;
+}

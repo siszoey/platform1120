@@ -15,10 +15,9 @@ namespace MODEL
         public ModelProject ModelProjects { get; set; }
 
         /// <summary>
-        /// 实景模型
+        /// 实景模型任务
         /// </summary>
         public ModelTaskInfos ModelTasks { get; set; }
-
-        //TODO
+        
     }
 }

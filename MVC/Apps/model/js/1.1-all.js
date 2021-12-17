@@ -20,7 +20,7 @@ var modelprojectrightuserlayerindex = null;                          //项目权
 var modeltaskinfoviewlayerindex = null;                           //模型信息模块（查看）
 var modeltaskinfoaddlayerindex = null;                            //模型信息模块（新建）
 var modeltaskinfoeditlayerindex = null;                           //模型信息模块（编辑）
-
+var newmodeltaskinfolayerindex = null;                            //新模型任务信息
 
 var headeruserlayerindex = null;                                //用户信息
 var headernoticelayerindex = null;                              //通知消息
@@ -42,7 +42,7 @@ var currentprojectdisastertype = null;//当前项目类型
 
 
 var curtileset = null;//当前模型
-
+var projectlayerlistlayerindex=null  //标注窗口
 
 /*
  * 图标常量

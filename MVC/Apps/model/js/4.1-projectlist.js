@@ -519,7 +519,11 @@ function CloseAllLayer() {
         layer.close(modeltaskinfoeditlayerindex);
         modeltaskinfoeditlayerindex = null;
     }
-
+    
+    if (newmodeltaskinfolayerindex != null) {
+        layer.close(newmodeltaskinfolayerindex);
+        newmodeltaskinfolayerindex = null;
+    }
     //TODO更多关闭图层
 };
 //关闭任务信息相关图层
@@ -556,6 +560,10 @@ function CloseModelTaskInfoLayer() {
     if (modeltaskinfoeditlayerindex != null) {
         layer.close(modeltaskinfoeditlayerindex);
         modeltaskinfoeditlayerindex = null;
+    }
+    if (newmodeltaskinfolayerindex != null) {
+        layer.close(newmodeltaskinfolayerindex);
+        newmodeltaskinfolayerindex = null;
     }
 }
 

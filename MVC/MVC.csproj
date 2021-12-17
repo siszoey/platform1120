@@ -513,6 +513,7 @@
     <Content Include="Apps\model\js\1.1-all.js" />
     <Content Include="Apps\model\js\1.2-para.js" />
     <Content Include="Apps\model\js\3.0-map.js" />
+    <Content Include="Apps\model\js\4.5-newtaskinfo.js" />
     <Content Include="Apps\model\js\4.1-projectlist.js" />
     <Content Include="Apps\model\js\4.2-projectinfo.js" />
     <Content Include="Apps\model\js\4.3-projectright.js" />
