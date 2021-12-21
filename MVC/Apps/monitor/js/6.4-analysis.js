@@ -199,7 +199,7 @@ function LoadwuRenJiXuShiLayer(projectid) {
                             success: function (result) {
                                 layer.close(loadingminindex);
                                 console.log(result);
-                                window.location.href = 'http://www.cq107chy.com:4022/SurImage/Download/' + "南川区李家湾滑坡20211207144007726.docx";
+                               // window.location.href = 'http://www.cq107chy.com:4022/SurImage/Download/' + result;
                             },
                             error: function (res) {
                                 layer.close(loadingminindex);
@@ -209,7 +209,56 @@ function LoadwuRenJiXuShiLayer(projectid) {
                         });
                         return false;
                     });
+                    //巡视照片列表
+                    form.on('submit(queryrenXunsubmit)', function (data) {
+                        data.field.cookie = document.cookie;
+                        data.field.id = currentprojectid;
+                        // data.field.patrolStatus = "1";//这里已处理的
+                        var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
 
+                        $.ajax({
+                            url: servicesurl + "/api/ImageUpload/GetMonImageInfos", type: "get", data: data.field,
+                            success: function (result) {
+                                renXuntabledata = [];
+                                var windowInfos = JSON.parse(result);
+                                if (windowInfos.data == "") {
+                                    layer.msg(windowInfos.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                                    renXuntableview.reload({ id: 'renXuntableviewid', data: [] });
+                                }
+                                else {
+                                    var renXunData = JSON.parse(windowInfos.data);
+                                    console.log(renXunData);
+                                    for (var i in renXunData) {
+
+                                        var renXun = new Object;
+                                        renXun.BSM = renXunData[i].BSM;
+                                        renXun.BZ = renXunData[i].BZ;
+                                        renXun.CJSJ = renXunData[i].CJSJ;
+                                        renXun.Id = renXunData[i].Id;
+                                        renXun.YXBH = renXunData[i].YXBH;
+                                        renXun.YXLJ = renXunData[i].YXLJ;
+                                        renXun.YXMC = renXunData[i].YXMC;
+                                        renXun.xsjg = renXunData[i].xsjg;
+                                        renXun.xszt = renXunData[i].xszt;
+                                        renXun.targetid = renXunData[i].targetid;
+
+
+                                        if (renXunData[i].YXBH) {
+                                            var tempzht = renXunData[i].YXBH.split("#");
+                                            if (tempzht[0]) {
+                                                renXun.zht = tempzht[0].split("_")[1];
+                                            }
+                                        }
+                                        renXuntabledata.push(renXun);
+                                    }
+                                    console.log(renXuntabledata);
+                                    renXuntableview.reload({ id: 'renXuntableviewid', data: renXuntabledata });
+                                }
+                                layer.close(loadingminindex);
+                            }, datatype: "json"
+                        });
+                        return false;
+                    });
                 }
                 , end: function () {
                     wuRenJiXuShilayerindex = null;
@@ -1317,6 +1366,267 @@ function LoadwuRenJiXuShiLayer(projectid) {
                     layer.close(loadingminindex);
                 }, datatype: "json"
             });
+            //巡视照片处理
+            //裂缝巡查
+
+            var renXuntableview = table.render({
+                elem: '#renXuntable-view'
+                , id: 'renXuntableviewid'
+                , title: '裂缝巡查信息'
+                , skin: 'line'
+                , even: false
+                , page: true
+                , limit: 10
+                , toolbar: true
+                , totalRow: false
+                , initSort: { field: 'id', type: 'desc' }
+                , cols: [[
+                    { field: 'id', title: 'ID', hide: true }
+                    , { field: 'YXMC', title: '影像名称', width: 360, align: "center" }
+                    , {
+                        field: 'xszt', title: '巡查状态', width: 80, align: "center", templet: function (row) {
+                            if (row.xszt == "1") {
+                                return '已处理'
+                            } else {
+                                return '<span style="color: red;">未处理</span>'
+                            }
+
+                        }
+                    }
+                    , { field: 'xsjg', title: '巡查结果', width: 120, align: "center" }
+                    , { field: 'zht', title: '灾害体', width: 80, sort: true, width: 100, align: "center" }
+                    , {
+                        field: 'CJSJ', title: '巡查时间', width: 80, sort: true, align: "center", templet: function (row) {
+
+                            if (row.CJSJ != null) {
+                                var len = row.CJSJ.length;
+                                return row.CJSJ.slice(0, len - 8);
+                            } else {
+                                return ''
+                            }
+
+                        }
+
+                    }
+
+                    , { fixed: 'right', width: 80, align: 'center', toolbar: '#renXunButon' }
+                ]]
+                , data: []
+            });
+            table.on('tool(renXuntable-view)', function (obj) {
+                console.log(obj);
+                if (obj.event === 'edit') {
+                    if (renXunChuLilayerindex != null) {
+                        layer.close(renXunChuLilayerindex);
+                        return;
+                    }
+
+                    renXunChuLilayerindex = layer.open({
+                        type: 1
+                        , title: [obj.data.YXMC + '巡查', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
+                        , area: ['920px', '800px']
+                        , shade: 0
+                        , offset: 'auto'
+                        , closeBtn: 1
+                        , maxmin: true
+                        , moveOut: true
+                        , content: renXunHtml
+                        , zIndex: layer.zIndex
+                        , success: function (layero) {
+                            layer.setTop(layero);
+
+                            form.val("renXunform", {
+                                xsjg: obj.data.xsjg,
+
+                            });
+                            document.getElementById("renXunChuli").src = datasurl + lujizhuanhuan(obj.data.YXLJ);//处理存的路劲地址
+
+                            form.on('submit(renXunsubmit)', function (data) {
+                                data.field.id = obj.data.Id;
+                                data.field.cookie = document.cookie;
+                                data.field.xszt = "1";//只要提交，都是处理
+                                var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+
+                                $.ajax({
+                                    url: servicesurl + "/api/ImageUpload/UpdatePartorLieFeng", type: "put", data: data.field,
+                                    success: function (result) {
+                                        layer.msg(result, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                                        // GetWarningCriterion();
+                                        console.log(renXuntabledata);
+                                        for (var i in renXuntabledata) {
+                                            if (renXuntabledata[i].id == obj.data.id) {
+                                                renXuntabledata[i].xszt = "1",
+                                                    renXuntabledata[i].xsjg = data.field.xsjg
+                                                break;
+                                            }
+                                        }
+                                        renXuntableview.reload({ id: 'renXuntableviewid', data: renXuntabledata });
+                                        layer.close(loadingminindex);
+                                    }, datatype: "json"
+                                });
+                                console.log(data);
+                                layer.close(renXunChuLilayerindex);
+                                return false;
+                            });
+                            if (viewerPhoto != null) {
+                                viewerPhoto.destroy();
+                            }
+                            viewerPhoto = new Viewer(document.getElementById('dowebok'), {
+                                toolbar: true, //显示工具条
+                                viewed() {
+                                    viewerPhoto.zoomTo(0.75); // 图片显示比例 75%
+                                },
+                                zIndex: 99999999,
+                                navbar: false,
+                                show: function () {  // 动态加载图片后，更新实例
+                                    viewerPhoto.update();
+                                },
+                            });
+                            form.on('select(renXunduiBiSelectname)', function (data) {
+                                console.log(data);
+                                loadingimgindex = layer.load(0, { title: '图片加载中', shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+                                document.getElementById("renXunduiBitui").src = datasurl + data.value;
+                                viewerPhoto.destroy();
+                                viewerPhoto = new Viewer(document.getElementById('dowebok'), {
+                                    toolbar: true, //显示工具条
+                                    viewed() {
+                                        viewerPhoto.zoomTo(0.75); // 图片显示比例 75%
+                                    },
+                                    zIndex: 99999999,
+                                    navbar: false,
+                                    show: function () {  // 动态加载图片后，更新实例
+                                        viewerPhoto.update();
+                                    },
+                                });
+                            });
+                            $("#renXunselectNumDiv").hide();
+                            $("#renXunduiBitui").hide();
+
+                            form.on('switch(renXunswitch-type)', function (data) {  //radio-type为lay-filter的属性值
+
+                                console.log(data.elem.checked);
+                                if (data.elem.checked) {//选中
+                                    $("#renXunselectNumDiv").show();
+                                    console.log($("#renXunduiBitui"));
+                                } else {//不选中
+                                    $("#renXunselectNumDiv").hide();
+                                    $("#renXunduiBitui").hide();
+                                    $("#renXunChuli")[0].attributes[1].value = "width:820px;height:646px;margin-left: 40px";
+                                }
+                                return false;
+                            });
+                            // 发送后台，查出相同的设备，不同的期数。
+                            var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+                            $.ajax({
+                                url: servicesurl + "/api/ImageUpload/GetMonImageInfos", type: "get", data: { "id": projectid, "cookie": document.cookie, "targetId": obj.data.targetid, "yxmc": "", "xszt": "" },
+                                success: function (result) {
+
+                                    var windowInfos = JSON.parse(result);
+                                    if (windowInfos.data == "") {
+                                        //无监测剖面信
+                                        document.getElementById("renXunduiBiSelect").innerHTML = "<option value=''>无往期数据</option>	"
+                                    }
+                                    else {
+                                        var renXungList = JSON.parse(windowInfos.data);
+                                        for (var i in renXungList) {
+                                            if (renXungList[i].YXLJ.length > 8) {
+                                                document.getElementById("renXunduiBiSelect").innerHTML += '<option value="' + lujizhuanhuan(renXungList[i].YXLJ) + '" selected>' + renXungList[i].CJSJ.slice(0, renXungList[i].CJSJ.length - 8) + '</option>';
+                                            }
+                                        }
+                                    }
+                                    layer.close(loadingminindex);
+                                    // form.render();
+                                    form.render('select');
+                                }, datatype: "json"
+                            });
+                            // document.getElementById("duiBiSelect").innerHTML += '<option value="' + autodatadatetimes[i].value + '" selected>' + autodatadatetimes[i].name + '</option>';
+                            LoadImageDataPreDateTimess(obj.data.targetid, '13');
+
+                        }
+                        , end: function () {
+                            renXunChuLilayerindex = null;
+                        }
+                    });
+                }
+            });
+            var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+
+            $.ajax({
+                url: servicesurl + "/api/ImageUpload/GetMonImageInfos", type: "get", data: { "id": projectid, "cookie": document.cookie, "targetId": "", "yxmc": "", "xszt": "" },
+                success: function (result) {
+                    renXuntabledata = [];
+                    var windowInfos = JSON.parse(result);
+                    if (windowInfos.data == "") {
+                        layer.msg(windowInfos.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                        renXuntableview.reload({ id: 'renXuntableviewid', data: [] });
+                    }
+                    else {
+                        var renXunData = JSON.parse(windowInfos.data);
+                        console.log(renXunData);
+                        for (var i in renXunData) {
+
+                            var renXun = new Object;
+                            renXun.BSM = renXunData[i].BSM;
+                            renXun.BZ = renXunData[i].BZ;
+                            renXun.CJSJ = renXunData[i].CJSJ;
+                            renXun.Id = renXunData[i].Id;
+                            renXun.YXBH = renXunData[i].YXBH;
+                            renXun.YXLJ = renXunData[i].YXLJ;
+                            renXun.YXMC = renXunData[i].YXMC;
+                            renXun.xsjg = renXunData[i].xsjg;
+                            renXun.xszt = renXunData[i].xszt;
+                            renXun.targetid = renXunData[i].targetid;
+
+
+                            if (renXunData[i].YXBH) {
+                                var tempzht = renXunData[i].YXBH.split("#");
+                                if (tempzht[0]) {
+                                    renXun.zht = tempzht[0].split("_")[1];
+                                }
+                            }
+                            renXuntabledata.push(renXun);
+                        }
+                        console.log(renXuntabledata);
+                        renXuntableview.reload({ id: 'renXuntableviewid', data: renXuntabledata });
+                    }
+                    layer.close(loadingminindex);
+                }, datatype: "json"
+            });
+
+
+            var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+
+            $.ajax({//string targetId,string yxmc,string xszt
+                url: servicesurl + "/api/ImageProject/getYinXiangProjectId", type: "get", data: { "id": projectid },
+                success: function (data) {
+                    if (data != null) {//有对应id
+                        $.ajax({//string targetId,string yxmc,string xszt
+                            url: servicesurl + "/api/ImageTarget/GetTargetList", type: "get", data: { "id": data, "cookie": document.cookie },
+                            success: function (result) {
+                                layer.close(loadingminindex);
+                                var windowInfos = JSON.parse(result);
+                                if (windowInfos.data == "") {
+                                    // document.getElementById("targetIdSelect").innerHTML = '<option value="">请选择</option>';
+                                } else {
+                                    mubiaoList = JSON.parse(windowInfos.data);
+                                    for (var i in mubiaoList) {
+                                        document.getElementById("targetIdSelect").innerHTML += '<option value="' + mubiaoList[i].Id + '">' + mubiaoList[i].MBMC + '</option>';
+                                    }
+                                    form.render('select');
+                                }
+
+                            }, datatype: "json"
+                        });
+
+                    } else {//没有目标就没有下拉选
+                        // document.getElementById("xunShiDiv").innerHTML = '<option value="">请选择</option>';
+                        layer.close(loadingminindex);
+                    }
+                    console.log(data);
+                }, datatype: "json"
+            });
+
+
 
         } else {
             layer.msg("已打开无人机宏观地质巡查", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
@@ -1339,37 +1649,7 @@ function lujizhuanhuan(lujin) {
     var temp = lujin.split("\\SurImage\\");
     return "/SurImage/Thumbnail/"+ temp[1].replace('#', "%23");
 }
-//elem.on('tab(docDemoTabBriefitem)', function (data) {
-//    if (this.getAttribute('lay-id') == "222") {
 
-//        console.log(2222);
-//        console.log(document.getElementById("targetIdSelect"));
-//        layer.style(wuRenJiXuShilayerindex, {
-//            width: '980px',
-//            height: '700px',
-//            //top: '10px'
-//        });
-//      //  $("#xunShiDiv")[0].attributes[1].value = "width:814px";
-//       // console.log($("#xunShiDiv"));
-//       // elem.tabChange('projecrListTuCeng', 111); //跳转地址图层列表
-//    } else if (this.getAttribute('lay-id') == "111") {
-//        console.log(1111); console.log(wuRenJiXuShilayerindex);
-      
-//        layer.style(wuRenJiXuShilayerindex, {
-//            width: '980px',
-//            height:'700px',
-//            //top: '10px'
-//        });
-
-//        //$("#xunShiDiv")[0].attributes[1].value = "width:814px";
-//    } else if (this.getAttribute('lay-id') == "333") {
-//        layer.style(wuRenJiXuShilayerindex, {
-//            width: '350px',
-//        });
-//       // console.log($("#xunShiDiv"));
-//       // $("#xunShiDiv")[0].attributes[1].value = "width:200px";
-//    }
-//})
 //裂缝数据可视化
 function liefengkeshihua() {
     var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
@@ -1431,6 +1711,7 @@ var partolHtm =  "    <div class='layui-tab layui-tab-brief' lay-filter='docDemo
     + "            <li lay-id='222' style='display: block;'>裂缝巡查</li>                                                                                                        "
     + "            <li lay-id='333' style='display: block;'>基座巡查</li>                                                                                                        "
     + "            <li lay-id='444' style='display: block;'>报告下载</li>                                                                                                        "
+    + "            <li lay-id='555' style='display: block;'>人工巡视</li>                                                                                                        "
     + "        </ul>                                                                                                                                                "
     + "                                                                                                                                                             "
     + "        <div class='layui-tab-content' id='xunShiDiv' style='margin-left:120px;height:600px;border-left:solid;border-left-color:#e6e6e6;border-left-width:1px;'>      "
@@ -1618,6 +1899,57 @@ var partolHtm =  "    <div class='layui-tab layui-tab-brief' lay-filter='docDemo
     + "						</form>	"
     //  + "                 <div  id='jiZuoXunShiTree'></div>                                                                                                                                             "
     + "            </div>                                                                                                                                            "
+    + "            <div class='layui-tab-item'>                                                                                                                      "
+    + "            <!--裂缝巡查-->                                                                                                                                   "
+    + "					<form class='layui-form' style='margin-bottom:15px;margin-right:5px;' lay-filter='queryrenXuninfoform'>	"
+    + "						    <div class='layui-form-item'>	"
+    + "						        <div class='layui-row'>	"
+    + "						            <div class='layui-col-md3'>	"
+    + "						                <div class='grid-demo grid-demo-bg1'>	"
+    + "						                    <label class='layui-form-label'>影像名称</label>	"
+    + "						                    <div class='layui-input-block'>	"
+    + "						                        <input type='text' name='yxmc' autocomplete='off' placeholder='请输入' class='layui-input' />	"
+    + "						                    </div>	"
+    + "						                </div>	"
+    + "						            </div>	"
+    + "						            <div class='layui-col-md3'>	"
+    + "						                <div class='grid-demo'>	"
+    + "						                    <label class='layui-form-label'>目标</label>	"
+    + "						                    <div class='layui-input-block'>	"
+    + "						                        <select id='targetIdSelect' name='targetId' lay-filter='targetId'>	"
+    + "						                            <option value=''>全部</option>	"
+    + "						                        </select>	"
+    + "						                    </div>	"
+    + "						                </div>	"
+    + "						            </div>	"
+    + "						            <div class='layui-col-md3'>	"
+    + "						                <div class='grid-demo grid-demo-bg1'>	"
+    + "						                    <label class='layui-form-label'>巡查状态</label>	"
+    + "						                    <div class='layui-input-block'>	"
+    + "						                        <select id='xsztSelect' name='xszt'>	"
+    + "						                            <option value=''>全部</option>	"
+    + "						                            <option value='0'>未处理</option>	"
+    + "						                            <option value='1'>已处理</option>	"
+    + "						                        </select>	"
+    + "						                    </div>	"
+    + "						                </div>	"
+    + "						            </div>	"
+    + "						            <div class='layui-col-md3'>	"
+    + "						                <div class='grid-demo grid-demo-bg1'>	"
+    + "						        <div style='position:absolute;right:25px;'>	"
+    + "						            <button type='submit' class='layui-btn' lay-submit='' lay-filter='queryrenXunsubmit' style='width:100px'>查询</button>	"
+    + "						        </div>	"
+    + "						                </div>	"
+    + "						            </div>	"
+    + "						        </div>	"
+    + "						    </div>	"
+    + "						</form>	"
+    + "						<table class='layui-hide' id='renXuntable-view' style='margin-top:20px' lay-filter='renXuntable-view'></table>	"
+    + "						<script type='text/html' id='renXunButon'>                                                      "
+    + "							<a class='layui-btn layui-btn-xs' lay-event='edit'>处理</a>                       "
+    + "						</script>                                                                             "
+    + "                                                                                                                                                              "
+    + "             </div>                                                                                                                                           "
     + "        </div>                                                                                                                                                "
  //   + "    </div>                                                                                                                                                    "
     + "</div>";
@@ -1992,264 +2324,3 @@ var jiZuoHtml = "	<form class='layui-form' style='margin-top:5px;margin-right:5p
         + "	    </div>	"
         + "	</form>	";
 
-//$(document).on("mousewheel DOMMouseScroll", ".layui-layer-phimg img", function (e) {
-//    var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) || // chrome & ie
-//        (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1)); // firefox
-//    var imagep = $(".layui-layer-phimg").parent().parent();
-//    var image = $(".layui-layer-phimg").parent();
-//    var h = image.height();
-//    var w = image.width();
-//    if (delta > 0) {
-
-//        h = h * 1.05;
-//        w = w * 1.05;
-
-//    } else if (delta < 0) {
-//        if (h > 100) {
-//            h = h * 0.95;
-//            w = w * 0.95;
-//        }
-//    }
-//    imagep.css("top", (window.innerHeight - h) / 2);
-//    imagep.css("left", (window.innerWidth - w) / 2);
-//    image.height(h);
-//    image.width(w);
-//    imagep.height(h);
-//    imagep.width(w);
-//});
-
-
-
-
-
-
-
-
-
-
-
-
-//var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
-                    //$.ajax({
-                    //    url: servicesurl + "/api/PatrolEquipment/getDianYunShuJu", type: "get", data: { "id": projectid, "cookie": document.cookie },
-                    //    success: function (data) {
-                    //        var windowInfos = JSON.parse(data);
-                    //        if (windowInfos.code == 0) {//失败
-                    //            //无监测剖面信
-                    //            layer.msg(" ！", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                    //            document.getElementById("jiZuoXunShiTree").innerHTML = "无基座信息";
-                    //        }
-                    //        else {
-                    //            console.log(JSON.parse(windowInfos.data));
-                    //            var xunShiList = JSON.parse(windowInfos.data);
-
-
-
-                    //            for (var i in xunShiList) {
-                    //                var father = new Object;
-                    //                father.title = xunShiList[i].regionname;
-                    //                if (i == 0) {
-                    //                    //默认展开第一项
-                    //                    father.spread = true;
-                    //                    father.checked = true;
-                    //                }
-                    //                else {
-                    //                    father.spread = false;
-                    //                    father.checked = false;
-                    //                }
-                    //                father.id = "DianYun"+i;
-                    //                father.type = "DianYun";
-                    //                father.regionalboundary = JSON.parse(xunShiList[i].regionalboundary);
-                    //                father.changes = JSON.parse(xunShiList[i].changes);
-                    //                father.showCheckbox = true;//显示复选框
-                    //                jiZuoXunShiTreeData.push(father);
-                    //            }
-                    //            console.log(jiZuoXunShiTreeData);
-                    //            //按时间渲染
-                    //            tree.render({
-                    //                elem: '#jiZuoXunShiTree'
-                    //                , id: 'projiZuoXunShiTree'
-                    //                , data: jiZuoXunShiTreeData
-                    //                , edit: ['add', 'update']
-                    //                , showCheckbox: true
-                    //                , customCheckbox: true
-                    //                , showLine: false
-                    //                , accordion: true
-                    //                , click: function (obj) {
-                    //                    console.log(obj);
-                    //                    if (obj.data.checked) {//
-                    //                        //
-                    //                        console.log(getChanzhuang(obj.data.regionalboundary));
-                    //                        var chanzhuang = getChanzhuang(obj.data.regionalboundary);
-                    //                        var qingXiang = parseFloat(chanzhuang.qingXiang) - 180;
-                    //                        var qingJiao = parseFloat(chanzhuang.qingJiao) - 90;
-
-                    //                        viewer.zoomTo(viewer.entities.getById(obj.data.id), new Cesium.HeadingPitchRange(Cesium.Math.toRadians(qingXiang)), Cesium.Math.toRadians(qingJiao), 40);
-                    //                        //viewer.zoomTo(viewer.entities.getById(obj.data.id));
-                    //                    }
-                    //                   // ProjectNodeClick(obj);
-
-                    //                }
-                    //                , oncheck: function (obj) {
-                    //                    console.log(obj);
-                    //                    var checked = obj.checked;
-                    //                    var data = obj.data;
-                    //                    if (checked) {
-                    //                        if (curtileset==null) {
-                    //                            layer.msg("请先选择模型！", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                    //                            return;
-                    //                        }
-                    //                        viewer.entities.add({
-                    //                            id: data.id,
-                    //                            polyline: {
-                    //                                positions: data.regionalboundary,
-                    //                                width: 3,
-                    //                                material: Cesium.Color.fromCssColorString('#00FF00'),
-                    //                                depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-                    //                                    color: Cesium.Color.fromCssColorString('#00FF00'),
-                    //                                }),
-                    //                            }
-                    //                        });
-                    //                        data.checked = true;
-                    //                        var flog = true;
-                    //                        let x = 1;
-                    //                        for (var j in data.changes) {
-                    //                            // 四个预警级别    红橙黄蓝，大小
-                    //                            var lbh = xy2bl(data.changes[j].x, data.changes[j].y, 6378137.0, 1 / 298.257223563, 3, 108, false);
-                    //                            var postiontemp = new Cesium.Cartesian3.fromDegrees(lbh.l, lbh.b, data.changes[j].z);
-
-                    //                            if (data.changes[j].value > 6000) {//红色警告
-                    //                                viewer.entities.add({
-                    //                                    position: postiontemp,//new Cesium.Cartesian3.fromDegrees(data.lbh.ls, data.lbh.bs, data.lbh.hs),
-                    //                                    id: data.id+"-"+j,
-                    //                                    billboard: {
-                    //                                        image: "../Resources/img/pointcloud/red.png",
-                    //                                        //color: new Cesium.CallbackProperty(function () {
-                    //                                        //    if (flog) {
-                    //                                        //        x = x - 0.05;
-                    //                                        //        if (x <= 0) {
-                    //                                        //            flog = false;
-                    //                                        //        }
-                    //                                        //    } else {
-                    //                                        //        x = x + 0.05;
-                    //                                        //        if (x >= 1) {
-                    //                                        //            flog = true;
-                    //                                        //        }
-                    //                                        //    }
-                    //                                        //    return Cesium.Color.fromHsl(1, 1, 0.5, x);
-                    //                                        //}, false),
-                    //                                       // color: Cesium.Color.RED,
-                    //                                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                    //                                        width: 24,
-                    //                                        height: 24,
-                    //                                        disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                    //                                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 3000),
-                    //                                    }
-                    //                                });
-                    //                            } else if (data.changes[j].value > 4000) {//橙色
-                    //                                viewer.entities.add({
-                    //                                    position: postiontemp,//new Cesium.Cartesian3.fromDegrees(data.lbh.ls, data.lbh.bs, data.lbh.hs),
-                    //                                    id: data.id + "-" + j,
-                    //                                    billboard: {
-                    //                                        image: "../Resources/img/pointcloud/yellow.png",
-                    //                                        //color: new Cesium.CallbackProperty(function () {
-                    //                                        //    if (flog) {
-                    //                                        //        x = x - 0.05;
-                    //                                        //        if (x <= 0) {
-                    //                                        //            flog = false;
-                    //                                        //        }
-                    //                                        //    } else {
-                    //                                        //        x = x + 0.05;
-                    //                                        //        if (x >= 1) {
-                    //                                        //            flog = true;
-                    //                                        //        }
-                    //                                        //    }
-                    //                                        //    return Cesium.Color.fromHsl(1, 1, 0.5, x);
-                    //                                        //}, false),
-                    //                                      //  color: Cesium.Color.YELLOW,
-                    //                                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                    //                                        width: 20,
-                    //                                        height: 20,
-                    //                                        disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                    //                                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 3000),
-                    //                                    }
-                    //                                });
-
-                    //                            } else if (data.changes[j].value > 2000) {//黄
-                    //                                viewer.entities.add({
-                    //                                    position: postiontemp,//new Cesium.Cartesian3.fromDegrees(data.lbh.ls, data.lbh.bs, data.lbh.hs),
-                    //                                    id: data.id + "-" + j,
-                    //                                    billboard: {
-                    //                                        image: "../Resources/img/pointcloud/oranig.png",
-                    //                                        //color: new Cesium.CallbackProperty(function () {
-                    //                                        //    if (flog) {
-                    //                                        //        x = x - 0.05;
-                    //                                        //        if (x <= 0) {
-                    //                                        //            flog = false;
-                    //                                        //        }
-                    //                                        //    } else {
-                    //                                        //        x = x + 0.05;
-                    //                                        //        if (x >= 1) {
-                    //                                        //            flog = true;
-                    //                                        //        }
-                    //                                        //    }
-                    //                                        //    return Cesium.Color.fromHsl(1, 1, 0.5, x);
-                    //                                        //}, false),
-                    //                                       // color: Cesium.Color.ORANGE,
-                    //                                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                    //                                        width: 16,
-                    //                                        height: 16,
-                    //                                        disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                    //                                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 3000),
-                    //                                    }
-                    //                                });
-
-                    //                            } else {//蓝
-                    //                                viewer.entities.add({
-                    //                                    position: postiontemp,//new Cesium.Cartesian3.fromDegrees(data.lbh.ls, data.lbh.bs, data.lbh.hs),
-                    //                                    id: data.id + "-" + j,
-                    //                                    billboard: {
-                    //                                        image: "../Resources/img/pointcloud/blue.png",
-                    //                                        //color: new Cesium.CallbackProperty(function () {
-                    //                                        //    if (flog) {
-                    //                                        //        x = x - 0.05;
-                    //                                        //        if (x <= 0) {
-                    //                                        //            flog = false;
-                    //                                        //        }
-                    //                                        //    } else {
-                    //                                        //        x = x + 0.05;
-                    //                                        //        if (x >= 1) {
-                    //                                        //            flog = true;
-                    //                                        //        }
-                    //                                        //    }
-                    //                                        //    return Cesium.Color.fromHsl(1, 1, 0.5, x);
-                    //                                        //}, false),
-                    //                                       // color: Cesium.Color.BLUE,
-                    //                                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                    //                                        width: 12,
-                    //                                        height: 12,
-                    //                                        disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                    //                                        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0.0, 3000),
-                    //                                    }
-                    //                                });
-                    //                            }
-
-                    //                        }
-                    //                    } else {
-                    //                        viewer.entities.removeById(data.id);
-                    //                        for (var j in data.changes) {
-                    //                            viewer.entities.removeById(data.id+"-"+j);
-                    //                        }
-                    //                        data.checked = false;
-                    //                    }
-                    //                }
-                    //                , operate: function (obj) {
-                    //                    console.log(obj);
-                    //                    //ProjectNodeOperate(obj);
-                    //                }
-                    //            });
-                    //        }
-                    //        layer.close(loadingminindex);
-
-                    //    }, datatype: "json"
-                    //});

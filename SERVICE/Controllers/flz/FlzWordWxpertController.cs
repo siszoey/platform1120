@@ -665,7 +665,7 @@ namespace SERVICE.Controllers
                     }
                     if (string.Equals(tagInfos[i].TagTips.Trim(), "[巡视图1]"))
                     {
-                        if (patrolPhotoInfoList.Count > 0)
+                        if (patrolPhotoInfoList!=null&&patrolPhotoInfoList.Count > 0)
                         {
                             PatrolPhotoInfo patrolPhotoInfo1 = patrolPhotoInfoList[0];
                             ImgInfo imgInfo = new ImgInfo();
@@ -684,7 +684,7 @@ namespace SERVICE.Controllers
                     }
                     if (string.Equals(tagInfos[i].TagTips.Trim(), "[巡视图2]"))
                     {
-                        if (patrolPhotoInfoList.Count > 1)
+                        if (patrolPhotoInfoList != null && patrolPhotoInfoList.Count > 1)
                         {
                             PatrolPhotoInfo patrolPhotoInfo1 = patrolPhotoInfoList[1];
                             ImgInfo imgInfo = new ImgInfo();
