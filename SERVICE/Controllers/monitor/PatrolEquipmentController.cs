@@ -345,8 +345,14 @@ namespace SERVICE.Controllers
         {
            
            
-                string sql = "SELECT * FROM patrol_photo_info WHERE project_id ={0} and patrol_num={1}";
-                string datas = PostgresqlHelper.QueryData(pgsqlConnection, string.Format(sql, SQLHelper.UpdateString(id), SQLHelper.UpdateString(patrolNum)));
+                string sql = "SELECT * FROM patrol_photo_info WHERE project_id ={0}";
+                if (!string.IsNullOrEmpty(patrolNum))
+                {
+                    sql = sql + " and patrol_num = " + SQLHelper.UpdateString(patrolNum);
+                }
+
+                sql = sql + "ORDER BY patrol_num DESC";
+                string datas = PostgresqlHelper.QueryData(pgsqlConnection, string.Format(sql, SQLHelper.UpdateString(id)));
                 if (!string.IsNullOrEmpty(datas))
                 {
                     List<PatrolPhotoInfo> patrolPhotoInfoList = new List<PatrolPhotoInfo>();
@@ -376,7 +382,29 @@ namespace SERVICE.Controllers
                     return string.Empty;
                 }
          }
+        /// <summary>
+        /// 删除照片
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        public string DeletePhoto()
+        {
+            string id = HttpContext.Current.Request.Form["id"];
+
             
+                int updatecount = PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("DELETE from patrol_photo_info  WHERE id={0}", id));
+                if (updatecount == 1)
+                {
+                   return "删除成功！";
+                }
+                else
+                {
+                   return "删除照片失败！";
+                }
+         }
+           
         
+
+
     }
 }

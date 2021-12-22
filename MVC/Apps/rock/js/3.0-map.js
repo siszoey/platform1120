@@ -374,10 +374,13 @@ function LoadModel(obj) {
         maximumNumberOfLoadedTiles: isMobile.any() ? 1000 : 1000
     }));
 
-    //缩放至模型
-    viewer.zoomTo(curtileset,new Cesium.HeadingPitchRange(Cesium.Math.toRadians(0), Cesium.Math.toRadians(-90), 0));
-
-    //tree.reload('prjlayerlistid', { data: layers });
+    if (obj.modelView != null && obj.modelView.length > 0) {
+        var home = JSON.parse(obj.modelView);
+        viewer.scene.camera.setView(home);
+        console.log(home);
+    } else {
+        viewer.zoomTo(curtileset);
+    }
 };
 
 

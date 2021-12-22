@@ -204,6 +204,7 @@ function FlyToChina() {
  */
 function LoadModel(obj) {
     //var modelurl = "../Data/SurModel" + obj.path;
+    console.log(obj);
     var modelurl =''
     if (currentprojectid == 28 || currentprojectid == 30) {//
         modelurl = datasurl + "/SurModel" + obj.path;
@@ -243,9 +244,16 @@ function LoadModel(obj) {
         maximumScreenSpaceError: isMobile.any() ? 1 : 1,
         maximumNumberOfLoadedTiles: isMobile.any() ? 1000 : 1000
     }));
+ 
+    if (obj.modelView != null && obj.modelView.length>0) {
+        var home = JSON.parse(obj.modelView);
+        viewer.scene.camera.setView(home);
+        console.log(home);
+    } else {
+        viewer.zoomTo(curtileset);
+    }
+    
 
-    //缩放至模型
-    viewer.zoomTo(curtileset);
 };
 
 

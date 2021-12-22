@@ -159,6 +159,7 @@ function LoadLayerListLayer(id) {
                                     surmodel.checked = false;
                                     surmodel.showCheckbox = true;//显示复选框
                                     surmodel.gcgz = layerlist.ProjectLayer.SurModels.SurModelList[i].MXST;
+                                    surmodel.modelView = layerlist.ProjectLayer.SurModels.SurModelList[i].MXFW;
                                     prjsurmodelchild.push(surmodel);
                                 }
                                 console.log(modleInfoList);
@@ -440,7 +441,12 @@ function LoadLayerListLayer(id) {
                                                     viewer.zoomTo(viewer.entities.getById(data.id + "_LABEL"), new Cesium.HeadingPitchRange(Cesium.Math.toRadians(data.datas.inclination - 180), Cesium.Math.toRadians(data.datas.dipAngle-90), 40));
                                                 } else if (data.type == "PROJECTSUMODEL") {// || data.type == "YOUSHIMIAN"
                                                     if (curtileset != null) {
-                                                        viewer.zoomTo(curtileset);
+                                                        if (data.modelView != null && data.modelView.length > 0) {
+                                                            var home = JSON.parse(data.modelView);
+                                                            viewer.scene.camera.setView(home);
+                                                        } else {
+                                                            viewer.zoomTo(curtileset);
+                                                        }
                                                     }
 
                                                 }else {

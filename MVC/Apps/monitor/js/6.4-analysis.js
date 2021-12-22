@@ -1366,232 +1366,9 @@ function LoadwuRenJiXuShiLayer(projectid) {
                     layer.close(loadingminindex);
                 }, datatype: "json"
             });
-            //巡视照片处理
-            //裂缝巡查
-
-            var renXuntableview = table.render({
-                elem: '#renXuntable-view'
-                , id: 'renXuntableviewid'
-                , title: '裂缝巡查信息'
-                , skin: 'line'
-                , even: false
-                , page: true
-                , limit: 10
-                , toolbar: true
-                , totalRow: false
-                , initSort: { field: 'id', type: 'desc' }
-                , cols: [[
-                    { field: 'id', title: 'ID', hide: true }
-                    , { field: 'YXMC', title: '影像名称', width: 360, align: "center" }
-                    , {
-                        field: 'xszt', title: '巡查状态', width: 80, align: "center", templet: function (row) {
-                            if (row.xszt == "1") {
-                                return '已处理'
-                            } else {
-                                return '<span style="color: red;">未处理</span>'
-                            }
-
-                        }
-                    }
-                    , { field: 'xsjg', title: '巡查结果', width: 120, align: "center" }
-                    , { field: 'zht', title: '灾害体', width: 80, sort: true, width: 100, align: "center" }
-                    , {
-                        field: 'CJSJ', title: '巡查时间', width: 80, sort: true, align: "center", templet: function (row) {
-
-                            if (row.CJSJ != null) {
-                                var len = row.CJSJ.length;
-                                return row.CJSJ.slice(0, len - 8);
-                            } else {
-                                return ''
-                            }
-
-                        }
-
-                    }
-
-                    , { fixed: 'right', width: 80, align: 'center', toolbar: '#renXunButon' }
-                ]]
-                , data: []
-            });
-            table.on('tool(renXuntable-view)', function (obj) {
-                console.log(obj);
-                if (obj.event === 'edit') {
-                    if (renXunChuLilayerindex != null) {
-                        layer.close(renXunChuLilayerindex);
-                        return;
-                    }
-
-                    renXunChuLilayerindex = layer.open({
-                        type: 1
-                        , title: [obj.data.YXMC + '巡查', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
-                        , area: ['920px', '800px']
-                        , shade: 0
-                        , offset: 'auto'
-                        , closeBtn: 1
-                        , maxmin: true
-                        , moveOut: true
-                        , content: renXunHtml
-                        , zIndex: layer.zIndex
-                        , success: function (layero) {
-                            layer.setTop(layero);
-
-                            form.val("renXunform", {
-                                xsjg: obj.data.xsjg,
-
-                            });
-                            document.getElementById("renXunChuli").src = datasurl + lujizhuanhuan(obj.data.YXLJ);//处理存的路劲地址
-
-                            form.on('submit(renXunsubmit)', function (data) {
-                                data.field.id = obj.data.Id;
-                                data.field.cookie = document.cookie;
-                                data.field.xszt = "1";//只要提交，都是处理
-                                var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
-
-                                $.ajax({
-                                    url: servicesurl + "/api/ImageUpload/UpdatePartorLieFeng", type: "put", data: data.field,
-                                    success: function (result) {
-                                        layer.msg(result, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                                        // GetWarningCriterion();
-                                        console.log(renXuntabledata);
-                                        for (var i in renXuntabledata) {
-                                            if (renXuntabledata[i].id == obj.data.id) {
-                                                renXuntabledata[i].xszt = "1",
-                                                    renXuntabledata[i].xsjg = data.field.xsjg
-                                                break;
-                                            }
-                                        }
-                                        renXuntableview.reload({ id: 'renXuntableviewid', data: renXuntabledata });
-                                        layer.close(loadingminindex);
-                                    }, datatype: "json"
-                                });
-                                console.log(data);
-                                layer.close(renXunChuLilayerindex);
-                                return false;
-                            });
-                            if (viewerPhoto != null) {
-                                viewerPhoto.destroy();
-                            }
-                            viewerPhoto = new Viewer(document.getElementById('dowebok'), {
-                                toolbar: true, //显示工具条
-                                viewed() {
-                                    viewerPhoto.zoomTo(0.75); // 图片显示比例 75%
-                                },
-                                zIndex: 99999999,
-                                navbar: false,
-                                show: function () {  // 动态加载图片后，更新实例
-                                    viewerPhoto.update();
-                                },
-                            });
-                            form.on('select(renXunduiBiSelectname)', function (data) {
-                                console.log(data);
-                                loadingimgindex = layer.load(0, { title: '图片加载中', shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
-                                document.getElementById("renXunduiBitui").src = datasurl + data.value;
-                                viewerPhoto.destroy();
-                                viewerPhoto = new Viewer(document.getElementById('dowebok'), {
-                                    toolbar: true, //显示工具条
-                                    viewed() {
-                                        viewerPhoto.zoomTo(0.75); // 图片显示比例 75%
-                                    },
-                                    zIndex: 99999999,
-                                    navbar: false,
-                                    show: function () {  // 动态加载图片后，更新实例
-                                        viewerPhoto.update();
-                                    },
-                                });
-                            });
-                            $("#renXunselectNumDiv").hide();
-                            $("#renXunduiBitui").hide();
-
-                            form.on('switch(renXunswitch-type)', function (data) {  //radio-type为lay-filter的属性值
-
-                                console.log(data.elem.checked);
-                                if (data.elem.checked) {//选中
-                                    $("#renXunselectNumDiv").show();
-                                    console.log($("#renXunduiBitui"));
-                                } else {//不选中
-                                    $("#renXunselectNumDiv").hide();
-                                    $("#renXunduiBitui").hide();
-                                    $("#renXunChuli")[0].attributes[1].value = "width:820px;height:646px;margin-left: 40px";
-                                }
-                                return false;
-                            });
-                            // 发送后台，查出相同的设备，不同的期数。
-                            var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
-                            $.ajax({
-                                url: servicesurl + "/api/ImageUpload/GetMonImageInfos", type: "get", data: { "id": projectid, "cookie": document.cookie, "targetId": obj.data.targetid, "yxmc": "", "xszt": "" },
-                                success: function (result) {
-
-                                    var windowInfos = JSON.parse(result);
-                                    if (windowInfos.data == "") {
-                                        //无监测剖面信
-                                        document.getElementById("renXunduiBiSelect").innerHTML = "<option value=''>无往期数据</option>	"
-                                    }
-                                    else {
-                                        var renXungList = JSON.parse(windowInfos.data);
-                                        for (var i in renXungList) {
-                                            if (renXungList[i].YXLJ.length > 8) {
-                                                document.getElementById("renXunduiBiSelect").innerHTML += '<option value="' + lujizhuanhuan(renXungList[i].YXLJ) + '" selected>' + renXungList[i].CJSJ.slice(0, renXungList[i].CJSJ.length - 8) + '</option>';
-                                            }
-                                        }
-                                    }
-                                    layer.close(loadingminindex);
-                                    // form.render();
-                                    form.render('select');
-                                }, datatype: "json"
-                            });
-                            // document.getElementById("duiBiSelect").innerHTML += '<option value="' + autodatadatetimes[i].value + '" selected>' + autodatadatetimes[i].name + '</option>';
-                            LoadImageDataPreDateTimess(obj.data.targetid, '13');
-
-                        }
-                        , end: function () {
-                            renXunChuLilayerindex = null;
-                        }
-                    });
-                }
-            });
-            var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
-
-            $.ajax({
-                url: servicesurl + "/api/ImageUpload/GetMonImageInfos", type: "get", data: { "id": projectid, "cookie": document.cookie, "targetId": "", "yxmc": "", "xszt": "" },
-                success: function (result) {
-                    renXuntabledata = [];
-                    var windowInfos = JSON.parse(result);
-                    if (windowInfos.data == "") {
-                        layer.msg(windowInfos.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                        renXuntableview.reload({ id: 'renXuntableviewid', data: [] });
-                    }
-                    else {
-                        var renXunData = JSON.parse(windowInfos.data);
-                        console.log(renXunData);
-                        for (var i in renXunData) {
-
-                            var renXun = new Object;
-                            renXun.BSM = renXunData[i].BSM;
-                            renXun.BZ = renXunData[i].BZ;
-                            renXun.CJSJ = renXunData[i].CJSJ;
-                            renXun.Id = renXunData[i].Id;
-                            renXun.YXBH = renXunData[i].YXBH;
-                            renXun.YXLJ = renXunData[i].YXLJ;
-                            renXun.YXMC = renXunData[i].YXMC;
-                            renXun.xsjg = renXunData[i].xsjg;
-                            renXun.xszt = renXunData[i].xszt;
-                            renXun.targetid = renXunData[i].targetid;
 
 
-                            if (renXunData[i].YXBH) {
-                                var tempzht = renXunData[i].YXBH.split("#");
-                                if (tempzht[0]) {
-                                    renXun.zht = tempzht[0].split("_")[1];
-                                }
-                            }
-                            renXuntabledata.push(renXun);
-                        }
-                        console.log(renXuntabledata);
-                        renXuntableview.reload({ id: 'renXuntableviewid', data: renXuntabledata });
-                    }
-                    layer.close(loadingminindex);
-                }, datatype: "json"
-            });
+          
 
 
             var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
@@ -1626,7 +1403,85 @@ function LoadwuRenJiXuShiLayer(projectid) {
                 }, datatype: "json"
             });
 
+            //巡视照片处理
 
+
+            var renXuntableview = table.render({
+                elem: '#renXuntable-view'
+                , id: 'renXuntableviewid'
+                , title: '照片巡视信息'
+                , skin: 'line'
+                , even: false
+                , page: true
+                , limit: 10
+                , toolbar: true
+                , totalRow: false
+                , initSort: { field: 'id', type: 'desc' }
+                , cols: [[
+                    { field: 'id', title: 'ID', hide: true }
+                    , { field: 'patrolTime', title: '上传时间', width:100,  align: "center" }
+                    , { field: 'patrolNum', title: '巡视期数', width: 100,  align: "center", }
+                    , {
+                        field: 'photoUrl', title: '巡查时间', sort: true, align: "center", templet: function (row) {
+
+                           
+                            return "<div> <img src="+ datasurl+row.photoUrl +"></div>";
+                          
+
+                        }
+
+                    }
+                    , { fixed: 'right', width: 80, align: 'center', toolbar: '#renXunButon' }
+                ]]
+                , data: []
+            });
+            table.on('tool(renXuntable-view)', function (obj) {
+                console.log(obj);
+                if (obj.event === 'del') {
+
+                    layer.confirm('是否删除?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
+                        var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+                        $.ajax({
+                            url: servicesurl + "/api/PatrolEquipment/DeletePhoto", type: "delete", data: { "id": obj.data.id },
+                            success: function (result) {
+                                layer.close(loadingminindex);
+                                layer.msg(result, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                               
+                            }, datatype: "json"
+                        });
+                    });
+                }
+            });
+            var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+
+            $.ajax({
+                url: servicesurl + "/api/PatrolEquipment/getPatrolPhotoInfo", type: "get", data: { "id": projectid, "patrolNum": "" },
+                success: function (result) {
+                    renXuntabledata = [];
+                    var windowInfos = JSON.parse(result);
+                    if (windowInfos.data == "") {
+                        layer.msg(windowInfos.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                        renXuntableview.reload({ id: 'renXuntableviewid', data: [] });
+                    }
+                    else {
+                        var renXunData = windowInfos;
+                        console.log(renXunData);
+                        for (var i in renXunData) {
+
+                            var renXun = new Object;
+                            renXun.photoUrl = renXunData[i].photoUrl;
+                            renXun.patrolTime = renXunData[i].patrolTime;
+                            renXun.patrolNum = renXunData[i].patrolNum;
+                            renXun.id = renXunData[i].id;
+                            renXun.projectId = renXunData[i].projectId;
+                            renXuntabledata.push(renXun);
+                        }
+                        console.log(renXuntabledata);
+                        renXuntableview.reload({ id: 'renXuntableviewid', data: renXuntabledata });
+                    }
+                    layer.close(loadingminindex);
+                }, datatype: "json"
+            });
 
         } else {
             layer.msg("已打开无人机宏观地质巡查", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
@@ -1900,7 +1755,7 @@ var partolHtm =  "    <div class='layui-tab layui-tab-brief' lay-filter='docDemo
     //  + "                 <div  id='jiZuoXunShiTree'></div>                                                                                                                                             "
     + "            </div>                                                                                                                                            "
     + "            <div class='layui-tab-item'>                                                                                                                      "
-    + "            <!--裂缝巡查-->                                                                                                                                   "
+    + "            <!--照片巡查-->                                                                                                                                   "
     + "					<form class='layui-form' style='margin-bottom:15px;margin-right:5px;' lay-filter='queryrenXuninfoform'>	"
     + "						    <div class='layui-form-item'>	"
     + "						        <div class='layui-row'>	"
@@ -1946,9 +1801,9 @@ var partolHtm =  "    <div class='layui-tab layui-tab-brief' lay-filter='docDemo
     + "						</form>	"
     + "						<table class='layui-hide' id='renXuntable-view' style='margin-top:20px' lay-filter='renXuntable-view'></table>	"
     + "						<script type='text/html' id='renXunButon'>                                                      "
-    + "							<a class='layui-btn layui-btn-xs' lay-event='edit'>处理</a>                       "
+    + "							<a class='layui-btn layui-btn-danger layui-btn-xs' lay-event='del'>删除</a>                       "
     + "						</script>                                                                             "
-    + "                                                                                                                                                              "
+    + "                       <style type='text/css'> .layui-table-cell{text-align:center;height:auto;white-space:normal; } .layui-table img{ max-width:400px;max-height: 200px;} </style>  "
     + "             </div>                                                                                                                                           "
     + "        </div>                                                                                                                                                "
  //   + "    </div>                                                                                                                                                    "

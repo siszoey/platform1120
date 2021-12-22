@@ -82,6 +82,8 @@ function LoadLayerListLayer(id) {
                                     surmodel.path = layerlist.ProjectLayer.SurModels.SurModelList[i].MXLJ;
                                     surmodel.checked = false;
                                     surmodel.showCheckbox = true;//显示复选框
+                                    surmodel.gcgz = layerlist.ProjectLayer.SurModels.SurModelList[i].MXST;
+                                    surmodel.modelView = layerlist.ProjectLayer.SurModels.SurModelList[i].MXFW;
                                     prjsurmodelchild.push(surmodel);
                                 }
 
@@ -262,17 +264,18 @@ function LoadLayerListLayer(id) {
                             tree.render({
                                 elem: '#prjlayerlist'
                                 , id: 'prjlayerlistid'
+                                , edit: ['update']
                                 , showCheckbox: true
                                 , customCheckbox: true
                                 , showLine: false
                                 , data: layers
-                                , edit: false
                                 , accordion: false
                                 , click: function (obj) {
                                     //点击事件
                                     //如果选中就缩放到目标
                                     //如果未选中就不做任何处理
                                     var data = obj.data;
+                                    console.log(data);
                                     if (data.checked) {
                                         if (data.children != undefined) {
                                             var entities = [];
@@ -288,7 +291,19 @@ function LoadLayerListLayer(id) {
                                             }
                                         }
                                         else {
-                                            viewer.zoomTo(viewer.entities.getById(data.id));
+                                            if (data.type == "PROJECTSUMODEL") {// || data.type == "YOUSHIMIAN"
+                                                
+                                                if (curtileset != null) {
+                                                    if (data.modelView != null && data.modelView.length > 0) {
+                                                        var home = JSON.parse(data.modelView);
+                                                        viewer.scene.camera.setView(home);
+                                                    } else {
+                                                        viewer.zoomTo(curtileset);
+                                                    }
+                                                }
+                                            } else {
+                                                viewer.zoomTo(viewer.entities.getById(data.id));
+                                            }
                                         }
                                     }
 
@@ -464,7 +479,7 @@ function LoadLayerListLayer(id) {
                                             else if (data.type == "PROJECTSUMODEL") {
                                                 //项目模型
                                                 LoadModel(data);
-                                                
+                                                data.checked = true;
                                                 if (currentprojectid == 70) {
                                                     console.log(111);
                                                     console.log(id);
@@ -625,6 +640,53 @@ function LoadLayerListLayer(id) {
                                     }
 
                                 }
+                                , operate: function (obj) {
+                                    var data = obj.data; //得到当前节点的数据
+                                    console.log(obj);
+                                    if (data.type != "PROJECTSUMODEL") {
+                                        return;
+                                    }
+                                    if (data.checked) {
+                                        layer.confirm('是否更新该模型的最佳视角?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
+                                            //console.log(viewer.camera.position);
+                                            //console.log(viewer.camera.heading);
+                                            //console.log(viewer.camera.pitch);
+                                            //console.log(viewer.camera.roll); 
+                                            var x = viewer.camera.position;
+                                            var y1 = {
+                                                // 指向
+                                                heading: viewer.camera.heading,
+                                                // 视角
+                                                pitch: viewer.camera.pitch,
+                                                roll: viewer.camera.roll
+                                            }
+                                            var home = {
+                                                destination: x,
+                                                orientation: y1
+                                            }
+                                            console.log(home);
+                                            layer.close(index);
+
+                                            var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+                                            var data2 = {
+                                                mxfw: JSON.stringify(home),
+                                                id: data.id.split("_")[1]//模型id
+                                            }
+                                            $.ajax({
+                                                url: servicesurl + "/api/Survey/UpdateModelGoodView", type: "put", data: data2,
+                                                success: function (result) {
+                                                    layer.msg(result, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+
+                                                    layer.close(loadingminindex);
+                                                }, datatype: "json"
+                                            });
+                                        });
+                                    } else {
+                                        layer.msg("请选择该模型进行最佳视图更新", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                                        return;
+                                    }
+                                }
+
                             });
 
                         }

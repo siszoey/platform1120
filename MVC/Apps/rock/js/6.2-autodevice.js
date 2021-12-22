@@ -485,6 +485,48 @@ function DrwInfo(data,flag) {
                     }
                 });
             }, 500);
+        } else if (data.data.type == "PROJECTSUMODEL") {
+            console.log(data.data);
+            if (data.data.checked) {
+                layer.confirm('是否更新该模型的最佳视角?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
+                    //console.log(viewer.camera.position);
+                    //console.log(viewer.camera.heading);
+                    //console.log(viewer.camera.pitch);
+                    //console.log(viewer.camera.roll); 
+                    var x = viewer.camera.position;
+                    var y1 = {
+                        // 指向
+                        heading: viewer.camera.heading,
+                        // 视角
+                        pitch: viewer.camera.pitch,
+                        roll: viewer.camera.roll
+                    }
+                    var home = {
+                        destination: x,
+                        orientation: y1
+                    }
+                    console.log(home);
+                    layer.close(index);
+
+                    var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+                    var data2 = {
+                        mxfw: JSON.stringify(home),
+                        id: data.data.id.split("_")[1]//模型id
+                    }
+                    $.ajax({
+                        url: servicesurl + "/api/Survey/UpdateModelGoodView", type: "put", data: data2,
+                        success: function (result) {
+                            layer.msg(result, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+
+                            layer.close(loadingminindex);
+                        }, datatype: "json"
+                    });
+                });
+            } else {
+                layer.msg("请选择该模型进行最佳视图更新", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                return;
+            }
+
         } else if (data.data.type == "PROFILE") {//剖面
             var temptitle = data.data.title;
             console.log(data.data);

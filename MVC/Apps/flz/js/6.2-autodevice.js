@@ -425,7 +425,6 @@ function DrwInfo(data,flag) {
                 , closeBtn: 1
                 , maxmin: true
                 , moveOut: true
-                //, content: '/Apps/flz/widget/addinfoPoint.html'
                 , content: '<form class="layui-form" style="margin-top:5px;margin-right:25px;" lay-filter="addpointinfoform"><div class="layui-form-item" style="margin-top:15px;margin-right:5px;"><div class="layui-row"><div class="layui-col-md6"><div class="grid-demo grid-demo-bg1"><label class="layui-form-label">名称</label><div class="layui-input-block"><input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input" style="width:160px;"  /></div></div></div><div class="layui-col-md6" style="margin-top:15px;margin-right:5px;"><div class="grid-demo"><label class="layui-form-label">描述</label><div class="layui-input-block"><input type="text" name="remarks" lay-verify="required" autocomplete="off" placeholder="请输入"  class="layui-input" style="width:160px;"  /></div></div></div></div></div><div class="layui-form-item" style="margin-top:15px"><div style="position:absolute;right:15px;"><button type="reset" class="layui-btn layui-btn-primary" style="width:100px">重置</button><button type="submit" class="layui-btn" lay-submit="" lay-filter="addpointinfosubmit" style="width:100px">提交</button></div></div></form>'
                 , zIndex: layer.zIndex
                 , success: function (layero) {
@@ -487,7 +486,50 @@ function DrwInfo(data,flag) {
                 }
             });
 
-        } else {//最开始的点线面。
+        } else if (data.data.type == "PROJECTSUMODEL") {
+            console.log(data.data);
+            if (data.data.checked) {
+                layer.confirm('是否更新该模型的最佳视角?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
+                    //console.log(viewer.camera.position);
+                    //console.log(viewer.camera.heading);
+                    //console.log(viewer.camera.pitch);
+                    //console.log(viewer.camera.roll); 
+                    var x = viewer.camera.position;
+                    var y1 = {
+                        // 指向
+                        heading: viewer.camera.heading,
+                        // 视角
+                        pitch: viewer.camera.pitch,
+                        roll: viewer.camera.roll
+                    }
+                    var home = {
+                        destination: x,
+                        orientation: y1
+                    }
+                    console.log(home);
+                    layer.close(index);
+
+                    var loadingminindex = layer.load(0, { shade: 0.3, zIndex: layer.zIndex, success: function (loadlayero) { layer.setTop(loadlayero); } });
+                    var data2 = {
+                        mxfw: JSON.stringify(home),
+                        id: data.data.id.split("_")[1]//模型id
+                    }
+                    $.ajax({
+                        url: servicesurl + "/api/Survey/UpdateModelGoodView", type: "put", data: data2,
+                        success: function (result) {
+                            layer.msg(result, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                            
+                            layer.close(loadingminindex);
+                        }, datatype: "json"
+                    });
+                });
+            } else {
+                layer.msg("请选择该模型进行最佳视图更新", { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
+                return;
+            }
+            
+        }
+        else {//最开始的点线面。
             var temptitle = data.data.title;
             if (data.data.type == "FLZJIELI" || data.data.type == "YOUSHIMIAN") {//节理信息修改
                 drwInfox = layer.open({
