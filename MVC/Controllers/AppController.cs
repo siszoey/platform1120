@@ -118,6 +118,56 @@ namespace MVC.Controllers
         }
 
         /// <summary>
+        /// 三维实景模型数据管理系统
+        /// </summary>
+        /// <returns></returns>
+        [AuthorityFilter]
+        public ActionResult Modelp()
+        {
+            List<string> userinfo = COM.CookieHelper.GetUserInfoFromEncrypt(this.HttpContext.Request.Cookies.Get("User").Value);
+            ViewBag.User = userinfo[0];
+            logger.Info("【" + ViewBag.User + "】登录三维实景模型管理系统");
+            return View();
+        }
+
+        /// <summary>
+        /// 三维实景模型数据管理系统
+        /// </summary>
+        /// <returns></returns>
+        [AuthorityFilter]
+        public ActionResult Modelv()
+        {
+            List<string> userinfo = COM.CookieHelper.GetUserInfoFromEncrypt(this.HttpContext.Request.Cookies.Get("User").Value);
+            ViewBag.User = userinfo[0];
+            logger.Info("【" + ViewBag.User + "】登录三维实景模型管理系统");
+            return View();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /// <summary>
         /// 展示系统
         /// </summary>
         /// <returns></returns>

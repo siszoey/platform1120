@@ -70,6 +70,12 @@ namespace MODEL
             [RemarkAttribute("实景模型数据系统")]
             Model = 9,
 
+            [RemarkAttribute("实景模型数据系统(处理)")]
+            Modelp = 10,
+
+            [RemarkAttribute("实景模型数据系统(用户)")]
+            Modelv = 9,
+
             [RemarkAttribute("无角色")]
             Null = 99
         }
