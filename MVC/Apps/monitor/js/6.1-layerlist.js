@@ -628,6 +628,7 @@ function LoadLayerListLayer(id) {
                                             if (data.type == "PROJECTSUMODEL" || data.type == "DISASTERSURMODEL") {
                                                 viewer.scene.primitives.remove(curtileset);
                                                 curtileset = null;
+                                                modleInfo = null;
                                             }
                                             else {
                                                 viewer.entities.removeById(data.id);

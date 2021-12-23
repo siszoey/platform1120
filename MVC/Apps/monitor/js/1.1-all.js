@@ -36,7 +36,7 @@ var currentprojectmonitors = [];//当前项目监测点树（除报警器、GNSS
 var currentprojectfristmonitor = null;//当前项目默认第一个监测点
 
 var curtileset = null;//当前模型
-
+var modleInfo = null;//当前模型数据
 
 /*
  * 图标常量

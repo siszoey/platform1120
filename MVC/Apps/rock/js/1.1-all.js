@@ -12,7 +12,6 @@ var table = layui.table;            //layui初始化
 var util = layui.util;              //layui初始化
 var date = layui.laydate;           //layui初始化
 var elem = layui.element;           //layui初始化
-var colorpicker = layui.colorpicker;//
 layui.use(['element'], function () {
     layui.element.init();//手动调用初始化方法
 })
@@ -37,7 +36,7 @@ var headerselayerindex = null;                                  //设置
 var tipslayer = -1;//全局提示层
 
 
-var drowinfoAddlayerindex = null;                           //画点新增，弹出框
+
 
 
 

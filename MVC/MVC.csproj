@@ -1346,6 +1346,8 @@
     <Content Include="Views\App\Model.cshtml" />
     <Content Include="Scripts\openseadragon\openseadragon.js.map" />
     <Content Include="Scripts\openseadragon\openseadragon.min.js.map" />
+    <Content Include="Views\App\Modelp.cshtml" />
+    <Content Include="Views\App\Modelv.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Apps\common\" />

@@ -347,6 +347,7 @@ function LoadModel(obj) {
     //删除上一个模型（保证只有一个模型）
     if (curtileset != null) {
         viewer.scene.primitives.remove(curtileset);
+        modleInfo = null;
     }
 
     //添加模型
@@ -355,6 +356,7 @@ function LoadModel(obj) {
         maximumScreenSpaceError: isMobile.any() ? 1 : 1,
         maximumNumberOfLoadedTiles: isMobile.any() ? 1000 : 1000
     }));
+    modleInfo = obj;
 
     //缩放至模型
 

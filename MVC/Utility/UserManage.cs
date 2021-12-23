@@ -181,6 +181,14 @@ namespace MVC
                     {
                         return MODEL.Enum.SystemRole.Model;
                     }
+                    else if (role.RoleName.ToUpper() == MODEL.Enum.SystemRole.Modelp.ToString().ToUpper())
+                    {
+                        return MODEL.Enum.SystemRole.Modelp;
+                    }
+                    else if (role.RoleName.ToUpper() == MODEL.Enum.SystemRole.Modelv.ToString().ToUpper())
+                    {
+                        return MODEL.Enum.SystemRole.Modelv;
+                    }
                     else
                     {
                         return MODEL.Enum.SystemRole.Null;

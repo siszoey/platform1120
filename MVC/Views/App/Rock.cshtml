@@ -46,7 +46,7 @@
         </div>
         <!--工具栏-->
         <div style="position:absolute;right:5px">
-            <button id="userbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><i class="layui-icon layui-icon-user"><span style="margin-left:5px">@ViewBag.User</span></i></button>
+            <button id="userbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><i class="layui-icon layui-icon-user"><span style="margin-left:5px">@ViewBag.UserName</span></i></button>
             <button id="noticebtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><i class="layui-icon layui-icon-notice"></i></button>
             <button id="setbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="color:Lavender"><i class="layui-icon layui-icon-set-fill"></i></button>
             <a href="~/Platform/Logout">
@@ -151,7 +151,7 @@
 
             </div>*@
         <img src="~/Resources/img/survey/fenge.png" class="surveyFevGeStyle" />
-        <div style="width:520px;display: inline-block">
+        <div style="width:222px;display: inline-block">
             <div><span style=" margin-top:5px; margin-left:70px">测量工具</span></div>
             <div>
                 <img src="~/Resources/img/survey/celiang.png" onclick="celiang()" title="测量" class="surveyStyle" />
@@ -163,8 +163,9 @@
                 @*<img src="~/Resources/img/survey/azimuth.png" onclick="getpoly()" title="临时" class="surveyStyle" />*@
                 <img src="~/Resources/img/survey/azimuth.png" onclick="azimuthMeasure()" title="走向" class="surveyStyle" />
                 @*<img src="~/Resources/img/survey/position.png" onclick="getxyzh()" title="定位" class="surveyStyle" />*@
-                <img src="~/Resources/img/survey/position.png" onclick="dispalyPosition()" title="定位" class="surveyStyle" />
+
                 <img src="~/Resources/img/survey/remove.png" onclick="ClearCeliangTemp()" title="清除" class="surveyStyle" />
+                <img src="~/Resources/img/survey/position.png" onclick="dispalyPosition()" title="定位" class="surveyStyle" />
             </div>
 
         </div>
