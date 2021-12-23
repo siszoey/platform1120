@@ -50,8 +50,9 @@ util.fixbar({
             LoadMeasureLayer();
         }
         else if (type === 'bar8') {
-            //绘制
-            LoadDrawLayer();
+            //标注
+            biaozhuMangan();
+            //LoadDrawLayer();
         }
         else if (type === 'bar9') {
             //本地工具
@@ -164,7 +165,7 @@ $("#utilbar7").on("mouseleave", function () {
 
 $("#utilbar8").on("mouseenter", function () {
     if (tipslayer == -1) {
-        tipslayer = layer.tips('绘图', '#utilbar8', {
+        tipslayer = layer.tips('标注', '#utilbar8', {
             tips: [4, '#78BA32']
         });
     }

@@ -46,7 +46,7 @@
 
         <!--工具栏-->
         <div style="position:absolute;top:7px;right:5px">
-            <butto id="userbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="height:35px;color:Lavender"><i class="layui-icon layui-icon-user"><span style="margin-left:5px">@ViewBag.User</span></i></butto>
+            <butto id="userbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="height:35px;color:Lavender"><i class="layui-icon layui-icon-user"><span style="margin-left:5px">@ViewBag.UserName</span></i></butto>
             <button id="noticebtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="height:35px;color:Lavender"><i class="layui-icon layui-icon-notice"></i></button>
             <button id="setbtn" type="button" class="layui-btn1 layui-btn-primary1 layui-btn-sm1" style="height:35px;color:Lavender"><i class="layui-icon layui-icon-set-fill"></i></button>
             <a href="~/Platform/Logout">
@@ -63,6 +63,7 @@
     <script>
         var servicesurl = @Html.Raw(Json.Encode(ViewBag.ServicesURL));
         var datasurl = @Html.Raw(Json.Encode(ViewBag.DatasURL));
+        var ViewBag = @Html.Raw(Json.Encode(ViewBag));
     </script>
 
     <!--生产-->
@@ -93,6 +94,8 @@
     <script src="~/Apps/pointscloud/js/6.5.1-pointcloud-util-changelayer-heatmap.js"></script>
     <!--导入丁兰兰的显示画面-->
     <script src="~/Apps/image/js/6.1-imageresult.js"></script>
+
+    <script src="~/Apps/rock/js/6.7-draw.js"></script><!--引入标注-->
 
 </body>
 </html>

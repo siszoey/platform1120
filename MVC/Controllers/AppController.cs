@@ -34,7 +34,8 @@ namespace MVC.Controllers
         public ActionResult Monitor()
         {
             List<string> userinfo = COM.CookieHelper.GetUserInfoFromEncrypt(this.HttpContext.Request.Cookies.Get("User").Value);
-            ViewBag.User = userinfo[1];
+            ViewBag.User = userinfo[0];
+            ViewBag.UserName = userinfo[1];
             logger.Info("【" + ViewBag.User + "】登录监测系统");
             return View();
         }
@@ -87,6 +88,7 @@ namespace MVC.Controllers
         {
             List<string> userinfo = COM.CookieHelper.GetUserInfoFromEncrypt(this.HttpContext.Request.Cookies.Get("User").Value);
             ViewBag.User = userinfo[0];
+            ViewBag.UserName = userinfo[1];
             logger.Info("【" + ViewBag.User + "】登录消落带采集系统");
             return View();
         }
@@ -100,6 +102,7 @@ namespace MVC.Controllers
         {
             List<string> userinfo = COM.CookieHelper.GetUserInfoFromEncrypt(this.HttpContext.Request.Cookies.Get("User").Value);
             ViewBag.User = userinfo[0];
+            ViewBag.UserName = userinfo[1];
             logger.Info("【" + ViewBag.User + "】登录陡崖数据采集系统");
             return View();
         }
