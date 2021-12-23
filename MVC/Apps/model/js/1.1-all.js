@@ -9,8 +9,11 @@ var table = layui.table;            //layui初始化
 var util = layui.util;              //layui初始化
 var date = layui.laydate;           //layui初始化
 var elem = layui.element;           //layui初始化
-
-var role = "";                     //用户功能权限
+var colorpicker = layui.colorpicker;//
+layui.use(['element'], function () {
+    layui.element.init();//手动调用初始化方法
+})
+//var role = "";                     //用户功能权限
 
 var modelprojectinfoviewlayerindex = null;                           //项目信息模块（查看）
 var modelprojectinfoaddlayerindex = null;                            //项目信息模块（新建）
@@ -42,13 +45,15 @@ var currentprojectdisastertype = null;//当前项目类型
 
 
 var curtileset = null;//当前模型
-var projectlayerlistlayerindex=null  //标注窗口
+var modleInfo = null;//当前模型数据
+
+var projectlayerlistlayerindex =null  //标注窗口
 
 /*
  * 图标常量
  */
-var LANDSLIDEICON = '<span style="margin-right:2px;"><img src="../../../Resources/img/map/project_type_landslide.png" style="width:14px;height:14px;"/></span>';
-var ROCKFALLICON = '<span style="margin-right:2px;"><img src="../../../Resources/img/map/project_type_rockfall.png" style="width:14px;height:14px;"/></span>';
+var LANDSLIDEICON = '<span style="margin-right:15px;"><img src="../../../Resources/img/map/marker.png" style="width:14px;height:14px;"/></span>';
+//var ROCKFALLICON = '<span style="margin-right:2px;"><img src="../../../Resources/img/map/project_type_rockfall.png" style="width:14px;height:14px;"/></span>';
 
 
 

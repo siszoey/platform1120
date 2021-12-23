@@ -220,7 +220,7 @@ function biaozhuMangan() {
         , title: ['标注管理', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
         , area: ['300px', '500px']
         , shade: 0
-        , offset: ['85px', '260px']
+        , offset: ['60px', '350px']
         , closeBtn: 1
         , maxmin: true
         , moveOut: true

@@ -65,7 +65,7 @@ function LoadNewModelTask() {
     if (newmodeltaskinfolayerindex == null) {
         newmodeltaskinfolayerindex = layer.open({
             type: 1
-            , title: ['新任务信息', 'font-weight:bold;font-size:large;font-family:Microsoft YaHei']
+            , title: ['待处理任务', 'font-weight:bold;font-size:large;font-family:Microsoft YaHei']
             , area: ['900px', '700px']
             , shade: 0
             , offset: 'auto'

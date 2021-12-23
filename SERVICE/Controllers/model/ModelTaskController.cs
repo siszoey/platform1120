@@ -355,6 +355,31 @@ namespace SERVICE.Controllers
 
         }
 
+
+        /// <summary>
+        /// 更新模型表最佳视角
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        public string UpdateModelGoodView()
+        {
+            string mxsj = HttpContext.Current.Request.Form["mxsj"];//最佳试图
+            string id = HttpContext.Current.Request.Form["id"];
+
+
+            int updatecount = PostgresqlHelper.UpdateData(pgsqlConnection, string.Format("UPDATE model_task SET mxsj={0} WHERE id={1} ", SQLHelper.UpdateString(mxsj), SQLHelper.UpdateString(id)));
+            if (updatecount == 1)
+            {
+                return "更新成功";
+            }
+            else
+            {
+                return "更新失败";
+            }
+
+
+
+        }
         #region 方法1
         /// <summary>
         /// 创建项目编码

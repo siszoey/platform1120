@@ -73,6 +73,34 @@ console.log(mouth);
 //        color: Cesium.Color.YELLOW,
 //    },
 //});
+function LoadDrawLayer() {
+
+
+    var drawlayerindex = layer.open({
+        type: 1
+        , title: ['绘制', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
+        , area: ['500px', '500px']
+        , shade: 0
+        , offset: 'auto'
+        , closeBtn: 1
+        , maxmin: true
+        , moveOut: true
+        , content: ''
+        , zIndex: layer.zIndex
+        , success: function (layero) {
+            //置顶
+            layer.setTop(layero);
+        }
+    });
+
+
+
+
+
+
+}
+
+
 
 //显示/隐藏功能面板
 var isOpenMenu = false;
@@ -174,14 +202,14 @@ function ClearTemp() {
     points = [];
     eyespoints = [];
 }
-//坐标量测
+//标注管理
 function biaozhuMangan() {
-    //判断一下模型项目
+    //判断一下模型。项目
     if (currentprojectid == null) {
         layer.msg('请先选择项目');
         return;
     }
-    if (curtileset == null) {
+    if (modleInfo == null) {
         layer.msg('请先选择模型');
         return;
     }
@@ -195,7 +223,7 @@ function biaozhuMangan() {
         , title: ['标注管理', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
         , area: ['300px', '500px']
         , shade: 0
-        , offset: ['85px', '260px']
+        , offset: ['60px', '350px']
         , closeBtn: 1
         , maxmin: true
         , moveOut: true
@@ -296,7 +324,7 @@ function LoadBiaozhunListLayer() {
         var data = {};
         data.cookie = document.cookie;
         data.projectId = currentprojectid;
-        data.modleId = modleInfo.id.split('_')[1];
+        data.modleId = modleInfo.id;
         data.user = ViewBag.User;
 
         data.type = null;
@@ -917,8 +945,19 @@ function LoadBiaozhunListLayer() {
 }
 
 
+//生成随机数
+function NewGuid() {
+    return ((((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+        + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+        + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+        + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1));
+}
 
-
+//点
 function pointMeasure() {
 
     //layer.photos({
@@ -991,19 +1030,8 @@ function pointMeasure() {
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
 }
-//生成随机数
-function NewGuid() {
-    return ((((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-        + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-        + "-" + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-        + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-        + (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1));
-}
 
-//长度量测
+//多段线
 function lengthMeasure() {
     if (pointColor.length == 0) {
         layer.msg('请先选择线的颜色');
@@ -1147,7 +1175,7 @@ function lengthMeasure() {
     }
 };
 
-//面积测量
+//平面
 /*
 面积计算包括表面积、投影面积计算
 投影面积计算过程：
@@ -3491,7 +3519,6 @@ function jisumianji(postList) {
     return area;
 }
 
-
 //坐标量测
 //function pointMeasure2() {
 //    ClearTemp();
@@ -3748,13 +3775,6 @@ function lengthMeasure2() {
         }
     }
 };
-
-
-
-
-
-
-
 
 function gotoJieli() {
     if (currentprojectid == null) {

@@ -2,13 +2,13 @@
 layer.open({
     type: 1
     , title: ['项目列表', 'font-weight:bold;font-size:large;font-family:Microsoft YaHei']
-    , area: ['320px', '90%']
+    , area: ['350px', '90%']
     , shade: 0
     , offset: ['60px', '10px']
     , closeBtn: 0
     , maxmin: true
     , moveOut: true
-    , content: ' <!--项目列表--> <div class="layui-row" style="margin-left:10px;margin-top:10px"> <div class="layui-input-inline"> <input type="text" id="projectfilter" lay-verify="title" autocomplete="off" placeholder="搜索" class="layui-input" style="width:230px;padding-left:25px;border-radius:5px;"> </div> <button id="projectsearch" type="button" class="layui-btn" style="width:60px;border-radius:5px;margin-left:5px"> <i class="layui-icon layui-icon-search" ></i> </button> </div><div class="layui-row" style="margin-left:10px;margin-top:10px"> <div class="layui-input-inline"> <div id="projectbyarea"></div> <!--<div class="layui-tab-item" id="projectbylayer"></div>--> </div> </div>'
+    , content: '<!--项目列表--> <div class="layui-row" style="margin-left:10px;margin-top:10px"> <div class="layui-input-inline"> <input type="text" id="projectfilter" lay-verify="title" autocomplete="off" placeholder="搜索" class="layui-input" style="width:230px;padding-left:25px;border-radius:5px;"> </div> <button id="projectsearch" type="button" class="layui-btn layui-btn-primary" style="width:50px;border-radius:5px;margin-left:5px"> <i class="layui-icon layui-icon-search" ></i> </button> </div><div class="layui-row" style="margin-top:10px"> <div class="layui-input-inline"> <div id="projectbyarea"></div> <!--<div class="layui-tab-item" id="projectbylayer"></div>--> </div> </div>'
     , zIndex: layer.zIndex
     , success: function (layero) {
         layer.setTop(layero);
@@ -19,7 +19,7 @@ layer.open({
 
         tree.render({
             elem: '#projectbyarea'
-            , id: 'modelprojectlistid'
+            , id: 'modelprojectlistid' 
             , data: []
             , showCheckbox: true
             , customCheckbox: true
@@ -34,6 +34,7 @@ layer.open({
             }
             , oncheck: function (obj) {
                 if (obj.checked) {
+                    modleInfo = obj.data;//标签
                     if (obj.data.type == "task") {
                         for (var i in modelprojectlist) {
                             for (var j in modelprojectlist[i].children) {
@@ -44,6 +45,7 @@ layer.open({
                                         modelprojectlist[i].children[j].spread = true;
                                         modelprojectlist[i].children[j].children[k].spread = true;
                                         LoadModel(obj.data);
+                                        
                                     }
                                     else {
                                         //modelprojectlist[i].spread = false;
@@ -62,10 +64,12 @@ layer.open({
                     }
                 }
                 else {
+                    modleInfo = null;//标签
                     viewer.scene.primitives.remove(curtileset);
                 }
             }
         });
+        
         //树搜索
         $('#projectsearch').click(function () {
             for (var i in modelprojectlist) {
@@ -197,7 +201,7 @@ function GetUserAllModelProjects() {
                             var prj = new Object;
                             prj.id = modelprojectdata[i].ModelProjects.Id;
                             prj.nodeOperate = true;
-                            prj.title = modelprojectdata[i].ModelProjects.XMMC;
+                            prj.title = modelprojectdata[i].ModelProjects.XMSJ.split("-").join("")+modelprojectdata[i].ModelProjects.XMMC;
                             prj.b = modelprojectdata[i].ModelProjects.ZXWD;
                             prj.l = modelprojectdata[i].ModelProjects.ZXJD;
                             prj.type = "project";
@@ -213,6 +217,7 @@ function GetUserAllModelProjects() {
                                     task.nodeOperate = true;
                                     task.title = modelprojectdata[i].ModelTasks.TaskList[j].RWMC;
                                     task.path = modelprojectdata[i].ModelTasks.TaskList[j].MXLJ;
+                                    task.modelView = modelprojectdata[i].ModelTasks.TaskList[j].MXSJ;
                                     
                                     if (modelprojectdata[i].ModelTasks.TaskList[j].MXLJ != null) {
                                         task.showCheckbox = true;
@@ -249,7 +254,7 @@ function GetUserAllModelProjects() {
                         id: "PROJECTCENTER_" + modelprojectdata[i].ModelProjects.Id,
                         position: Cesium.Cartesian3.fromDegrees(modelprojectdata[i].ModelProjects.ZXJD, modelprojectdata[i].ModelProjects.ZXWD),
                         billboard: {
-                            image: '../../Resources/img/map/marker.png',
+                            image: '../../Resources/img/mark/p19.png',
                             verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
                             heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
                             width: 40,
@@ -298,7 +303,6 @@ function GetUserAllModelProjects() {
     });
     return modelprojectlist;
 };
-
 //项目节点点击:set currentproject
 function ModelProjectNodeClick(obj) {
     if (obj.data.type == "project") {
@@ -380,6 +384,7 @@ function ModelProjectNodeOperate(obj) {
                 layer.confirm('是否打开新的模块?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
                     CloseModelProjectInfoLayer();
                     ModelProjectInfo(obj.data.id, "edit");
+
                     layer.close(index);
                 });
             }
@@ -388,6 +393,7 @@ function ModelProjectNodeOperate(obj) {
             //目标的编辑操作
             if ((modeltaskinfoaddlayerindex == null) && (modeltaskinfoviewlayerindex == null)) {
                 ModelTaskInfo(obj.data.id, "edit");
+                
             }
             else {
                 layer.confirm('是否打开新的模块?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
@@ -566,8 +572,3 @@ function CloseModelTaskInfoLayer() {
         newmodeltaskinfolayerindex = null;
     }
 }
-
-
-
-
-

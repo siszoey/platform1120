@@ -88,5 +88,9 @@ namespace MODEL
         /// 备注
         /// </summary>
         public string BZ { get; set; }
+        /// <summary>
+        /// 模型视角
+        /// </summary>
+        public string MXSJ{ get; set; }
     }
 }

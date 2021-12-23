@@ -75,8 +75,8 @@
     border-radius: 5px;
     animation-delay: 0s;
     animation-name: shock;
-    animation-duration: .2s;
-    animation-iteration-count: infinite;
+    animation-duration: .4s;
+    animation-iteration-count: 5;
     animation-direction: normal;
     animation-timing-function: linear;
 }

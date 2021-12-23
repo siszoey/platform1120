@@ -128,7 +128,7 @@ namespace SERVICE.Controllers
             {
                 List<ModelProjectInfo> modelProjectInfos = new List<ModelProjectInfo>();
                 
-                string projectdatas = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_project WHERE bsm{0} AND ztm={1} ORDER BY id DESC", userbsms, (int)MODEL.Enum.State.InUse));
+                string projectdatas = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_project WHERE bsm{0} AND ztm={1} ORDER BY xmsj DESC", userbsms, (int)MODEL.Enum.State.InUse));
                 if (!string.IsNullOrEmpty(projectdatas))
                 {
                     string[] projectrows = projectdatas.Split(new char[] { COM.ConstHelper.rowSplit });
@@ -142,7 +142,7 @@ namespace SERVICE.Controllers
                             modelProjectInfo.ModelProjects = modelProject;
 
                             #region 项目对应模型
-                            string project_task_maps = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_map_project_task WHERE projectid={0} AND ztm={1} ORDER BY cjsj ASC", modelProject.Id, (int)MODEL.Enum.State.InUse));
+                            string project_task_maps = PostgresqlHelper.QueryData(pgsqlConnection, string.Format("SELECT *FROM model_map_project_task WHERE projectid={0} AND ztm={1} ORDER BY cjsj DESC", modelProject.Id, (int)MODEL.Enum.State.InUse));
                             if (!string.IsNullOrEmpty(project_task_maps))
                             {
                                 ModelTaskInfos modelTaskInfos = new ModelTaskInfos();

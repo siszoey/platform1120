@@ -692,6 +692,7 @@
     <Content Include="Resources\img\mark\p7.png" />
     <Content Include="Resources\img\mark\p8.png" />
     <Content Include="Resources\img\mark\p9.png" />
+    <Content Include="Resources\img\mark\p19.png" />
     <Content Include="Resources\img\platformname.png" />
     <Content Include="Apps\monitor\js\1.1-all.js" />
     <Content Include="Apps\monitor\js\4.1-projectlist.js" />
