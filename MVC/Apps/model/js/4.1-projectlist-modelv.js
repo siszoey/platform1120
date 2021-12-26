@@ -23,7 +23,7 @@ layer.open({
             , data: []
             , showCheckbox: true
             , customCheckbox: true
-            , edit: ['add', 'update', 'del']    //项目操作选项
+            , edit: ['add']    //项目操作选项
             , customOperate: true
             , accordion: false
             , click: function (obj) {
@@ -373,84 +373,6 @@ function ModelProjectNodeOperate(obj) {
                 });
             }
         }
-    }
-    else if (obj.type == 'update') {
-        //编辑
-        if (obj.data.type == 'project') {
-            //项目编辑操作
-            if ((modelprojectinfoaddlayerindex == null) && (modelprojectinfoviewlayerindex == null)) {
-                ModelProjectInfo(obj.data.id, "edit");
-            }
-            else {
-                layer.confirm('是否打开新的模块?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
-                    CloseModelProjectInfoLayer();
-                    ModelProjectInfo(obj.data.id, "edit");
-
-                    layer.close(index);
-                });
-            }
-        }
-        else if (obj.data.type == 'task') {
-            //目标的编辑操作
-            if ((modeltaskinfoaddlayerindex == null) && (modeltaskinfoviewlayerindex == null)) {
-                ModelTaskInfo(obj.data.id, "edit");
-                
-            }
-            else {
-                layer.confirm('是否打开新的模块?', { icon: 3, title: '提示', zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } }, function (index) {
-                    CloseModelTaskInfoLayer();
-                    ModelTaskInfo(obj.data.id, "edit");
-                    layer.close(index);
-                });
-            }
-        }
-
-    }
-    else {
-        //删除
-        //编辑
-        if (obj.data.type == 'project') {
-            //项目删除操作del                      
-            $.ajax({
-                url: servicesurl + "/api/ModelProject/DeleteModelProject", type: "delete", data: { "id": obj.data.id, "cookie": document.cookie },
-                success: function (data) {
-                    var result = JSON.parse(data);
-                    //layer.msg(result.data, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                    layer.msg(result.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                    //TODO————清除项目位置及标注
-                    //刷新项目列表
-                    GetUserAllModelProjects();
-                    ////欲删除项目未选定为当前项目，或当前项目为空。
-                    if (obj.data.id == currentprojectid) {
-                        document.getElementById("currentproject").innerHTML = "";
-                        document.getElementById("currentproject").style.visibility = "hidden";
-                        currentprojectid = null;
-                        CloseAllLayer();                               //关闭弹出图层
-                    }
-                    if ((modelprojectinfoviewlayerindex != null) || (modelprojectinfoeditlayerindex != null) || (modelprojectinfoaddlayerindex != null)) {
-                        CloseAllLayer();
-                    }
-                }, datatype: "json"
-            })
-        }
-        else if (obj.data.type == 'task') {
-            //任务删除操作
-            $.ajax({
-                url: servicesurl + "/api/ModelTask/DeleteTask", type: "delete", data: { "id": obj.data.id, "cookie": document.cookie },
-                success: function (data) {
-                    var result = JSON.parse(data);
-                    //刷新项目列表
-                    GetUserAllModelProjects();
-                    layer.msg(result.message, { zIndex: layer.zIndex, success: function (layero) { layer.setTop(layero); } });
-                    if ((modeltaskinfoviewlayerindex != null) || (modeltaskinfoaddlayerindex != null) || (modeltaskinfoeditlayerindex != null)) {
-                        CloseAllLayer();
-                        
-
-                    }
-                }, datatype: "json"
-            })
-        }
-
     }
 };
 

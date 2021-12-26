@@ -513,6 +513,13 @@
     <Content Include="Apps\model\js\1.1-all.js" />
     <Content Include="Apps\model\js\1.2-para.js" />
     <Content Include="Apps\model\js\3.0-map.js" />
+    <Content Include="Apps\model\js\4.1-projectlist-modelv.js" />
+    <Content Include="Apps\model\js\4.1-projectlist-modelp.js" />
+    <Content Include="Apps\model\js\4.2-projectinfo-modelv.js" />
+    <Content Include="Apps\model\js\4.2-projectinfo-modelp.js" />
+    <Content Include="Apps\model\js\4.4-taskinfo-modelv.js" />
+    <Content Include="Apps\model\js\4.4-taskinfo-modelp.js" />
+    <Content Include="Apps\model\js\4.5-newtaskinfo-modelp.js" />
     <Content Include="Apps\model\js\4.5-newtaskinfo.js" />
     <Content Include="Apps\model\js\4.1-projectlist.js" />
     <Content Include="Apps\model\js\4.2-projectinfo.js" />
@@ -521,6 +528,8 @@
     <Content Include="Apps\model\js\5.0-header.js" />
     <Content Include="Apps\model\js\5.1-message.js" />
     <Content Include="Apps\model\js\5.2-setting.js" />
+    <Content Include="Apps\model\js\6.0-util-modelv.js" />
+    <Content Include="Apps\model\js\6.0-util-modelp.js" />
     <Content Include="Apps\model\js\6.0-util.js" />
     <Content Include="Apps\model\js\6.1-measure.js" />
     <Content Include="Apps\model\js\6.2-draw.js" />

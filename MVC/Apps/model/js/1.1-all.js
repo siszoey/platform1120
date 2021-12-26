@@ -42,8 +42,6 @@ var currentprojectid = null;//当前项目id
 var currentprojectdisastertype = null;//当前项目类型
 
 
-
-
 var curtileset = null;//当前模型
 var modleInfo = null;//当前模型数据
 

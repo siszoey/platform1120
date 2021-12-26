@@ -163,13 +163,13 @@ function celiang() {
         return;
     }
    
-    //添加点标注，弹出框
+    //弹出框
     projectlayerlistceliangindex = layer.open({
         type: 1
         , title: ['测量', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
         , area: ['300px', '350px']
         , shade: 0
-        , offset: ['60px', '350px']
+        , offset: ['60px', '360px']
         , closeBtn: 1
         //, maxmin: true
         , moveOut: true
@@ -195,7 +195,9 @@ function celiang() {
             viewer.scene.globe.depthTestAgainstTerrain = false;
             projectlayerlistceliangindex = null;
             //删除图层数据
-
+        }
+        , cancel: function (index, layero) {
+            ClearCeliangTemp();
         }
     });
 };
@@ -1919,7 +1921,7 @@ function dispalyPosition() {
         , title: ['定位', 'font-weight:bold;font-size:large;font-family:	Microsoft YaHei']
         , area: ['300px', '300px']
         , shade: 0
-        , offset: ['420px', '350px']
+        , offset: ['420px', '360px']
         , closeBtn: 1
         , maxmin: true
         , moveOut: true
